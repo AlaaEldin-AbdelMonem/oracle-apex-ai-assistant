@@ -1,0 +1,27 @@
+# Oracle
+*.log
+*.trc
+*.lst
+*.dmp
+
+# API Keys
+*wallet*
+*credentials*
+*.pem
+*.key
+
+# APEX exports with sensitive data
+*_with_data.sql
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+build/
+dist/
