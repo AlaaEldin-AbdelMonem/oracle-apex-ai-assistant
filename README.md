@@ -1,3 +1,11 @@
+
+<!-- GitHub Profile: Alaaeldin Abdelmonem -->
+<p align="center">
+  <img src="https://github.com/alaaeldin-abdelmonem/oracle-apex-ai-assistant/readme-banner.png" alt="Alaaeldin Abdelmonem Banner" width="100%"/>
+</p>
+<h1 align="center">🌐 Alaaeldin Abdelmonem <img src="https://img.shields.io/badge/Verified-✓-brightgreen" height="20"/></h1>
+<h3 align="center">Oracle AI Assistant ChatPot.</h3>
+
 # Oracle AI Assistant ChatPot
 
 Enterprise-grade RAG chatbot built on Oracle Database 23+ and APEX 24.x
