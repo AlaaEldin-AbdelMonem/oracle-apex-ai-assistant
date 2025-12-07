@@ -30,7 +30,7 @@ It provides a **ChatGPT-like UI**, strict enterprise governance, multi-LLM routi
 ### 🔌 Multi-Provider LLM Orchestration
 
 <p align="center">
-  <img src="docs/assets/images/Multi-Provider%20LLM%20Orchestration.png" width="600"/>
+  <img src="docs/assets/images/Multi-Provider LLM Orchestration.png" width="600"/>
 </p>
 
 - OpenAI (GPT-4o, GPT-4 Turbo, GPT-4o-Mini) — **Working**
@@ -136,3 +136,4 @@ It provides a **ChatGPT-like UI**, strict enterprise governance, multi-LLM routi
 </p>
 
 ---
+
