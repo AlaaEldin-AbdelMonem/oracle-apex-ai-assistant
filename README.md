@@ -3,8 +3,8 @@
 <p align="center">
   <img src="docs/assets/images/readme-banner.png" alt="Alaaeldin Abdelmonem Banner" width="100%"/>
 </p>
-<h1 align="center">🌐 Alaaeldin Abdelmonem <img src="https://img.shields.io/badge/Verified-✓-brightgreen" height="20"/></h1>
-<h3 align="center">Oracle AI Assistant ChatPot.</h3>
+<h1 align="center">🌐 Entrprise AI Assistant<img src="https://img.shields.io/badge/Verified-✓-brightgreen" height="20"/></h1>
+<h3 align="center">.</h3>
 
 # Oracle AI Assistant ChatPot
 
