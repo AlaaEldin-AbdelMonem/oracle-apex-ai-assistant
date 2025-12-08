@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo "🔧 Building Chatpot Production Bundle..."
+
+esbuild ../js/src/chat_session.js \
+        ../js/src/chat_message.js \
+        ../js/src/chat_ui.js \
+        ../js/src/chat_settings.js \
+        --bundle --minify --outfile=../js/dist/chatpot.min.js
+
+echo "✅ Build complete: js/dist/chatpot.min.js"

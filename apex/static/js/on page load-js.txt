@@ -1,0 +1,53 @@
+console.log("🚀 Page 115 Execute When Page Loads...");
+
+// Resolve APEX application item
+const env = '&G_APP_ENV.';
+console.log("Current Environment =", env);
+
+// Universal JS loader for APEX 18 → 24.2
+function loadScript(url) {
+    const script = document.createElement("script");
+    script.src = url;
+    script.type = "text/javascript";
+
+    script.onload = () => console.log("📦 Loaded:", url);
+    script.onerror = () => console.error("❌ Failed:", url);
+
+    document.head.appendChild(script);
+}
+
+// Dynamic loading
+if (env === 'DEV') {
+    console.log("Mode: DEVELOPMENT");
+
+    loadScript("#WORKSPACE_FILES#chat/assistant/src/chatPrompt#MIN#.js");
+    loadScript("#WORKSPACE_FILES#chat/assistant/src/chatSession#MIN#.js");
+    loadScript("#WORKSPACE_FILES#chat/assistant/src/chatMessage#MIN#.js");
+    loadScript("#WORKSPACE_FILES#chat/assistant/src/chatProjects#MIN#.js");
+} else if (env === 'PROD') {
+    console.log("Mode: PRODUCTION");
+
+    loadScript("#WORKSPACE_FILES#chat/assistant/dist/chatAssistant#MIN#.js");
+}
+
+/* ============================================================================
+   INITIALIZE ALL NAMESPACES ON PAGE LOAD
+   ============================================================================ */
+apex.jQuery(function() {
+    console.log("🚀 Page 115 Initialization Starting...");
+    
+    SessionHeader.init();
+    ProjectsSidebar.init();
+    userPrompt.init();   // ONLY THIS
+    
+    console.log("✅ Page 115 Fully Loaded");
+    console.log("📦 Available Namespaces:", {
+        SessionHeader: typeof window.SessionHeader,
+        ProjectsSidebar: typeof window.ProjectsSidebar,
+        userPrompt: typeof window.userPrompt
+    });
+});
+
+
+ 
+ 
