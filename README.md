@@ -8,7 +8,7 @@
 
 # Oracle AI Assistant ChatPot
 
-Enterprise-grade RAG chatbot built on Oracle Database 23+ and APEX 24.x
+Enterprise-grade RAG chatbot built on Oracle Database 26+ and APEX 24.2.11+
 
 ## Features
 - 🤖 Multi-provider LLM support (OpenAI, Claude, Gemini)
