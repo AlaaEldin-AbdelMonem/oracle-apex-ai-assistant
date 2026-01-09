@@ -1,0 +1,1236 @@
+---
+# ====== Page: Report Issue ==================================
+id: 116
+identification: 
+  name: Report Issue
+  alias: REPORT-ISSUE
+  title: Report Issue
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+javascript: 
+  execute-when-page-loads: |
+    /* ============================================================================
+       PAGE 116 - REPORT ISSUE DIALOG
+       ============================================================================ */
+    
+    // Display issue context info
+    const issueLevel  = apex.item('P116_ISSUE_LEVEL').getValue();
+    const entityId    = apex.item('P116_ENTITY_ID').getValue();
+    const messageText = apex.item('P116_MESSAGE_TEXT').getValue();
+    
+    const firstRegion = document.querySelector('.t-Region-body');
+    
+    console.log('📋 Report Issue Dialog Opened');
+    console.log('   Level:', issueLevel);
+    console.log('   Entity ID:', entityId);
+    console.log('   Message Preview:', messageText ? messageText.substring(0, 50) + '...' : 'N/A');
+    
+    // Add context info
+    if (issueLevel === 'CALL' && messageText && firstRegion) {
+    
+        const contextDiv = document.createElement('div');
+        contextDiv.style.cssText = `
+            background: #f0f9ff;
+            border-left: 4px solid #0ea5e9;
+            padding: 12px;
+            margin-bottom: 16px;
+            border-radius: 4px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        `;
+    
+        contextDiv.innerHTML = `
+            <span style="font-weight:600;">📨 Reporting issue for call</span>
+            <span style="color:#64748b;">— Call ID: ${entityId}</span>
+        `;
+    
+        firstRegion.insertBefore(contextDiv, firstRegion.firstChild);
+    
+    } else if (issueLevel === 'SESSION' && firstRegion) {
+    
+        const contextDiv = document.createElement('div');
+        contextDiv.style.cssText = `
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 12px;
+            margin-bottom: 16px;
+            border-radius: 4px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        `;
+    
+        contextDiv.innerHTML = `
+            <span style="font-weight:600;">💬 Reporting issue for entire session</span>
+            <span style="color:#64748b;">— Session ID: ${entityId}</span>
+        `;
+    
+        firstRegion.insertBefore(contextDiv, firstRegion.firstChild);
+    }
+    
+
+css: 
+  inline: |
+    css/* ============================================================================
+       PAGE 116 - REPORT ISSUE DIALOG
+       ============================================================================ */
+    
+    /* Dialog Container */
+    .t-Dialog-page {
+        max-width: 800px !important;
+    }
+    
+    .t-Dialog-body {
+        padding: 24px;
+        background: #f9fafb;
+    }
+    
+    /* Issue Type Cards */
+    .issue-type-card {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px;
+        background: white;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin-bottom: 8px;
+    }
+    
+    .issue-type-card:hover {
+        border-color: #3b82f6;
+        background: #eff6ff;
+        transform: translateX(2px);
+    }
+    
+    .issue-type-card.selected {
+        border-color: #3b82f6;
+        background: #eff6ff;
+    }
+    
+    .issue-type-icon {
+        font-size: 24px;
+        flex-shrink: 0;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f1f5f9;
+        border-radius: 8px;
+    }
+    
+    .issue-type-content h4 {
+        margin: 0 0 4px 0;
+        font-size: 14px;
+        font-weight: 600;
+        color: #1e293b;
+    }
+    
+    .issue-type-content p {
+        margin: 0;
+        font-size: 12px;
+        color: #64748b;
+        line-height: 1.4;
+    }
+    
+    /* Category Badges */
+    .category-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .category-badge.accuracy {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+    
+    .category-badge.quality {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+    
+    .category-badge.safety {
+        background: #fef3c7;
+        color: #92400e;
+    }
+    
+    .category-badge.technical {
+        background: #f3e8ff;
+        color: #6b21a8;
+    }
+    
+    /* Form Fields */
+    .t-Form-fieldContainer {
+        margin-bottom: 20px;
+    }
+    
+    .t-Form-label {
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 8px;
+    }
+    
+    .apex-item-text,
+    .apex-item-textarea,
+    .apex-item-select {
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 14px;
+        transition: all 0.2s ease;
+    }
+    
+    .apex-item-text:focus,
+    .apex-item-textarea:focus,
+    .apex-item-select:focus {
+        border-color: #3b82f6;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    
+    /* File Upload Area */
+    .apex-item-file {
+        border: 2px dashed #cbd5e1;
+        border-radius: 8px;
+        padding: 24px;
+        text-align: center;
+        background: white;
+        transition: all 0.2s ease;
+    }
+    
+    .apex-item-file:hover {
+        border-color: #3b82f6;
+        background: #eff6ff;
+    }
+    
+    /* Help Text */
+    .t-Form-helpText {
+        font-size: 12px;
+        color: #64748b;
+        margin-top: 6px;
+        font-style: italic;
+    }
+    
+    /* Buttons */
+    .t-Button {
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.2s ease;
+    }
+    
+    .t-Button--hot {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        border: none;
+    }
+    
+    .t-Button--hot:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+    
+    /* Region Headers */
+    .t-Region-header {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border-bottom: 2px solid #e2e8f0;
+        padding: 16px 20px;
+    }
+    
+    .t-Region-title {
+        font-weight: 700;
+        color: #1e293b;
+        font-size: 16px;
+    }
+    
+    /* Priority Indicator */
+    .priority-low { color: #10b981; }
+    .priority-medium { color: #f59e0b; }
+    .priority-high { color: #ef4444; }
+    .priority-critical { 
+        color: #dc2626; 
+        font-weight: 700;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+comments: 
+  comments: User will use this page to create the issue
+
+regions: 
+- # ====== Region: hiddenItems =================================
+  id: 147673252283110416
+  identification: 
+    name: hiddenItems
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Issue Details ===============================
+  id: 147673866936110422
+  identification: 
+    name: Issue Details
+    title: Issue Details
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--removeHeader js-removeLandmark
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: btn =========================================
+  id: 147675624651110440
+  identification: 
+    name: btn
+    type: Static Content
+
+  layout: 
+    sequence: 70
+    parent-region: Issue Details # 147673866936110422
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-ButtonRegion--noUI
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P116_ISSUE_LEVEL =========================
+  id: 147673366895110417
+  identification: 
+    name: P116_ISSUE_LEVEL
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: hiddenItems # 147673252283110416
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: MESSAGE
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P116_ENTITY_ID ===========================
+  id: 147673410671110418
+  identification: 
+    name: P116_ENTITY_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 20
+    region: hiddenItems # 147673252283110416
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P116_MESSAGE_TEXT ========================
+  id: 147673569520110419
+  identification: 
+    name: P116_MESSAGE_TEXT
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 30
+    region: hiddenItems # 147673252283110416
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P116_BROWSER_INFO ========================
+  id: 147673609586110420
+  identification: 
+    name: P116_BROWSER_INFO
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 40
+    region: hiddenItems # 147673252283110416
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P116_ISSUE_ID ============================
+  id: 147673753501110421
+  identification: 
+    name: P116_ISSUE_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 50
+    region: hiddenItems # 147673252283110416
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P116_ISSUE_TYPE_CODE =====================
+  id: 147673940409110423
+  identification: 
+    name: P116_ISSUE_TYPE_CODE
+    type: Select List
+
+  label: 
+    label: Issue Type
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 20
+    region: Issue Details # 147673866936110422
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      SELECT issue_type_name || ' - ' || issue_description AS display_value,
+                                                    issue_type_code AS return_value
+                                             FROM lkp_issue_types
+                                             WHERE is_active = 'Y'
+                                             ORDER BY display_order
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P116_ISSUE_TITLE =========================
+  id: 147674027018110424
+  identification: 
+    name: P116_ISSUE_TITLE
+    type: Text Field
+
+  label: 
+    label: Issue Title
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 40
+    region: Issue Details # 147673866936110422
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    value-placeholder: Brief description of the issue
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P116_ISSUE_DESCRIPTION ===================
+  id: 147674172425110425
+  identification: 
+    name: P116_ISSUE_DESCRIPTION
+    type: Textarea
+
+  label: 
+    label: Issue Description
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 50
+    region: Issue Details # 147673866936110422
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: 12
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Hidden
+    template-options: 
+    - '#DEFAULT#'
+    - t-Form-fieldContainer--stretchInputs
+    width: 30
+    height: 8
+    value-placeholder: Please provide as much detail as possible about the issue...
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P116_PRIORITY ============================
+  id: 147674216078110426
+  identification: 
+    name: P116_PRIORITY
+    type: Select List
+
+  label: 
+    label: Priority
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 30
+    region: Issue Details # 147673866936110422
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: CHAT_ISSUE_PRIORITY # 160973660116719895
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: MEDIUM
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P116_ATTACHMENT ==========================
+  id: 147674342715110427
+  identification: 
+    name: P116_ATTACHMENT
+    type: File Upload
+
+  label: 
+    label: Attach Files
+    alignment: Left
+
+  display: 
+    display-as: Block Dropzone
+    capture-using: NONE
+
+  storage:: 
+    type: Table APEX_APPLICATION_TEMP_FILES
+    purge-file-at: End of Request
+    allow-multiple-files: true
+    file-types: .doc,.docx,.pdf,.txt,.csv,.html,.htm,.md,.png,.jpg,.jpeg,.gif
+    maximum-file-size: 10000
+
+  layout: 
+    sequence: 60
+    region: Issue Details # 147673866936110422
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: SAVE ========================================
+  id: 147674529946110429
+  identification: 
+    button-name: SAVE
+    label: Save
+
+  layout: 
+    sequence: 20
+    region: btn # 147675624651110440
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    icon: fa-save
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: CANCEL ======================================
+  id: 147674730803110431
+  identification: 
+    button-name: CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 10
+    region: btn # 147675624651110440
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-arrow-left
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+dynamic-actions: 
+- # ====== Dynamic Action: Close Dialog on Cancel ==============
+  id: 147674893626110432
+  identification: 
+    name: Close Dialog on Cancel
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: CANCEL # 147674730803110431
+
+  actions: 
+  - # ====== Action: Cancel Dialog ===============================
+    id: 147674978860110433
+    identification: 
+      action: Cancel Dialog
+
+    execution: 
+      sequence: 10
+      event: Close Dialog on Cancel # 147674893626110432
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Init Region items ===================
+  id: 148845946356293947
+  identification: 
+    name: Init Region items
+
+  execution: 
+    sequence: 40
+    event-scope: Static
+
+  when: 
+    event: Page Load
+
+  actions: 
+  - # ====== Action: Execute Server-side Code ====================
+    id: 148846059782293948
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: |
+        :P116_ISSUE_TYPE_CODE    := NULL;
+        :P116_MESSAGE_TEXT      := NULL;
+        :P116_ISSUE_DESCRIPTION := NULL;
+        :P116_PRIORITY           := 'MEDIUM';
+      items-to-return: 
+      - P116_ISSUE_TYPE_CODE
+      - P116_MESSAGE_TEXT
+      - P116_ISSUE_DESCRIPTION
+      - P116_PRIORITY
+      suppress-change-event: false
+
+    execution: 
+      sequence: 10
+      event: Init Region items # 148845946356293947
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+processes: 
+- # ====== Process: SAVE_ISSUE_REPORT ==========================
+  id: 147674457773110428
+  identification: 
+    name: SAVE_ISSUE_REPORT
+    type: Execute Code
+    execution-chain: SAVE_ISSUE # 155687651576186612
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |2
+       DECLARE
+          v_issue_id              NUMBER;
+          v_user_id               NUMBER := v('G_USER_ID');
+          v_session_id            NUMBER;
+          v_call_id               NUMBER;
+          v_issue_level           VARCHAR2(20);
+          v_issue_type_code       VARCHAR2(50);
+          v_issue_title           VARCHAR2(200);
+          v_issue_description     CLOB;
+          v_priority              VARCHAR2(20);
+          v_browser_info          VARCHAR2(4000);
+          v_attachment_count      NUMBER := 0;
+      
+      BEGIN
+          apex_debug.enable(p_level => apex_debug.c_log_level_info);
+          debug_util.init(p_module_name => 'PAGE_116');
+          debug_util.info('Starting issue report submission');
+      
+          BEGIN
+              -- Read values
+              v_issue_level        := UPPER(TRIM(:P116_ISSUE_LEVEL));
+              v_issue_type_code    := :P116_ISSUE_TYPE_CODE;
+              v_issue_title        := TRIM(:P116_ISSUE_TITLE);
+              v_issue_description  := :P116_ISSUE_DESCRIPTION;
+              v_priority           := :P116_PRIORITY;
+              v_browser_info       := :P116_BROWSER_INFO;
+      
+              -- Resolve context
+              IF v_issue_level = 'MESSAGE' THEN
+                  v_call_id := TO_NUMBER(:P116_ENTITY_ID);
+                  SELECT chat_session_id INTO v_session_id
+                  FROM chat_calls WHERE call_id = v_call_id;
+      
+              ELSIF v_issue_level = 'SESSION' THEN
+                  v_session_id := TO_NUMBER(:P116_ENTITY_ID);
+                  v_call_id := NULL;
+      
+              ELSE
+                  RAISE_APPLICATION_ERROR(-20001, 'Invalid issue level: ' || v_issue_level);
+              END IF;
+      
+              -- Required checks
+              IF v_issue_type_code IS NULL THEN
+                  RAISE_APPLICATION_ERROR(-20002, 'Issue type is required');
+              END IF;
+      
+              IF v_issue_title IS NULL THEN
+                  RAISE_APPLICATION_ERROR(-20003, 'Issue title is required');
+              END IF;
+      
+              IF v_session_id IS NULL THEN
+                  RAISE_APPLICATION_ERROR(-20004, 'Invalid session context');
+              END IF;
+      
+              debug_util.info('Creating issue report...');
+      
+              -- Create issue
+              INSERT INTO chat_issues (
+                  CHAT_ISSUE_LEVEL_CODE,
+                  chat_call_id,
+                  chat_session_id,
+                  chat_issue_type_code,
+                  issue_title,
+                  issue_description,
+                  user_id,
+                  username,
+                  CHAT_ISSUE_PRIORITY_CODE,
+                  CHAT_ISSUE_STATUS_CODE,
+                  browser_info,
+                  user_agent,
+                  page_url
+              ) VALUES (
+                  v_issue_level,
+                  v_call_id,
+                  v_session_id,
+                  v_issue_type_code,
+                  v_issue_title,
+                  v_issue_description,
+                  v_user_id,
+                  :APP_USER,
+                  v_priority,
+                  'NW',
+                  v_browser_info,
+                  SUBSTR(owa_util.get_cgi_env('HTTP_USER_AGENT'), 1, 500),
+                  SUBSTR(owa_util.get_cgi_env('REQUEST_URI'), 1, 2000)
+              ) RETURNING chat_issue_id INTO v_issue_id;
+      
+              debug_util.info('Issue created with ID: ' || v_issue_id);
+      
+              ----------------------------------------------------------------------
+              -- Handle MULTIPLE ATTACHMENTS (APEX 24.2)
+              ----------------------------------------------------------------------
+              IF :P116_ATTACHMENT IS NOT NULL THEN
+                  DECLARE
+                      l_file_names apex_t_varchar2;
+                      l_file       apex_application_temp_files%ROWTYPE;
+                  BEGIN
+                      -- Split names (multiple files)
+                      l_file_names := apex_string.split(:P116_ATTACHMENT, ':');
+      
+                      FOR i IN 1 .. l_file_names.count LOOP
+      
+                          -- Read the temp file
+                          SELECT *
+                            INTO l_file
+                            FROM apex_application_temp_files
+                           WHERE name = l_file_names(i);
+      
+                          -- Insert into permanent table
+                          INSERT INTO chat_issue_attachments (
+                              chat_issue_id,
+                              attachment_name,
+                              attachment_type,
+                              attachment_size,
+                              attachment_blob
+                          ) VALUES (
+                              v_issue_id,
+                              l_file.filename,
+                              l_file.mime_type,
+                              DBMS_LOB.getlength(l_file.blob_content),
+                              l_file.blob_content
+                          );
+      
+                          v_attachment_count := v_attachment_count + 1;
+      
+                          -- cleanup temp file
+                          DELETE FROM apex_application_temp_files
+                           WHERE name = l_file_names(i);
+      
+                      END LOOP;
+                  END;
+              END IF;
+      
+              -- Update issue with attachment metadata
+              IF v_attachment_count > 0 THEN
+                  UPDATE chat_issues
+                     SET attachment_count = v_attachment_count,
+                         has_screenshot = CASE 
+                             WHEN EXISTS (
+                                 SELECT 1 FROM chat_issue_attachments
+                                 WHERE chat_issue_id = v_issue_id
+                                   AND attachment_type LIKE 'image%'
+                             ) THEN 'Y'
+                             ELSE 'N'
+                         END
+                   WHERE chat_issue_id = v_issue_id;
+      
+                  debug_util.info('Saved ' || v_attachment_count || ' attachments');
+              END IF;
+      
+              :P116_ISSUE_ID := v_issue_id;
+      
+            --  COMMIT;
+      
+              apex_application.g_print_success_message :=
+                  'Issue #' || v_issue_id ||
+                  ' reported successfully. Our team will review it shortly.';
+      
+          EXCEPTION
+          WHEN NO_DATA_FOUND THEN
+              debug_util.error(
+                'Invalid context. ISSUE_LEVEL=' || v_issue_level ||  ', ENTITY_ID=' || :P116_ENTITY_ID );
+              RAISE_APPLICATION_ERROR(  -20010,  'Invalid issue context. Please refresh and try again.' );
+      
+          WHEN OTHERS THEN
+              debug_util.error('SAVE_ISSUE_REPORT failed: ' || SQLERRM);
+              RAISE;
+       
+          END;
+      
+      END;
+      
+
+  execution: 
+    sequence: 40
+
+  success-message: 
+    success-message: Issue Reported !
+
+  error: 
+    error-message: Issue Error !
+
+- # ====== Process: Close Dialog ===============================
+  id: 155687550088186611
+  identification: 
+    name: Close Dialog
+    type: Close Dialog
+    execution-chain: SAVE_ISSUE # 155687651576186612
+
+  settings: 
+    show-success-messages: true
+
+  execution: 
+    sequence: 50
+
+- # ====== Process: SAVE_ISSUE =================================
+  id: 155687651576186612
+  identification: 
+    name: SAVE_ISSUE
+    type: Execution Chain
+    execution-chain: None
+
+  settings: 
+    run-in-background: false
+
+  execution: 
+    sequence: 30
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: SAVE # 147674529946110429
+

@@ -1,0 +1,2788 @@
+---
+# ====== Page: Deployment Versions ===========================
+id: 703
+identification: 
+  name: Deployment Versions
+  alias: DEPLOYMENT-VERSIONS
+  title: Deployment Versions
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+javascript: 
+  function-and-global-variable-declaration: |
+    // Deployment management functions
+    
+    function activateDeployment(deploymentId) {
+        apex.message.confirm('Activate this deployment?', function(okPressed) {
+            if (okPressed) {
+                apex.server.process('ACTIVATE_DEPLOYMENT', {
+                    x01: deploymentId
+                }, {
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.success) {
+                            apex.message.showPageSuccess(data.message);
+                            apex.region('deployment-grid').refresh();
+                        } else {
+                            apex.message.showErrors([{
+                                type: 'error',
+                                message: data.message,
+                                location: 'page'
+                            }]);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        apex.message.showErrors([{
+                            type: 'error',
+                            message: 'Error activating deployment: ' + error,
+                            location: 'page'
+                        }]);
+                    }
+                });
+            }
+        });
+    }
+    
+    function pauseDeployment(deploymentId) {
+        apex.message.confirm('Pause this deployment?', function(okPressed) {
+            if (okPressed) {
+                apex.server.process('PAUSE_DEPLOYMENT', {
+                    x01: deploymentId
+                }, {
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.success) {
+                            apex.message.showPageSuccess(data.message);
+                            apex.region('deployment-grid').refresh();
+                        } else {
+                            apex.message.showErrors([{
+                                type: 'error',
+                                message: data.message,
+                                location: 'page'
+                            }]);
+                        }
+                    }
+                });
+            }
+        });
+    }
+    
+    function deactivateDeployment(deploymentId) {
+        apex.message.confirm('Deactivate this deployment? This will stop all traffic to this version.', function(okPressed) {
+            if (okPressed) {
+                apex.server.process('DEACTIVATE_DEPLOYMENT', {
+                    x01: deploymentId
+                }, {
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.success) {
+                            apex.message.showPageSuccess(data.message);
+                            apex.region('deployment-grid').refresh();
+                        } else {
+                            apex.message.showErrors([{
+                                type: 'error',
+                                message: data.message,
+                                location: 'page'
+                            }]);
+                        }
+                    }
+                });
+            }
+        });
+    }
+    
+    function promoteDeployment(deploymentId) {
+        apex.message.confirm('Promote this canary deployment to production? This will demote the current production deployment.', function(okPressed) {
+            if (okPressed) {
+                apex.server.process('PROMOTE_CANARY', {
+                    x01: deploymentId
+                }, {
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.success) {
+                            apex.message.showPageSuccess(data.message);
+                            apex.region('deployment-grid').refresh();
+                            // Optionally redirect to dashboard
+                            // apex.navigation.redirect('f?p=&APP_ID.:702:&SESSION.');
+                        } else {
+                            apex.message.showErrors([{
+                                type: 'error',
+                                message: data.message,
+                                location: 'page'
+                            }]);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+css: 
+  inline: |
+    /* Deployment type badges */
+    .deployment-type-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+    
+    .u-success {
+        background: #d4edda;
+        color: #155724;
+    }
+    
+    .u-warning {
+        background: #fff3cd;
+        color: #856404;
+    }
+    
+    .u-info {
+        background: #d1ecf1;
+        color: #0c5460;
+    }
+    
+    .u-hot {
+        background: #f8d7da;
+        color: #721c24;
+    }
+    
+    .u-normal {
+        background: #e2e3e5;
+        color: #383d41;
+    }
+    
+    /* Status badges */
+    .status-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+    
+    .status-Active {
+        background: #d4edda;
+        color: #155724;
+    }
+    
+    .status-Paused {
+        background: #fff3cd;
+        color: #856404;
+    }
+    
+    .status-Draft {
+        background: #e2e3e5;
+        color: #383d41;
+    }
+    
+    .status-Inactive {
+        background: #f8d7da;
+        color: #721c24;
+    }
+    
+    /* Rollout progress bar */
+    .rollout-bar {
+        width: 100%;
+        height: 24px;
+        background: #e9ecef;
+        border-radius: 4px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .rollout-progress {
+        height: 100%;
+        background: linear-gradient(90deg, #0d6efd 0%, #0a58ca 100%);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: width 0.3s ease;
+    }
+    
+    /* Action buttons */
+    .deployment-actions {
+        display: flex;
+        gap: 0.25rem;
+    }
+    
+    .deployment-actions .t-Button {
+        padding: 0.25rem 0.5rem;
+        min-width: 32px;
+    }
+    
+    /* Interactive Grid customization */
+    #deployment-grid .a-IG {
+        font-size: 0.9rem;
+    }
+    
+    #deployment-grid .a-IG-header {
+        background: #f8f9fa;
+        font-weight: 600;
+    }
+    
+    /* Filter region */
+    .filters-container {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Deployment Versions =========================
+  id: 158156313928537623
+  identification: 
+    name: Deployment Versions
+    type: Interactive Grid
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          d.deployment_id,
+          d.deployment_name,
+         -- d.deployment_type,
+         '<span class="deployment-type-badge #TYPE_CSS_CLASS#">'|| d.deployment_type||'</span>'deployment_type,
+      
+      
+          d.deployment_status,
+          d.provider,
+          d.model_name,
+         -- d.rollout_percentage,
+          '<div class="rollout-bar"><div class="rollout-progress" style="width:'||d.rollout_percentage ||'%">'||d.rollout_percentage||'%</div></div>' rollout_percentage,
+          d.is_active,
+          d.priority,
+          d.created_by,
+          TO_CHAR(d.created_at, 'YYYY-MM-DD HH24:MI') AS created_at_display,
+          TO_CHAR(d.activated_at, 'YYYY-MM-DD HH24:MI') AS activated_at_display,
+          d.target_segment_ids,
+          d.experiment_id,
+          CASE d.deployment_type
+              WHEN 'PRODUCTION' THEN 'u-success'
+              WHEN 'SHADOW' THEN 'u-warning'
+              WHEN 'CANARY' THEN 'u-info'
+              WHEN 'AB_TEST' THEN 'u-hot'
+              ELSE 'u-normal'
+          END AS type_css_class,
+          
+          CASE 
+              WHEN d.is_active = 'Y' AND 
+                   d.deployment_status = 'ACTIVE' THEN '<span class="status-badge status-Active">Active</span>'
+              WHEN d.deployment_status = 'PAUSED' THEN  '<span class="status-badge status-Paused">Paused</span>'
+              WHEN d.deployment_status = 'DRAFT' THEN   '<span class="status-badge status-Draft">Draft</span>'
+              ELSE                                      '<span class="status-badge status-Inactive">Inactive</span>'
+          END AS status_display,
+          -- Shadow parent info
+          (SELECT dv.deployment_name 
+           FROM DEPLOYMENT_VERSIONS dv 
+           WHERE dv.deployment_id = d.shadow_parent_deployment_id) AS shadow_parent_name,
+          d.shadow_parent_deployment_id,
+          d.shadow_execution_mode,
+          -- Experiment info
+          (SELECT de.experiment_name 
+           FROM DEPLOYMENT_EXPERIMENTS de 
+           WHERE de.experiment_id = d.experiment_id) AS experiment_name,
+          d.variant_label,
+          -- Canary info
+          d.canary_current_stage,
+          -- JSON configs
+          d.deployment_config,
+          d.canary_schedule_json,
+          -- Metrics summary (last 7 days)
+          (SELECT SUM(total_calls) 
+           FROM DEPLOYMENT_METRICS dm 
+           WHERE dm.deployment_id = d.deployment_id 
+             AND dm.metric_date >= TRUNC(SYSDATE) - 7) AS calls_last_7_days,
+          (SELECT ROUND(AVG(avg_total_pipeline_ms), 0)
+           FROM DEPLOYMENT_METRICS dm 
+           WHERE dm.deployment_id = d.deployment_id 
+             AND dm.metric_date >= TRUNC(SYSDATE) - 7) || ' ms' AS avg_latency_7_days,
+         '$'|| (SELECT ROUND(SUM(total_cost_usd), 4)
+           FROM DEPLOYMENT_METRICS dm 
+           WHERE dm.deployment_id = d.deployment_id 
+             AND dm.metric_date >= TRUNC(SYSDATE) - 7) AS cost_last_7_days,
+             CASE WHEN d.is_active = 'N' THEN 'inline-block' ELSE 'none' END AS is_activate_button,
+      CASE WHEN d.is_active = 'Y' AND d.deployment_status = 'ACTIVE' THEN 'inline-block' ELSE 'none' END AS is_pause_button,
+      CASE WHEN d.is_active = 'Y' THEN 'inline-block' ELSE 'none' END AS is_deactivate_button,
+      CASE WHEN d.deployment_type = 'CANARY' AND d.is_active = 'Y' AND d.rollout_percentage >= 50 THEN 'inline-block' ELSE 'none' END AS is_promote_button
+      FROM DEPLOYMENT_VERSIONS d
+      WHERE 1=1
+        AND (:P703_FILTER_TYPE IS NULL OR d.deployment_type = :P703_FILTER_TYPE)
+        AND (:P703_FILTER_STATUS IS NULL OR d.deployment_status = :P703_FILTER_STATUS)
+        AND (:P703_FILTER_ACTIVE IS NULL OR d.is_active LIKE :P703_FILTER_ACTIVE || '%')
+       
+
+  layout: 
+    sequence: 20
+    parent-region: Filters (Search) # 158156549799537625
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: deployment-grid
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 158156770824537627
+    edit: 
+      enabled: false
+
+    performance: 
+      lazy-loading: false
+
+    appearance: 
+      select-first-row: true
+      fixed-row-height: true
+
+    pagination: 
+      type: Scroll
+      show-total-count: true
+
+    toolbar: 
+      show: true
+      controls: 
+      - Search Column Selection
+      - Search Field
+      - Actions Menu
+      - Reset Button
+      - Save Button
+
+    enable-users-to: 
+      save-public-report: false
+      flashback: true
+      define-chart-view: true
+      download: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 158177992930751000
+      identification: 
+        name: Primary Report
+        alias: 1581780
+
+  columns: 
+  - # ====== Column: DEPLOYMENT_ID ===============================
+    id: 158156831288537628
+    identification: 
+      column-name: DEPLOYMENT_ID
+      type: Number Field
+
+    heading: 
+      heading: Deployment Id
+      alignment: end
+
+    settings: 
+      number-alignment: Start
+      virtual-keyboard: Decimal
+
+    layout: 
+      sequence: 10
+      column-alignment: end
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+
+    source: 
+      type: Database Column
+      database-column: DEPLOYMENT_ID
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: DEPLOYMENT_NAME =============================
+    id: 158156914531537629
+    identification: 
+      column-name: DEPLOYMENT_NAME
+      type: Text Field
+
+    heading: 
+      heading: Deployment Name
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 20
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+      maximum-length: 100
+
+    source: 
+      type: Database Column
+      database-column: DEPLOYMENT_NAME
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: DEPLOYMENT_TYPE =============================
+    id: 158157027456537630
+    identification: 
+      column-name: DEPLOYMENT_TYPE
+      type: Text Field
+
+    heading: 
+      heading: Deployment Type
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 30
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+      maximum-length: 20
+
+    source: 
+      type: Database Column
+      database-column: DEPLOYMENT_TYPE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: DEPLOYMENT_STATUS ===========================
+    id: 158157153268537631
+    identification: 
+      column-name: DEPLOYMENT_STATUS
+      type: Text Field
+
+    heading: 
+      heading: Deployment Status
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 40
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 20
+
+    source: 
+      type: Database Column
+      database-column: DEPLOYMENT_STATUS
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: PROVIDER ====================================
+    id: 158157207963537632
+    identification: 
+      column-name: PROVIDER
+      type: Text Field
+
+    heading: 
+      heading: Provider
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 50
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+      maximum-length: 50
+
+    source: 
+      type: Database Column
+      database-column: PROVIDER
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: MODEL_NAME ==================================
+    id: 158157394204537633
+    identification: 
+      column-name: MODEL_NAME
+      type: Text Field
+
+    heading: 
+      heading: Model Name
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 60
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+      maximum-length: 100
+
+    source: 
+      type: Database Column
+      database-column: MODEL_NAME
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: ROLLOUT_PERCENTAGE ==========================
+    id: 158157496643537634
+    identification: 
+      column-name: ROLLOUT_PERCENTAGE
+      type: Number Field
+
+    heading: 
+      heading: Rollout Percentage
+      alignment: end
+
+    settings: 
+      number-alignment: Start
+      virtual-keyboard: Decimal
+
+    layout: 
+      sequence: 70
+      column-alignment: end
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: ROLLOUT_PERCENTAGE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: IS_ACTIVE ===================================
+    id: 158157543959537635
+    identification: 
+      column-name: IS_ACTIVE
+      type: Text Field
+
+    heading: 
+      heading: Is Active
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 80
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 1
+
+    source: 
+      type: Database Column
+      database-column: IS_ACTIVE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: PRIORITY ====================================
+    id: 158157686989537636
+    identification: 
+      column-name: PRIORITY
+      type: Number Field
+
+    heading: 
+      heading: Priority
+      alignment: end
+
+    settings: 
+      number-alignment: Start
+      virtual-keyboard: Decimal
+
+    layout: 
+      sequence: 90
+      column-alignment: end
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: PRIORITY
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: CREATED_BY ==================================
+    id: 158157700655537637
+    identification: 
+      column-name: CREATED_BY
+      type: Number Field
+
+    heading: 
+      heading: Created By
+      alignment: end
+
+    settings: 
+      number-alignment: Start
+      virtual-keyboard: Decimal
+
+    layout: 
+      sequence: 100
+      column-alignment: end
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+
+    source: 
+      type: Database Column
+      database-column: CREATED_BY
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: CREATED_AT_DISPLAY ==========================
+    id: 158157832061537638
+    identification: 
+      column-name: CREATED_AT_DISPLAY
+      type: Text Field
+
+    heading: 
+      heading: Created At Display
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 110
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 16
+
+    source: 
+      type: Database Column
+      database-column: CREATED_AT_DISPLAY
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: ACTIVATED_AT_DISPLAY ========================
+    id: 158157978924537639
+    identification: 
+      column-name: ACTIVATED_AT_DISPLAY
+      type: Text Field
+
+    heading: 
+      heading: Activated At Display
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 120
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 16
+
+    source: 
+      type: Database Column
+      database-column: ACTIVATED_AT_DISPLAY
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: TARGET_SEGMENT_IDS ==========================
+    id: 158158017496537640
+    identification: 
+      column-name: TARGET_SEGMENT_IDS
+      type: Textarea
+
+    heading: 
+      heading: Target Segment Ids
+      alignment: start
+
+    settings: 
+      resizable: true
+      auto-height: false
+      character-counter: false
+      trim-spaces: Leading and Trailing
+
+    layout: 
+      sequence: 130
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 4000
+
+    source: 
+      type: Database Column
+      database-column: TARGET_SEGMENT_IDS
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: false
+      hide: true
+
+  - # ====== Column: EXPERIMENT_ID ===============================
+    id: 158158144619537641
+    identification: 
+      column-name: EXPERIMENT_ID
+      type: Number Field
+
+    heading: 
+      heading: Experiment Id
+      alignment: end
+
+    settings: 
+      number-alignment: Start
+      virtual-keyboard: Decimal
+
+    layout: 
+      sequence: 140
+      column-alignment: end
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: EXPERIMENT_ID
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: TYPE_CSS_CLASS ==============================
+    id: 158158249934537642
+    identification: 
+      column-name: TYPE_CSS_CLASS
+      type: Text Field
+
+    heading: 
+      heading: Type Css Class
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 150
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 9
+
+    source: 
+      type: Database Column
+      database-column: TYPE_CSS_CLASS
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: STATUS_DISPLAY ==============================
+    id: 158158348875537643
+    identification: 
+      column-name: STATUS_DISPLAY
+      type: Text Field
+
+    heading: 
+      heading: Status Display
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 160
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 8
+
+    source: 
+      type: Database Column
+      database-column: STATUS_DISPLAY
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: SHADOW_PARENT_NAME ==========================
+    id: 158158482857537644
+    identification: 
+      column-name: SHADOW_PARENT_NAME
+      type: Text Field
+
+    heading: 
+      heading: Shadow Parent Name
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 170
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 100
+
+    source: 
+      type: Database Column
+      database-column: SHADOW_PARENT_NAME
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: SHADOW_PARENT_DEPLOYMENT_ID =================
+    id: 158158527975537645
+    identification: 
+      column-name: SHADOW_PARENT_DEPLOYMENT_ID
+      type: Number Field
+
+    heading: 
+      heading: Shadow Parent Deployment Id
+      alignment: end
+
+    settings: 
+      number-alignment: Start
+      virtual-keyboard: Decimal
+
+    layout: 
+      sequence: 180
+      column-alignment: end
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: SHADOW_PARENT_DEPLOYMENT_ID
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: SHADOW_EXECUTION_MODE =======================
+    id: 158158628253537646
+    identification: 
+      column-name: SHADOW_EXECUTION_MODE
+      type: Text Field
+
+    heading: 
+      heading: Shadow Execution Mode
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 190
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 20
+
+    source: 
+      type: Database Column
+      database-column: SHADOW_EXECUTION_MODE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: EXPERIMENT_NAME =============================
+    id: 158158745821537647
+    identification: 
+      column-name: EXPERIMENT_NAME
+      type: Text Field
+
+    heading: 
+      heading: Experiment Name
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 200
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 100
+
+    source: 
+      type: Database Column
+      database-column: EXPERIMENT_NAME
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: VARIANT_LABEL ===============================
+    id: 158158810744537648
+    identification: 
+      column-name: VARIANT_LABEL
+      type: Text Field
+
+    heading: 
+      heading: Variant Label
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 210
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 10
+
+    source: 
+      type: Database Column
+      database-column: VARIANT_LABEL
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: CANARY_CURRENT_STAGE ========================
+    id: 158158936178537649
+    identification: 
+      column-name: CANARY_CURRENT_STAGE
+      type: Number Field
+
+    heading: 
+      heading: Canary Current Stage
+      alignment: end
+
+    settings: 
+      number-alignment: Start
+      virtual-keyboard: Decimal
+
+    layout: 
+      sequence: 220
+      column-alignment: end
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: CANARY_CURRENT_STAGE
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: DEPLOYMENT_CONFIG ===========================
+    id: 158159057339537650
+    identification: 
+      column-name: DEPLOYMENT_CONFIG
+      type: Textarea
+
+    heading: 
+      heading: Deployment Config
+      alignment: start
+
+    settings: 
+      resizable: true
+      auto-height: false
+      character-counter: false
+      trim-spaces: Leading and Trailing
+
+    layout: 
+      sequence: 230
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: DEPLOYMENT_CONFIG
+      data-type: CLOB
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: CLOB
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      hide: true
+
+  - # ====== Column: CANARY_SCHEDULE_JSON ========================
+    id: 158170664438674201
+    identification: 
+      column-name: CANARY_SCHEDULE_JSON
+      type: Textarea
+
+    heading: 
+      heading: Canary Schedule Json
+      alignment: start
+
+    settings: 
+      resizable: true
+      auto-height: false
+      character-counter: false
+      trim-spaces: Leading and Trailing
+
+    layout: 
+      sequence: 240
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: CANARY_SCHEDULE_JSON
+      data-type: CLOB
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: CLOB
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      hide: true
+
+  - # ====== Column: CALLS_LAST_7_DAYS ===========================
+    id: 158170731280674202
+    identification: 
+      column-name: CALLS_LAST_7_DAYS
+      type: Number Field
+
+    heading: 
+      heading: Calls Last 7 Days
+      alignment: end
+
+    settings: 
+      number-alignment: Start
+      virtual-keyboard: Decimal
+
+    layout: 
+      sequence: 250
+      column-alignment: end
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      format-mask: 999,999,999
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: CALLS_LAST_7_DAYS
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: AVG_LATENCY_7_DAYS ==========================
+    id: 158170806720674203
+    identification: 
+      column-name: AVG_LATENCY_7_DAYS
+      type: Number Field
+
+    heading: 
+      heading: Avg Latency 7 Days
+      alignment: end
+
+    settings: 
+      number-alignment: Start
+      virtual-keyboard: Decimal
+
+    layout: 
+      sequence: 260
+      column-alignment: end
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: AVG_LATENCY_7_DAYS
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: COST_LAST_7_DAYS ============================
+    id: 158170993603674204
+    identification: 
+      column-name: COST_LAST_7_DAYS
+      type: Number Field
+
+    heading: 
+      heading: Cost Last 7 Days
+      alignment: end
+
+    settings: 
+      number-alignment: Start
+      virtual-keyboard: Decimal
+
+    layout: 
+      sequence: 270
+      column-alignment: end
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: COST_LAST_7_DAYS
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: actions =====================================
+    id: 158171058698674205
+    identification: 
+      column-name: actions
+      type: Display Only
+
+    heading: 
+      alignment: start
+
+    settings: 
+      format: Plain Text
+      based-on: Item Value
+
+    layout: 
+      sequence: 280
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: None
+
+    default: 
+      type: Static
+      static-value: |
+        <div class="deployment-actions">
+            <button type="button" 
+                    class="t-Button t-Button--noLabel t-Button--icon" 
+                    title="Edit"
+                    onclick="apex.navigation.dialog('f?p=&APP_ID.:704:&SESSION.::NO:RP,704:P704_DEPLOYMENT_ID:#DEPLOYMENT_ID#',{title:'Edit Deployment',height:'auto',width:'800',maxWidth:'95%'});">
+                <span class="fa fa-edit"></span>
+            </button>
+            
+            <button type="button" 
+                    class="t-Button t-Button--noLabel t-Button--icon t-Button--success" 
+                    title="Activate"
+                    onclick="activateDeployment(#DEPLOYMENT_ID#);"
+                    style="display:#IS_ACTIVE_BUTTON#;">
+                <span class="fa fa-play"></span>
+            </button>
+            
+            <button type="button" 
+                    class="t-Button t-Button--noLabel t-Button--icon t-Button--warning" 
+                    title="Pause"
+                    onclick="pauseDeployment(#DEPLOYMENT_ID#);"
+                    style="display:#IS_PAUSE_BUTTON#;">
+                <span class="fa fa-pause"></span>
+            </button>
+            
+            <button type="button" 
+                    class="t-Button t-Button--noLabel t-Button--icon t-Button--danger" 
+                    title="Deactivate"
+                    onclick="deactivateDeployment(#DEPLOYMENT_ID#);"
+                    style="display:#IS_DEACTIVATE_BUTTON#;">
+                <span class="fa fa-stop"></span>
+            </button>
+            
+            <button type="button" 
+                    class="t-Button t-Button--noLabel t-Button--icon t-Button--hot" 
+                    title="Promote to Production"
+                    onclick="promoteDeployment(#DEPLOYMENT_ID#);"
+                    style="display:#IS_PROMOTE_BUTTON#;">
+                <span class="fa fa-arrow-up"></span>
+            </button>
+        </div>
+
+    session-state: 
+      data-type: VARCHAR2
+
+    enable-users-to: 
+      hide: true
+
+  - # ====== Column: IS_ACTIVATE_BUTTON ==========================
+    id: 158171132853674206
+    identification: 
+      column-name: IS_ACTIVATE_BUTTON
+      type: Text Field
+
+    heading: 
+      heading: Is Activate Button
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 290
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 12
+
+    source: 
+      type: Database Column
+      database-column: IS_ACTIVATE_BUTTON
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: IS_PAUSE_BUTTON =============================
+    id: 158171220289674207
+    identification: 
+      column-name: IS_PAUSE_BUTTON
+      type: Text Field
+
+    heading: 
+      heading: Is Pause Button
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 300
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 12
+
+    source: 
+      type: Database Column
+      database-column: IS_PAUSE_BUTTON
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: IS_DEACTIVATE_BUTTON ========================
+    id: 158171317866674208
+    identification: 
+      column-name: IS_DEACTIVATE_BUTTON
+      type: Text Field
+
+    heading: 
+      heading: Is Deactivate Button
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 310
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 12
+
+    source: 
+      type: Database Column
+      database-column: IS_DEACTIVATE_BUTTON
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: IS_PROMOTE_BUTTON ===========================
+    id: 158171411712674209
+    identification: 
+      column-name: IS_PROMOTE_BUTTON
+      type: Text Field
+
+    heading: 
+      heading: Is Promote Button
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 320
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 12
+
+    source: 
+      type: Database Column
+      database-column: IS_PROMOTE_BUTTON
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  printing: 
+    page: 
+      size: Letter
+      orientation: Landscape
+      units: Inches
+      width: 11
+      height: 8.5
+      border-width: 0.5
+      border-color: '#666666'
+
+    page-header: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 12
+      font-color: '#000000'
+      alignment: center
+
+    column-headings: 
+      font: Helvetica
+      font-weight: Bold
+      font-size: 10
+      font-color: '#000000'
+      background-color: '#EEEEEE'
+
+    columns: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 10
+      font-color: '#000000'
+      background-color: '#FFFFFF'
+
+    page-footer: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 12
+      font-color: '#000000'
+      alignment: center
+
+- # ====== Region: Filters (Search) ============================
+  id: 158156549799537625
+  identification: 
+    name: Filters (Search)
+    type: Static Content
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Search Results Container
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Create New Deployment  ======================
+  id: 158156654869537626
+  identification: 
+    name: 'Create New Deployment '
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Breadcrumb ==================================
+  id: 158169990335665415
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 123954626239486075
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--compactTitle
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region: New =========================================
+  id: 158172718894674222
+  identification: 
+    name: New
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: Filters (Search) # 158156549799537625
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P703_FILTER_TYPE =========================
+  id: 158171774924674212
+  identification: 
+    name: P703_FILTER_TYPE
+    type: Select List
+
+  label: 
+    label: Filter Type
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: New # 158172718894674222
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      SELECT deployment_type AS display_value, 
+             deployment_type AS return_value
+      FROM (
+          SELECT DISTINCT deployment_type 
+          FROM DEPLOYMENT_VERSIONS
+          ORDER BY deployment_type
+      )
+    display-extra-values: true
+    display-null-value: true
+    null-display-value: All Types
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P703_FILTER_STATUS =======================
+  id: 158171882164674213
+  identification: 
+    name: P703_FILTER_STATUS
+    type: Select List
+
+  label: 
+    label: Filter Status
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 20
+    region: New # 158172718894674222
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      SELECT deployment_status AS display_value,
+             deployment_status AS return_value
+      FROM (
+          SELECT DISTINCT deployment_status
+          FROM DEPLOYMENT_VERSIONS
+          ORDER BY deployment_status
+      )
+    display-extra-values: true
+    display-null-value: true
+    null-display-value: All Statuses
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P703_FILTER_ACTIVE =======================
+  id: 158172244754674217
+  identification: 
+    name: P703_FILTER_ACTIVE
+    type: Select List
+
+  label: 
+    label: Filter Active
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 40
+    region: New # 158172718894674222
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: YES_NO (2) # 141689407891482503
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: CREATE_DEPLOYMENT ===========================
+  id: 158171524622674210
+  identification: 
+    button-name: CREATE_DEPLOYMENT
+    label: ' Create New Deployment'
+
+  layout: 
+    sequence: 10
+    region: 'Create New Deployment ' # 158156654869537626
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-plus
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:704:&SESSION.::&DEBUG.:704:P704_DEPLOYMENT_ID:'
+      page: 704 # deployments Edit
+      clear-cache: 704
+      values: 
+
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: change items ========================
+  id: 158171944803674214
+  identification: 
+    name: change items
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P703_FILTER_TYPE
+    - ' P703_FILTER_STATUS'
+    - ' P703_FILTER_ACTIVE'
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 158172010470674215
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Deployment Versions # 158156313928537623
+
+    execution: 
+      sequence: 10
+      event: change items # 158171944803674214
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: ACTIVATE_DEPLOYMENT ========================
+  id: 158172332319674218
+  identification: 
+    name: ACTIVATE_DEPLOYMENT
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_deployment_id NUMBER := apex_application.g_x01;
+      BEGIN
+          DEPLOYMENT_MANAGER_PKG.activate_deployment(
+              p_deployment_id => v_deployment_id
+          );
+          
+          apex_json.open_object;
+          apex_json.write('success', true);
+          apex_json.write('message', 'Deployment activated successfully');
+          apex_json.close_object;
+          
+      EXCEPTION
+          WHEN OTHERS THEN
+              apex_json.open_object;
+              apex_json.write('success', false);
+              apex_json.write('message', SQLERRM);
+              apex_json.close_object;
+      END;
+
+  execution: 
+    sequence: 10
+    point: Ajax Callback
+    run-process: Once Per Page Visit (default)
+
+  server-side-condition: 
+    type: Request = Value
+    value: ACTIVATE_DEPLOYMENT
+
+- # ====== Process: PAUSE_DEPLOYMENT ===========================
+  id: 158172404966674219
+  identification: 
+    name: PAUSE_DEPLOYMENT
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_deployment_id NUMBER := apex_application.g_x01;
+      BEGIN
+          DEPLOYMENT_MANAGER_PKG.pause_deployment(
+              p_deployment_id => v_deployment_id
+          );
+          
+          apex_json.open_object;
+          apex_json.write('success', true);
+          apex_json.write('message', 'Deployment paused successfully');
+          apex_json.close_object;
+          
+      EXCEPTION
+          WHEN OTHERS THEN
+              apex_json.open_object;
+              apex_json.write('success', false);
+              apex_json.write('message', SQLERRM);
+              apex_json.close_object;
+      END;
+
+  execution: 
+    sequence: 20
+    point: Ajax Callback
+    run-process: Once Per Page Visit (default)
+
+  server-side-condition: 
+    type: Request = Value
+    value: PAUSE_DEPLOYMENT
+
+- # ====== Process:  DEACTIVATE_DEPLOYMENT =====================
+  id: 158172538464674220
+  identification: 
+    name: ' DEACTIVATE_DEPLOYMENT'
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_deployment_id NUMBER := apex_application.g_x01;
+      BEGIN
+          DEPLOYMENT_MANAGER_PKG.deactivate_deployment(
+              p_deployment_id => v_deployment_id
+          );
+          
+          apex_json.open_object;
+          apex_json.write('success', true);
+          apex_json.write('message', 'Deployment deactivated successfully');
+          apex_json.close_object;
+          
+      EXCEPTION
+          WHEN OTHERS THEN
+              apex_json.open_object;
+              apex_json.write('success', false);
+              apex_json.write('message', SQLERRM);
+              apex_json.close_object;
+      END;
+
+  execution: 
+    sequence: 30
+    point: Ajax Callback
+    run-process: Once Per Page Visit (default)
+
+  server-side-condition: 
+    type: Request = Value
+    value: DEACTIVATE_DEPLOYMENT
+
+- # ====== Process: PROMOTE_CANARY =============================
+  id: 158172616710674221
+  identification: 
+    name: PROMOTE_CANARY
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_deployment_id NUMBER := apex_application.g_x01;
+      BEGIN
+          DEPLOYMENT_MANAGER_PKG.promote_canary_to_production(
+              p_canary_deployment_id => v_deployment_id
+          );
+          
+          apex_json.open_object;
+          apex_json.write('success', true);
+          apex_json.write('message', 'Canary promoted to production successfully');
+          apex_json.close_object;
+          
+      EXCEPTION
+          WHEN OTHERS THEN
+              apex_json.open_object;
+              apex_json.write('success', false);
+              apex_json.write('message', SQLERRM);
+              apex_json.close_object;
+      END;
+
+  execution: 
+    sequence: 40
+    point: Ajax Callback
+    run-process: Once Per Page Visit (default)
+
+  server-side-condition: 
+    type: Request = Value
+    value: PROMOTE_CANARY
+

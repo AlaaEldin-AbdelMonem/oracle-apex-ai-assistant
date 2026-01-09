@@ -1,0 +1,1435 @@
+---
+- # ====== List of Values: ROLES.ROLE_CODE =====================
+  id: 124093738168184636
+  identification: 
+    name: ROLES.ROLE_CODE
+
+  subscription: 
+    version-number: 38947175801858
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: ROLES
+
+  column-mapping: 
+    return: ROLE_ID
+    display: ROLE_NAME
+    default-sort: ROLE_CODE
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: DATA CLASSIFICATION LIST ============
+  id: 124094819518184644
+  identification: 
+    name: DATA CLASSIFICATION LIST
+
+  subscription: 
+    version-number: 38947436634974
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          UNICODE_ICON || ' ' || DESCRIPTION AS DISPLAY_VALUE,
+          CLASSIFICATION_ID AS RETURN_VALUE
+      FROM LKP_DATA_CLASSIFICATION
+      ORDER BY CLASSIFICATION_LEVEL;
+
+  column-mapping: 
+    return: RETURN_VALUE
+    display: DISPLAY_VALUE
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: ALLOWED ACTIONS LIST ================
+  id: 124110398289209878
+  identification: 
+    name: ALLOWED ACTIONS LIST
+
+  subscription: 
+    version-number: 38947437257564
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT action_name  ,
+             action_code  
+      FROM lkp_access_action
+      ORDER BY action_id
+
+  column-mapping: 
+    return: ACTION_CODE
+    display: ACTION_NAME
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: YES_NO  =============================
+  id: 124111059557222693
+  identification: 
+    name: 'YES_NO '
+
+  subscription: 
+    version-number: 38947434074721
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 'Y' AS return_value, '🟢 Yes' AS display_value FROM dual
+      UNION ALL
+      SELECT 'N' AS return_value, '⚪ No' AS display_value FROM dual;
+
+  column-mapping: 
+    return: RETURN_VALUE
+    display: DISPLAY_VALUE
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: IS_ACTIVE_3 =========================
+  id: 124597466510100787
+  identification: 
+    name: IS_ACTIVE_3
+
+  subscription: 
+    version-number: 38947437241765
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT '🏳️ All'          AS display_value,        NULL AS return_value  FROM dual
+      UNION ALL
+      SELECT '🟩 Active Only'  AS display_value,  'Y'  AS return_value  FROM dual 
+      UNION ALL
+      SELECT '🟥 Inactive Only' AS display_value , 'N' AS return_value  FROM dual
+       
+
+  column-mapping: 
+    return: RETURN_VALUE
+    display: DISPLAY_VALUE
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: HCM_EMPLOYEE.FULL_NAME ==============
+  id: 124800669036508037
+  identification: 
+    name: HCM_EMPLOYEE.FULL_NAME
+
+  subscription: 
+    version-number: 38946763658729
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: HCM_EMPLOYEE
+
+  column-mapping: 
+    return: EMPLOYEE_ID
+    display: FULL_NAME
+    default-sort: FULL_NAME
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: DOCS.TITLE ==========================
+  id: 124878841167551232
+  identification: 
+    name: DOCS.TITLE
+
+  subscription: 
+    version-number: 38947417812238
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: DOCS
+
+  column-mapping: 
+    return: DOC_ID
+    display: DOC_TITLE
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: LKP_DOC_CATEGORY.CATEGORY_NAME ======
+  id: 125477171442396512
+  identification: 
+    name: LKP_DOC_CATEGORY.CATEGORY_NAME
+
+  subscription: 
+    version-number: 38946781999691
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: LKP_DOC_CATEGORY
+
+  column-mapping: 
+    return: CATEGORY_CODE
+    display: CATEGORY_NAME
+    default-sort: CATEGORY_NAME
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: CLASSIFICATION_LEVEL LIST ===========
+  id: 125481450280396531
+  identification: 
+    name: CLASSIFICATION_LEVEL LIST
+
+  subscription: 
+    version-number: 38947436596027
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          UNICODE_ICON || ' ' || CLASSIFICATION_CODE AS DISPLAY_VALUE,
+          CLASSIFICATION_ID AS RETURN_VALUE
+      FROM LKP_DATA_CLASSIFICATION
+      ORDER BY CLASSIFICATION_LEVEL;
+
+  column-mapping: 
+    return: RETURN_VALUE
+    display: DISPLAY_VALUE
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: SENSITIVITY LEVELS LIST =============
+  id: 125482126216396534
+  identification: 
+    name: SENSITIVITY LEVELS LIST
+
+  subscription: 
+    version-number: 38947433833317
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT  UNICODE_ICON||  ' ' || SENSITIVITY_NAME as display_value, 
+      SENSITIVITY_LEVEL return_value,
+      SENSITIVITY_CODE, DESCRIPTION,IS_ACTIVE,ICON_CSS_CLASS 
+      from "LKP_REGISTRY_SENSITIVITY_LEVELS" a
+
+  column-mapping: 
+    return: RETURN_VALUE
+    display: DISPLAY_VALUE
+    default-sort: Use Order By from Query
+    icon: ICON_CSS_CLASS
+
+- # ====== List of Values: DOC_STATUS LIST =====================
+  id: 125482895647396536
+  identification: 
+    name: DOC_STATUS LIST
+
+  subscription: 
+    version-number: 38947436286789
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: select STATUS_CODE returnx, ICON_UNICODE||' '||STATUS_NAME display from "LKP_DOC_STATUS" a
+
+  column-mapping: 
+    return: RETURNX
+    display: DISPLAY
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: LKP_CHUNKING_STRATEGY.STRATEGY_NAME =
+  id: 125492389295396566
+  identification: 
+    name: LKP_CHUNKING_STRATEGY.STRATEGY_NAME
+
+  subscription: 
+    version-number: 38946781999817
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: LKP_CHUNKING_STRATEGY
+
+  column-mapping: 
+    return: STRATEGY_CODE
+    display: STRATEGY_NAME
+    default-sort: STRATEGY_NAME
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: UNIFIED_TASK_LIST.LOV.DUE ===========
+  id: 128089382545978487
+  identification: 
+    name: UNIFIED_TASK_LIST.LOV.DUE
+
+  subscription: 
+    version-number: 38946886083772
+
+  source: 
+    location: Static Values
+
+  entries: 
+  - # ====== Entry: Overdue ======================================
+    id: 128089661854978488
+    entry: 
+      sequence: 1
+      display: Overdue
+      return: '|0'
+
+  - # ====== Entry: Next hour ====================================
+    id: 128090057975978491
+    entry: 
+      sequence: 2
+      display: Next hour
+      return: 0|1
+
+  - # ====== Entry: Next 24 hours ================================
+    id: 128090475516978492
+    entry: 
+      sequence: 3
+      display: Next 24 hours
+      return: 1|24
+
+  - # ====== Entry: Next 7 days ==================================
+    id: 128090894151978493
+    entry: 
+      sequence: 4
+      display: Next 7 days
+      return: 24|168
+
+  - # ====== Entry: Next 30 days =================================
+    id: 128091240465978494
+    entry: 
+      sequence: 5
+      display: Next 30 days
+      return: 168|720
+
+  - # ====== Entry: More than 30 days ============================
+    id: 128091640867978495
+    entry: 
+      sequence: 6
+      display: More than 30 days
+      return: 720|
+
+- # ====== List of Values: UNIFIED_TASK_LIST.LOV.TYPE ==========
+  id: 128092492887978498
+  identification: 
+    name: UNIFIED_TASK_LIST.LOV.TYPE
+
+  subscription: 
+    version-number: 38946886083790
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select disp,
+             val
+        from table ( apex_human_task.get_lov_type )
+       order by insert_order
+
+  column-mapping: 
+    return: VAL
+    display: DISP
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: UNIFIED_TASK_LIST.LOV.PRIORITY ======
+  id: 128093515614978501
+  identification: 
+    name: UNIFIED_TASK_LIST.LOV.PRIORITY
+
+  subscription: 
+    version-number: 38946886083791
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select disp,
+             val
+        from table ( apex_human_task.get_lov_priority )
+       order by insert_order
+
+  column-mapping: 
+    return: VAL
+    display: DISP
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: UNIFIED_TASK_LIST.LOV.STATE =========
+  id: 128094223856978503
+  identification: 
+    name: UNIFIED_TASK_LIST.LOV.STATE
+
+  subscription: 
+    version-number: 38946886083791
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select disp,
+             val
+        from table ( apex_human_task.get_lov_state )
+       order by insert_order
+
+  column-mapping: 
+    return: VAL
+    display: DISP
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: UNIFIED_TASK_LIST.LOV.INITIATED =====
+  id: 128096152822978508
+  identification: 
+    name: UNIFIED_TASK_LIST.LOV.INITIATED
+
+  subscription: 
+    version-number: 38946886083795
+
+  source: 
+    location: Static Values
+
+  entries: 
+  - # ====== Entry: Last hour ====================================
+    id: 128096413392978508
+    entry: 
+      sequence: 1
+      display: Last hour
+      return: '|1'
+
+  - # ====== Entry: Last 24 hours ================================
+    id: 128096827410978509
+    entry: 
+      sequence: 2
+      display: Last 24 hours
+      return: 1|24
+
+  - # ====== Entry: Last 7 days ==================================
+    id: 128097253589978510
+    entry: 
+      sequence: 3
+      display: Last 7 days
+      return: 24|168
+
+  - # ====== Entry: Last 30 days =================================
+    id: 128097613010978511
+    entry: 
+      sequence: 4
+      display: Last 30 days
+      return: 168|720
+
+  - # ====== Entry: Older than 30 days ===========================
+    id: 128098071593978512
+    entry: 
+      sequence: 5
+      display: Older than 30 days
+      return: 720|
+
+- # ====== List of Values: LKP_CONTEXT_DOMAIN_CATEGORIES.CATEGOR
+  id: 140966433950402822
+  identification: 
+    name: LKP_CONTEXT_DOMAIN_CATEGORIES.CATEGORY_CODE
+
+  subscription: 
+    version-number: 38947437252358
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: LKP_CONTEXT_DOMAIN_CATEGORIES
+
+  column-mapping: 
+    return: CONTEXT_DOMAIN_CATEGORY_ID
+    display: CATEGORY_NAME
+    default-sort: CATEGORY_CODE
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: REGISTRY_SOURCE_TYPES LIST ==========
+  id: 141021442957429555
+  identification: 
+    name: REGISTRY_SOURCE_TYPES LIST
+
+  subscription: 
+    version-number: 38947434484650
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 
+         UNICODE_ICON || ' ' || NAME AS DISPLAY_VALUE,
+          CONTEXT_REGISTRY_SOURCE_TYPE_CODE AS RETURN_VALUE
+      FROM LKP_CONTEXT_REGISTRY_SOURCE_TYPES
+       
+
+  column-mapping: 
+    return: RETURN_VALUE
+    display: DISPLAY_VALUE
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: DATA_CLASSIFICATION-CODE-LIST =======
+  id: 141022543036429558
+  identification: 
+    name: DATA_CLASSIFICATION-CODE-LIST
+
+  subscription: 
+    version-number: 38947436608472
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: LKP_DATA_CLASSIFICATION
+    where-clause: |
+      SELECT 
+          UNICODE_ICON || ' ' || CLASSIFICATION_NAME AS DISPLAY_VALUE,
+          CLASSIFICATION_CODE  AS RETURN_VALUE
+      FROM LKP_DATA_CLASSIFICATION
+      ORDER BY CLASSIFICATION_LEVEL;
+
+  column-mapping: 
+    return: CLASSIFICATION_LEVEL
+    display: CLASSIFICATION_CODE
+    default-sort: CLASSIFICATION_CODE
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: CONTEXT_DOMAINS(CODE) ===============
+  id: 141068527092441637
+  identification: 
+    name: CONTEXT_DOMAINS(CODE)
+
+  subscription: 
+    version-number: 38947905516870
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: CONTEXT_DOMAINS
+
+  column-mapping: 
+    return: CONTEXT_DOMAIN_ID
+    display: CONTEXT_DOMAIN_CODE
+    default-sort: CONTEXT_DOMAIN_CODE
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: CONTEXT_REGISTRY.SOURCE_TITLE =======
+  id: 141069212864441639
+  identification: 
+    name: CONTEXT_REGISTRY.SOURCE_TITLE
+
+  subscription: 
+    version-number: 38947415348677
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: CONTEXT_REGISTRY
+
+  column-mapping: 
+    return: CONTEXT_REGISTRY_ID
+    display: SOURCE_TITLE
+    default-sort: SOURCE_TITLE
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: CLEARANCE_ROLE_LEVELS LIST ==========
+  id: 141681599978262029
+  identification: 
+    name: CLEARANCE_ROLE_LEVELS LIST
+
+  subscription: 
+    version-number: 38947440188582
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select CLEARANCE_LEVEL return,
+             CLEARANCE_CODE,
+            UNICODE_ICON|| ' '|| CLEARANCE_NAME display,
+             DESCRIPTION,
+             ICON_CSS_CLASS 
+      from "LKP_ROLE_CLEARANCE_LEVELS" a
+      
+       
+
+  column-mapping: 
+    return: RETURN
+    display: DISPLAY
+    default-sort: Use Order By from Query
+    icon: ICON_CSS_CLASS
+
+- # ====== List of Values: YES_NO (2) ==========================
+  id: 141689407891482503
+  identification: 
+    name: YES_NO (2)
+
+  subscription: 
+    version-number: 38947433976237
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 'Y' AS return_value, '✔ Yes' AS display_value FROM dual
+      UNION ALL
+      SELECT 'N' AS return_value, '✖ No' AS display_value FROM dual;
+
+  column-mapping: 
+    return: RETURN_VALUE
+    display: DISPLAY_VALUE
+    default-sort: DISPLAY_VALUE
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: YES_NO (3) ==========================
+  id: 141689693115487954
+  identification: 
+    name: YES_NO (3)
+
+  subscription: 
+    version-number: 38947433988958
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 'Y' return_value, '🟢 Yes' display_value FROM dual
+      UNION ALL
+      SELECT 'N' return_value, '🔴 No' display_value FROM dual;
+
+  column-mapping: 
+    return: RETURN_VALUE
+    display: DISPLAY_VALUE
+    default-sort: DISPLAY_VALUE
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: YES_NO (4) ==========================
+  id: 141689860723500268
+  identification: 
+    name: YES_NO (4)
+
+  subscription: 
+    version-number: 38947434015732
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 'Y' return_name,'☑ Yes' display  FROM dual
+      UNION ALL
+      SELECT 'N' return_name ,'☐ No' display FROM dual;
+
+  column-mapping: 
+    return: RETURN_NAME
+    display: DISPLAY
+    default-sort: DISPLAY
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: ERROR SEVERITY TYPE LIST ============
+  id: 141702400117512509
+  identification: 
+    name: ERROR SEVERITY TYPE LIST
+
+  subscription: 
+    version-number: 38947436794272
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      
+      SELECT 
+          UNICODE_ICON || ' ' || SEVERITY_NAME AS DISPLAY_VALUE,
+          SEVERITY_CODE AS RETURN_VALUE
+      FROM LKP_ERROR_SEVERITY
+      WHERE IS_ACTIVE = 'Y'
+      ORDER BY SEVERITY_LEVEL;
+
+  column-mapping: 
+    return: RETURN_VALUE
+    display: DISPLAY_VALUE
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: DOMAIN ACTIVATION OPTIONS (CODE) ====
+  id: 141771919013142054
+  identification: 
+    name: DOMAIN ACTIVATION OPTIONS (CODE)
+
+  subscription: 
+    version-number: 38947441444107
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select ACTIVATION_TYPE_CODE as returnx,
+            ACTIVATION_TYPE_NAME  as display ,
+            
+           DESCRIPTION 
+      
+            -- IS_ACTIVE        DISPLAY_ORDER,
+      from "LKP_DOMAIN_ACTIVATION_TYPE" a
+      
+
+  column-mapping: 
+    return: RETURNX
+    display: DISPLAY
+    default-sort: DISPLAY
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: DOMAIN SCOPE TYPES LIST (CODE) ======
+  id: 141772149084159315
+  identification: 
+    name: DOMAIN SCOPE TYPES LIST (CODE)
+
+  subscription: 
+    version-number: 38947440948817
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select -- DOMAIN_SCOPE_TYPE_ID,
+             SCOPE_CODE as retrunx,
+             SCOPE_NAME as display,
+             SCOPE_DESCRIPTION,
+             IS_ACTIVE
+      from "LKP_CONTEXT_DOMAIN_SCOPE_TYPE" a
+      
+
+  column-mapping: 
+    return: RETRUNX
+    display: DISPLAY
+    default-sort: DISPLAY
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: LLM_PROVIDERS(CODE)-ACTIVE ==========
+  id: 142748082094460762
+  identification: 
+    name: LLM_PROVIDERS(CODE)-ACTIVE
+
+  subscription: 
+    version-number: 38947485381655
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select PROVIDER_ID,
+             PROVIDER_CODE,
+             PROVIDER_NAME,
+             DESCRIPTION,
+             IS_DEFAULT,
+             PRIORITY_LEVEL,
+             DISPLAY_ORDER
+      from "LLM_PROVIDERS" a
+      Where  IS_ACTIVE= 'Y'
+      
+
+  column-mapping: 
+    return: PROVIDER_CODE
+    display: PROVIDER_NAME
+    default-sort: PROVIDER_NAME
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: LLM_MODELS-(ID) =====================
+  id: 142749138849613282
+  identification: 
+    name: LLM_MODELS-(ID)
+
+  subscription: 
+    version-number: 38947485583631
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: LLM_PROVIDER_MODELS
+
+  column-mapping: 
+    return: LLM_PROVIDER_MODEL_ID
+    display: MODEL_NAME
+    default-sort: MODEL_NAME
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: LLM_MODELS-(CODE) ===================
+  id: 142749373454616369
+  identification: 
+    name: LLM_MODELS-(CODE)
+
+  subscription: 
+    version-number: 38947485472033
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: LLM_PROVIDER_MODELS
+
+  column-mapping: 
+    return: MODEL_CODE
+    display: MODEL_NAME
+    default-sort: MODEL_NAME
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: DEBUG SCOPE (CODE) ==================
+  id: 142782283603865597
+  identification: 
+    name: DEBUG SCOPE (CODE)
+
+  subscription: 
+    version-number: 38951391683201
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: LKP_DEBUG_SCOPES
+
+  column-mapping: 
+    return: SCOPE_CODE
+    display: SCOPE_NAME
+    default-sort: DEBUG_SCOPE_ID
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: DEBUG LEVEL (DEBUG_LEVEL) ===========
+  id: 142783886284945216
+  identification: 
+    name: DEBUG LEVEL (DEBUG_LEVEL)
+
+  subscription: 
+    version-number: 38951386510986
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select debug_level return_Val,
+       Level_Name ||' ('||debug_level||')' display_value
+        from LKP_DEBUG_LEVEL
+
+  column-mapping: 
+    return: RETURN_VAL
+    display: DISPLAY_VALUE
+    default-sort: RETURN_VAL
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: DEBUG LEVEL (LEVEL CODEL) ===========
+  id: 142784049886952758
+  identification: 
+    name: DEBUG LEVEL (LEVEL CODEL)
+
+  subscription: 
+    version-number: 38947489021437
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: LKP_DEBUG_LEVEL
+
+  column-mapping: 
+    return: LEVEL_CODE
+    display: LEVEL_NAME
+    default-sort: LEVEL_NAME
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: USERS(USERID) =======================
+  id: 142784559434972307
+  identification: 
+    name: USERS(USERID)
+
+  subscription: 
+    version-number: 38951386858685
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: USERS
+
+  column-mapping: 
+    return: USER_ID
+    display: USER_NAME
+    default-sort: USER_NAME
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: APP LIST ============================
+  id: 142784952100993911
+  identification: 
+    name: APP LIST
+
+  subscription: 
+    version-number: 38947489134408
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT
+          application_id,
+          application_name,
+          alias
+      FROM
+          apex_applications
+      ORDER BY
+          application_id;
+
+  column-mapping: 
+    return: APPLICATION_ID
+    display: APPLICATION_NAME
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: USER MODULES (DB PKGS) ==============
+  id: 142785128474004023
+  identification: 
+    name: USER MODULES (DB PKGS)
+
+  subscription: 
+    version-number: 38947489158790
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT
+          object_name AS display,
+          object_name AS returnx
+      FROM
+          user_objects
+      WHERE
+          object_type = 'PACKAGE'
+      ORDER BY
+          object_name;
+
+  column-mapping: 
+    return: RETURNX
+    display: DISPLAY
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: LOV_LLM_PROVIDERS ===================
+  id: 144722457248343192
+  identification: 
+    name: LOV_LLM_PROVIDERS
+
+  subscription: 
+    version-number: 38947574616272
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT provider_name AS display_value,
+             provider_code AS return_value
+      FROM llm_providers
+      WHERE is_active = 'Y'
+      ORDER BY display_order;
+
+  column-mapping: 
+    return: RETURN_VALUE
+    display: DISPLAY_VALUE
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: LOV_LLM_MODELS ======================
+  id: 144722697826346442
+  identification: 
+    name: LOV_LLM_MODELS
+
+  subscription: 
+    version-number: 38947574622817
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT model_name AS display_value,
+             model_code AS return_value
+      FROM llm_provider_models
+      WHERE provider_code = :P110_PROVIDER
+        AND is_active = 'Y'
+        AND is_embedding_model = 'N'
+        AND is_production_ready = 'Y'
+      ORDER BY display_order;
+
+  column-mapping: 
+    return: RETURN_VALUE
+    display: DISPLAY_VALUE
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: CHAT_MESSAGES.MESSAGE_ROLE ==========
+  id: 150021306727588018
+  identification: 
+    name: CHAT_MESSAGES.MESSAGE_ROLE
+
+  subscription: 
+    version-number: 38947788251295
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: CHAT_MESSAGES
+
+  column-mapping: 
+    return: MESSAGE_ID
+    display: MESSAGE_ROLE
+    default-sort: MESSAGE_ROLE
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: CHAT_SESSIONS.SESSION_UUID ==========
+  id: 150021568949588020
+  identification: 
+    name: CHAT_SESSIONS.SESSION_UUID
+
+  subscription: 
+    version-number: 38947788251295
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: CHAT_SESSIONS
+
+  column-mapping: 
+    return: SESSION_ID
+    display: SESSION_UUID
+    default-sort: SESSION_UUID
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: CONTEXT_DOMAINS(ID) =================
+  id: 152757137945460727
+  identification: 
+    name: CONTEXT_DOMAINS(ID)
+
+  subscription: 
+    version-number: 38947905551353
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: CONTEXT_DOMAINS
+
+  column-mapping: 
+    return: CONTEXT_DOMAIN_ID
+    display: DOMAIN_NAME
+    default-sort: DOMAIN_NAME
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: CHAT-PROJECT-SESSION-BY(USERID) =====
+  id: 154738453991024728
+  identification: 
+    name: CHAT-PROJECT-SESSION-BY(USERID)
+
+  subscription: 
+    version-number: 38948005411932
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select CHAT_PROJECT_ID,
+             PROJECT_CODE,
+             PROJECT_NAME,
+             PROJECT_INSTRUCTIONS,
+             IS_ACTIVE,
+             TENANT_ID 
+      from  CHAT_PROJECTS  a 
+      where OWNER_USER_ID =v('G_USER_ID')
+      AND IS_DELETED='N'
+      
+
+  column-mapping: 
+    return: CHAT_PROJECT_ID
+    display: PROJECT_NAME
+    default-sort: PROJECT_NAME
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: LKP_DOMAIN_DETECTION_METHODS.DETECTIO
+  id: 155718684985975589
+  identification: 
+    name: LKP_DOMAIN_DETECTION_METHODS.DETECTION_METHOD_NAME
+
+  subscription: 
+    version-number: 38948052626018
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: LKP_DOMAIN_DETECTION_METHODS
+
+  column-mapping: 
+    return: DETECTION_METHOD_CODE
+    display: DETECTION_METHOD_NAME
+    default-sort: DETECTION_METHOD_NAME
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: LKP_CONTEXT_DOMAIN_SCOPE_TYPE.SCOPE_C
+  id: 155718963601975591
+  identification: 
+    name: LKP_CONTEXT_DOMAIN_SCOPE_TYPE.SCOPE_CODE
+
+  subscription: 
+    version-number: 38948052626018
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: LKP_CONTEXT_DOMAIN_SCOPE_TYPE
+
+  column-mapping: 
+    return: SCOPE_CODE
+    default-sort: SCOPE_CODE
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: DESKTOP THEME STYLES ================
+  id: 157643631960345838
+  identification: 
+    name: DESKTOP THEME STYLES
+
+  subscription: 
+    version-number: 38948141441401
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select s.name d,
+             s.theme_style_id r
+        from apex_application_theme_styles s,
+             apex_application_themes t
+       where s.application_id = :app_id
+         and t.application_id = s.application_id
+         and t.theme_number   = s.theme_number
+         and t.is_current     = 'Yes'
+       order by 1
+
+  column-mapping: 
+    return: R
+    display: D
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: USER_THEME_PREFERENCE ===============
+  id: 157644398109345852
+  identification: 
+    name: USER_THEME_PREFERENCE
+
+  subscription: 
+    version-number: 38948141441403
+
+  source: 
+    location: Static Values
+
+  entries: 
+  - # ====== Entry: Allow End Users to choose Theme Style ========
+    id: 157644643946345853
+    entry: 
+      sequence: 1
+      display: Allow End Users to choose Theme Style
+      return: Yes
+
+- # ====== List of Values: DEPLOYMENT_VERSIONS.DEPLOYMENT_UUID =
+  id: 158715072133133443
+  identification: 
+    name: DEPLOYMENT_VERSIONS.DEPLOYMENT_UUID
+
+  subscription: 
+    version-number: 38948182189540
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: DEPLOYMENT_VERSIONS
+
+  column-mapping: 
+    return: DEPLOYMENT_ID
+    display: DEPLOYMENT_UUID
+    default-sort: DEPLOYMENT_UUID
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: CHAT_SESSIONS =======================
+  id: 160925527503637571
+  identification: 
+    name: CHAT_SESSIONS
+
+  subscription: 
+    version-number: 38948265204948
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: CHAT_SESSIONS
+
+  column-mapping: 
+    return: SESSION_ID
+    display: SESSION_TITLE
+    default-sort: SESSION_ID
+    sort-direction: Descending (Nulls Last)
+
+- # ====== List of Values: CHAT_ISSUE_STATUS ===================
+  id: 160955045819327024
+  identification: 
+    name: CHAT_ISSUE_STATUS
+
+  subscription: 
+    version-number: 38948267020769
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: LKP_CHAT_ISSUE_STATUS
+    where-clause: is_Active='Y'
+
+  column-mapping: 
+    return: CHAT_ISSUE_STATUS_CODE
+    display: ISSUE_STATUS
+    default-sort: ISSUE_STATUS
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: CHAT_ISSUE_PRIORITY =================
+  id: 160973660116719895
+  identification: 
+    name: CHAT_ISSUE_PRIORITY
+
+  subscription: 
+    version-number: 38948268067398
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: LKP_CHAT_ISSUE_PRIORITY
+    where-clause: is_active='Y'
+
+  column-mapping: 
+    return: CHAT_ISSUE_PRIORITY_CODE
+    display: PRIORITY_NAME
+    default-sort: PRIORITY_NAME
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: CHAT_ISSUE_LEVEL ====================
+  id: 160973937783725467
+  identification: 
+    name: CHAT_ISSUE_LEVEL
+
+  subscription: 
+    version-number: 38948268080668
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: LKP_CHAT_ISSUE_LEVEL
+    where-clause: is_Active='Y'
+
+  column-mapping: 
+    return: ISSUE_LEVEL_CODE
+    display: LEVEL_NAME
+    default-sort: LEVEL_NAME
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: REDACTION-APPLY-PHASE LKP ===========
+  id: 161637038377549969
+  identification: 
+    name: REDACTION-APPLY-PHASE LKP
+
+  subscription: 
+    version-number: 38948289471113
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: LKP_REDACTION_APPLY_PHASE
+
+  column-mapping: 
+    return: APPLY_PHASE_ID
+    display: DESCRIPTION
+    default-sort: DESCRIPTION
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: DEBUG SCOPE (ID) ====================
+  id: 163948941785212525
+  identification: 
+    name: DEBUG SCOPE (ID)
+
+  subscription: 
+    version-number: 38951391839490
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: LKP_DEBUG_SCOPES
+
+  column-mapping: 
+    return: DEBUG_SCOPE_ID
+    display: SCOPE_NAME
+    default-sort: DEBUG_SCOPE_ID
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: APP_PAGES_ALL =======================
+  id: 163957443930745159
+  identification: 
+    name: APP_PAGES_ALL
+
+  subscription: 
+    version-number: 38951393308691
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          application_id, 
+          application_name,
+          page_id, 
+          page_name, 
+          page_title
+      FROM apex_application_pages
+       ORDER BY application_id, page_id;
+
+  column-mapping: 
+    return: PAGE_ID
+    display: PAGE_NAME
+    default-sort: Use Order By from Query
+
+  columns: 
+  - # ====== Column: APPLICATION_NAME ============================
+    id: 163958211006757707
+    identification: 
+      column-name: APPLICATION_NAME
+      show: true
+
+    heading: 
+      heading: Application Name
+
+    layout: 
+      sequence: 30
+
+    source: 
+      data-type: VARCHAR2
+
+    advanced: 
+      searchable: true
+
+  - # ====== Column: PAGE_NAME ===================================
+    id: 163958671066757709
+    identification: 
+      column-name: PAGE_NAME
+      show: true
+
+    heading: 
+      heading: Page Name
+
+    layout: 
+      sequence: 20
+
+    source: 
+      data-type: VARCHAR2
+
+    advanced: 
+      searchable: true
+
+  - # ====== Column: PAGE_ID =====================================
+    id: 163959044866757710
+    identification: 
+      column-name: PAGE_ID
+      show: false
+
+    layout: 
+      sequence: 10
+
+    source: 
+      data-type: NUMBER
+
+    advanced: 
+      searchable: false
+
+- # ====== List of Values: APP_PAGES_CURRENT_SESSION ===========
+  id: 163957600564751563
+  identification: 
+    name: APP_PAGES_CURRENT_SESSION
+
+  subscription: 
+    version-number: 38951393286982
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          application_id, 
+          page_id, 
+          page_name, 
+          page_title
+      FROM apex_application_pages
+      WHERE application_id = v('APP_ID')  
+      ORDER BY application_id, page_id;
+
+  column-mapping: 
+    return: PAGE_ID
+    display: PAGE_NAME
+    default-sort: Use Order By from Query
+
+- # ====== List of Values: AUDIT_EVENT_TYPES ===================
+  id: 164484289796540923
+  identification: 
+    name: AUDIT_EVENT_TYPES
+
+  subscription: 
+    version-number: 38951415303848
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: LKP_DEBUG_AUDIT_EVENT_TYPES
+
+  column-mapping: 
+    return: AUDIT_EVENT_TYPE_CODE
+    display: DISPLAY_NAME
+    default-sort: DISPLAY_NAME
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: DEPLOYMENT_EXPERIMENTS.EXPERIMENT_NAM
+  id: 164980259378005958
+  identification: 
+    name: DEPLOYMENT_EXPERIMENTS.EXPERIMENT_NAME
+
+  subscription: 
+    version-number: 38951442099817
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: DEPLOYMENT_EXPERIMENTS
+
+  column-mapping: 
+    return: EXPERIMENT_ID
+    display: EXPERIMENT_NAME
+    default-sort: EXPERIMENT_NAME
+    sort-direction: Ascending (Nulls Last)
+
+- # ====== List of Values: CHAT_CALLS.PROVIDER =================
+  id: 164980470756005960
+  identification: 
+    name: CHAT_CALLS.PROVIDER
+
+  subscription: 
+    version-number: 38951442099817
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: CHAT_CALLS
+
+  column-mapping: 
+    return: CALL_ID
+    display: PROVIDER
+    default-sort: PROVIDER
+    sort-direction: Ascending (Nulls Last)
+

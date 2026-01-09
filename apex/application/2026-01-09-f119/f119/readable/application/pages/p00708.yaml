@@ -1,0 +1,1630 @@
+---
+# ====== Page: Deployment Comparison =========================
+id: 708
+identification: 
+  name: Deployment Comparison
+  alias: DEPLOYMENT-COMPARISON
+  title: Deployment Comparison
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+javascript: 
+  function-and-global-variable-declaration: |
+    // Load comparison winners
+    function loadComparisonWinners() {
+        apex.server.process('CALCULATE_WINNERS', {}, {
+            dataType: 'json',
+            success: function(data) {
+                if (data.error) {
+                    console.error('Error calculating winners:', data.error);
+                    return;
+                }
+                
+                // Update latency winner
+                $('#latency-winner').html('<span class="fa fa-trophy"></span> ' + data.latency_winner);
+                $('#latency-difference').text(data.latency_diff + ' ms difference');
+                
+                // Update cost winner
+                $('#cost-winner').html('<span class="fa fa-trophy"></span> ' + data.cost_winner);
+                $('#cost-difference').text('$' + data.cost_diff.toFixed(6) + ' difference');
+                
+                // Update success winner
+                $('#success-winner').html('<span class="fa fa-trophy"></span> ' + data.success_winner);
+                $('#success-difference').text(data.success_diff + '% difference');
+                
+                // Update overall recommendation
+                $('#overall-recommendation').html('<span class="fa fa-star"></span> ' + data.overall_winner);
+                
+                if (data.overall_winner === 'Mixed Results') {
+                    $('#recommendation-reason').text('Different deployments excel at different metrics. Consider your priorities when choosing.');
+                } else {
+                    $('#recommendation-reason').text('This deployment wins on multiple key metrics.');
+                }
+                
+                // Update statistical significance
+                $('#latency-p-value').text(data.p_value.toFixed(4));
+                
+                var significanceLabel = $('#latency-significance');
+                if (data.p_value < 0.01) {
+                    significanceLabel.text('Highly Significant (99% confidence)')
+                                    .removeClass('not-significant')
+                                    .addClass('significant');
+                } else if (data.p_value < 0.05) {
+                    significanceLabel.text('Statistically Significant (95% confidence)')
+                                    .removeClass('not-significant')
+                                    .addClass('significant');
+                } else {
+                    significanceLabel.text('Not Statistically Significant')
+                                    .removeClass('significant')
+                                    .addClass('not-significant');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX error:', error);
+            }
+        });
+    }
+    
+    // Export comparison results
+    function exportComparison() {
+        var deploymentA = apex.item('P708_DEPLOYMENT_A').getValue();
+        var deploymentB = apex.item('P708_DEPLOYMENT_B').getValue();
+        var dateRange = apex.item('P708_DATE_RANGE').getValue();
+        
+        if (!deploymentA || !deploymentB) {
+            apex.message.showErrors([{
+                type: 'error',
+                message: 'Please select both deployments to compare',
+                location: 'page'
+            }]);
+            return;
+        }
+        
+        window.location = 'f?p=&APP_ID.:708:&SESSION.:EXPORT_COMPARISON::' +
+                          'P708_DEPLOYMENT_A,P708_DEPLOYMENT_B,P708_DATE_RANGE:' +
+                          deploymentA + ',' + deploymentB + ',' + dateRange;
+    }
+
+css: 
+  inline: |
+    /* Comparison container */
+    .comparison-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin: 1.5rem 0;
+    }
+    
+    .comparison-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 16px;
+        padding: 1.5rem;
+        color: white;
+        text-align: center;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .comparison-card h3 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+    
+    .winner-badge {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin: 1rem 0;
+    }
+    
+    .winner-badge .fa {
+        color: #ffd700;
+        margin-right: 0.5rem;
+    }
+    
+    .metric-difference {
+        font-size: 1rem;
+        opacity: 0.85;
+        margin-top: 0.5rem;
+    }
+    
+    .recommendation-badge {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 1rem 0;
+    }
+    
+    .recommendation-text {
+        font-size: 0.95rem;
+        margin-top: 0.75rem;
+        line-height: 1.5;
+    }
+    
+    /* Statistical test styling */
+    .statistical-test-container {
+        padding: 1.5rem;
+    }
+    
+    .test-result {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .test-result h4 {
+        margin-top: 0;
+        color: #333;
+    }
+    
+    .p-value-display {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin: 1rem 0;
+    }
+    
+    .p-value-display .label {
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+    
+    .p-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #667eea;
+    }
+    
+    .significance-label {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 600;
+        display: inline-block;
+        margin-top: 0.5rem;
+    }
+    
+    .significance-label.significant {
+        background: #d4edda;
+        color: #155724;
+    }
+    
+    .significance-label.not-significant {
+        background: #f8d7da;
+        color: #721c24;
+    }
+    
+    .test-explanation {
+        background: #e7f3ff;
+        border-left: 4px solid #2196F3;
+        padding: 1rem 1.5rem;
+        border-radius: 4px;
+    }
+    
+    .test-explanation p {
+        margin-top: 0;
+        font-weight: 600;
+    }
+    
+    .test-explanation ul {
+        margin-bottom: 0;
+    }
+    
+    /* Filter region */
+    #comparison-filters .t-Form-fieldContainer {
+        margin-bottom: 0;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Select Deployments to Compare ===============
+  id: 158827431544853302
+  identification: 
+    name: Select Deployments to Compare
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Metrics Comparison ==========================
+  id: 158827587707853303
+  identification: 
+    name: Metrics Comparison
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      WITH deployment_a AS (
+          SELECT 
+              'Deployment A' AS deployment_label,
+              d.deployment_name,
+              d.deployment_type,
+              COUNT(m.message_id) AS total_calls,
+              ROUND(AVG(m.PROVIDER_PROCESSING_MS), 2) AS avg_latency_ms,
+             -- SUM(m.tokens_used) AS total_tokens,
+             -- ROUND(SUM(m.tokens_used) * 0.002 / 1000, 4) AS total_cost_usd,
+              ROUND(
+                  SUM(CASE WHEN m.user_prompt IS NOT NULL THEN 1 ELSE 0 END) * 100.0 / 
+                  NULLIF(COUNT(m.call_id), 0),
+                  2
+              ) AS success_rate_pct
+          FROM DEPLOYMENT_VERSIONS d
+          LEFT JOIN CHAT_CALLS m ON m.deployment_id = d.deployment_id
+              AND m.DB_CREATED_AT >= TRUNC(SYSDATE) - :P708_DATE_RANGE
+          WHERE d.deployment_id = :P708_DEPLOYMENT_A
+          GROUP BY d.deployment_name, d.deployment_type
+      ),
+      deployment_b AS (
+          SELECT 
+              'Deployment B' AS deployment_label,
+              d.deployment_name,
+              d.deployment_type,
+              COUNT(m.message_id) AS total_calls,
+             ROUND(AVG(m.PROVIDER_PROCESSING_MS), 2) AS avg_latency_ms,
+             -- SUM(m.tokens_used) AS total_tokens,
+             -- ROUND(SUM(m.tokens_used) * 0.002 / 1000, 4) AS total_cost_usd,
+              ROUND(
+                  SUM(CASE WHEN m.user_prompt IS NOT NULL THEN 1 ELSE 0 END) * 100.0 / 
+                  NULLIF(COUNT(m.call_id), 0),
+                  2
+              ) AS success_rate_pct
+          FROM DEPLOYMENT_VERSIONS d
+          LEFT JOIN CHAT_CALLS m ON m.deployment_id = d.deployment_id
+              AND m.DB_CREATED_AT >= TRUNC(SYSDATE) - :P708_DATE_RANGE
+          WHERE d.deployment_id = :P708_DEPLOYMENT_B
+          GROUP BY d.deployment_name, d.deployment_type
+      )
+      SELECT * FROM deployment_a
+      UNION ALL
+      SELECT * FROM deployment_b
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 60
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: metrics-comparison
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Value Attribute Pairs - Column
+      template-options: 
+      - '#DEFAULT#'
+      - t-AVPList--leftAligned
+
+    pagination: 
+      type: Row Ranges X to Y (with next and previous links)
+      display-position: Bottom - Right
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: DEPLOYMENT_LABEL ============================
+    id: 158828060448853308
+    identification: 
+      column-name: DEPLOYMENT_LABEL
+      type: Plain Text
+
+    heading: 
+      heading: Deployment Label
+      alignment: start
+
+    layout: 
+      sequence: 10
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: DEPLOYMENT_NAME =============================
+    id: 158828134427853309
+    identification: 
+      column-name: DEPLOYMENT_NAME
+      type: Plain Text
+
+    heading: 
+      heading: Deployment Name
+      alignment: start
+
+    layout: 
+      sequence: 20
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: DEPLOYMENT_TYPE =============================
+    id: 158828231902853310
+    identification: 
+      column-name: DEPLOYMENT_TYPE
+      type: Plain Text
+
+    heading: 
+      heading: Deployment Type
+      alignment: start
+
+    layout: 
+      sequence: 30
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: TOTAL_CALLS =================================
+    id: 158828369912853311
+    identification: 
+      column-name: TOTAL_CALLS
+      type: Plain Text
+
+    heading: 
+      heading: Total Calls
+      alignment: end
+
+    layout: 
+      sequence: 40
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: AVG_LATENCY_MS ==============================
+    id: 158828421039853312
+    identification: 
+      column-name: AVG_LATENCY_MS
+      type: Plain Text
+
+    heading: 
+      heading: Avg Latency Ms
+      alignment: end
+
+    layout: 
+      sequence: 50
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: SUCCESS_RATE_PCT ============================
+    id: 158828518228853313
+    identification: 
+      column-name: SUCCESS_RATE_PCT
+      type: Plain Text
+
+    heading: 
+      heading: Success Rate Pct
+      alignment: end
+
+    layout: 
+      sequence: 60
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+- # ====== Region:  Comparison Filters =========================
+  id: 158827613915853304
+  identification: 
+    name: ' Comparison Filters'
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Winner Determination ========================
+  id: 158828601304853314
+  identification: 
+    name: Winner Determination
+    type: Static Content
+
+  source: 
+    html-code: |
+      <div class="comparison-container">
+          <div class="comparison-card">
+              <h3>Latency Winner</h3>
+              <div id="latency-winner" class="winner-badge">
+                  <span class="fa fa-trophy"></span> Loading...
+              </div>
+              <div id="latency-difference" class="metric-difference">-</div>
+          </div>
+          
+          <div class="comparison-card">
+              <h3>Cost Efficiency Winner</h3>
+              <div id="cost-winner" class="winner-badge">
+                  <span class="fa fa-trophy"></span> Loading...
+              </div>
+              <div id="cost-difference" class="metric-difference">-</div>
+          </div>
+          
+          <div class="comparison-card">
+              <h3>Success Rate Winner</h3>
+              <div id="success-winner" class="winner-badge">
+                  <span class="fa fa-trophy"></span> Loading...
+              </div>
+              <div id="success-difference" class="metric-difference">-</div>
+          </div>
+          
+          <div class="comparison-card">
+              <h3>Overall Recommendation</h3>
+              <div id="overall-recommendation" class="recommendation-badge">
+                  <span class="fa fa-star"></span> Analyzing...
+              </div>
+              <div id="recommendation-reason" class="recommendation-text">-</div>
+          </div>
+      </div>
+
+  layout: 
+    sequence: 70
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: winner-determination
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Performance Trends Comparison ===============
+  id: 158828746791853315
+  identification: 
+    name: Performance Trends Comparison
+    type: Chart
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      WITH deployment_a_trend AS (
+          SELECT 
+              TO_CHAR(TRUNC(m.db_created_at, 'HH'), 'YYYY-MM-DD HH24:MI') AS time_label,
+              ROUND(AVG(m.provider_processing_ms), 2) AS avg_latency_a,
+              0 AS avg_latency_b
+          FROM CHAT_CALLS m
+          WHERE m.deployment_id = :P708_DEPLOYMENT_A
+            AND m.DB_CREATED_AT >= TRUNC(SYSDATE) - :P708_DATE_RANGE
+          GROUP BY TRUNC(m.DB_CREATED_AT, 'HH')
+      ),
+      deployment_b_trend AS (
+          SELECT 
+              TO_CHAR(TRUNC(m.DB_CREATED_AT, 'HH'), 'YYYY-MM-DD HH24:MI') AS time_label,
+              0 AS avg_latency_a,
+              ROUND(AVG(m.provider_processing_ms), 2) AS avg_latency_b
+          FROM CHAT_CALLS m
+          WHERE m.deployment_id = :P708_DEPLOYMENT_B
+            AND m.db_created_at >= TRUNC(SYSDATE) - :P708_DATE_RANGE
+          GROUP BY TRUNC(m.DB_CREATED_AT, 'HH')
+      )
+      SELECT 
+          time_label,
+          MAX(avg_latency_a) AS deployment_a_latency,
+          MAX(avg_latency_b) AS deployment_b_latency
+      FROM (
+          SELECT * FROM deployment_a_trend
+          UNION ALL
+          SELECT * FROM deployment_b_trend
+      )
+      GROUP BY time_label
+      ORDER BY time_label
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 80
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: trend-comparison-chart
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  security: 
+    escape-special-characters: true
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 158828895443853316
+    chart: 
+      type: Line
+
+    appearance: 
+      orientation: Vertical
+      stack: false
+
+    layout: 
+      height: 400
+
+    data-cursor: 
+      cursor: Automatic
+      behavior: Automatic
+      dim-on-hover: true
+
+    multi-series-chart-data: 
+      fill-gaps-in-chart-data: true
+      sort-order: Label - Ascending
+      render-gap-as-zero: true
+
+    settings: 
+      zoom-and-scroll: No
+
+    animation: 
+      on-display: Automatic
+      on-data-change: Automatic
+
+    tooltip: 
+      show: true
+      show-series-name: true
+      show-group-name: true
+      show-value: true
+
+    legend: 
+      show: false
+
+    series: 
+    - # ====== Series: deployement1 ================================
+      id: 158828903063853317
+      identification: 
+        name: deployement1
+
+      execution: 
+        sequence: 10
+
+      source: 
+        location: Region Source
+
+      column-mapping: 
+        label: TIME_LABEL
+        value-aggregation: No Aggregation
+        value: DEPLOYMENT_A_LATENCY
+
+      appearance: 
+        color: '#667eea'
+        assigned-to-y2-axis: false
+
+      line: 
+        style: Solid
+        type: Automatic
+
+      marker: 
+        show: Automatic
+        shape: Automatic
+
+      label: 
+        show: false
+
+    - # ====== Series: deployement2 ================================
+      id: 158829289404853320
+      identification: 
+        name: deployement2
+
+      execution: 
+        sequence: 20
+
+      source: 
+        location: Region Source
+
+      column-mapping: 
+        label: TIME_LABEL
+        value-aggregation: No Aggregation
+        value: DEPLOYMENT_B_LATENCY
+
+      appearance: 
+        color: '#f093fb'
+        assigned-to-y2-axis: false
+
+      line: 
+        style: Solid
+        type: Automatic
+
+      marker: 
+        show: Automatic
+        shape: Automatic
+
+      label: 
+        show: false
+
+    axes: 
+    - # ====== Axis: x =============================================
+      id: 158829092579853318
+      identification: 
+        name: x
+        show-axis: true
+
+      value: 
+        format-scaling: Automatic
+        baseline-scaling: Zero
+        scale: Linear
+
+      major-ticks: 
+        show: Yes
+
+      minor-ticks: 
+        show: false
+
+      tick-label: 
+        show: true
+        rotation: true
+        position: Outside
+
+    - # ====== Axis: y =============================================
+      id: 158829146685853319
+      identification: 
+        name: y
+        show-axis: true
+        title: Avg Latency (ms)
+
+      value: 
+        format: Decimal
+        decimal-places: 0
+        format-scaling: None
+        baseline-scaling: Zero
+        scale: Linear
+
+      appearance: 
+        position: Automatic
+
+      major-ticks: 
+        show: Yes
+
+      minor-ticks: 
+        show: false
+
+      tick-label: 
+        show: true
+
+- # ====== Region: Statistical Significance Test ===============
+  id: 158829374925853321
+  identification: 
+    name: Statistical Significance Test
+    type: Static Content
+
+  source: 
+    html-code: |
+      <div class="statistical-test-container">
+          <div class="test-result">
+              <h4>Latency Comparison (Welch's t-test)</h4>
+              <div class="p-value-display">
+                  <span class="label">p-value:</span>
+                  <span id="latency-p-value" class="p-value">-</span>
+              </div>
+              <div id="latency-significance" class="significance-label">-</div>
+          </div>
+          
+          <div class="test-explanation">
+              <p><strong>Interpretation:</strong></p>
+              <ul>
+                  <li><strong>p < 0.05:</strong> Statistically significant difference (95% confidence)</li>
+                  <li><strong>p < 0.01:</strong> Highly significant difference (99% confidence)</li>
+                  <li><strong>p ≥ 0.05:</strong> No statistically significant difference</li>
+              </ul>
+          </div>
+      </div>
+
+  layout: 
+    sequence: 90
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Alert
+    template-options: 
+    - '#DEFAULT#'
+    - t-Alert--horizontal
+    - t-Alert--defaultIcons
+    - t-Alert--warning
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: statistical-test
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Breadcrumb ==================================
+  id: 159358171059979811
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 123954626239486075
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+page-items: 
+- # ====== Page Item: P708_DEPLOYMENT_B ========================
+  id: 158827740087853305
+  identification: 
+    name: P708_DEPLOYMENT_B
+    type: Select List
+
+  label: 
+    label: Deployment B
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: ' Comparison Filters' # 158827613915853304
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 4
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          d.deployment_name || ' (' || d.deployment_type || ')' AS display_value,
+          d.deployment_id AS return_value
+      FROM DEPLOYMENT_VERSIONS d
+      ORDER BY d.deployment_name
+    display-extra-values: true
+    display-null-value: true
+    null-display-value: '- Select Deployment B -'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: SQL Query (return single value)
+    sql-query-(return-single-value): |
+      SELECT deployment_id 
+      FROM DEPLOYMENT_VERSIONS 
+      WHERE deployment_type = 'SHADOW' 
+        AND is_active = 'Y'
+        AND ROWNUM = 1
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P708_DEPLOYMENT_A ========================
+  id: 158827813965853306
+  identification: 
+    name: P708_DEPLOYMENT_A
+    type: Select List
+
+  label: 
+    label: Deployment A
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: ' Comparison Filters' # 158827613915853304
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: 4
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          d.deployment_name || ' (' || d.deployment_type || ')' AS display_value,
+          d.deployment_id AS return_value
+      FROM DEPLOYMENT_VERSIONS d
+      ORDER BY d.deployment_name
+    display-extra-values: true
+    display-null-value: true
+    null-display-value: '- Select Deployment A -'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: SQL Query (return single value)
+    sql-query-(return-single-value): |
+      SELECT deployment_id 
+      FROM DEPLOYMENT_VERSIONS 
+      WHERE deployment_type = 'PRODUCTION' 
+        AND is_active = 'Y'
+        AND ROWNUM = 1
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P708_DATE_RANGE ==========================
+  id: 158827956074853307
+  identification: 
+    name: P708_DATE_RANGE
+    type: Select List
+
+  label: 
+    label: Time Period
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: ' Comparison Filters' # 158827613915853304
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: 4
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:Last 24 Hours;1,Last 7 Days;7,Last 30 Days;30,Last 35 Days;35,Last 90 Days;90'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: 7
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+dynamic-actions: 
+- # ====== Dynamic Action: Load Comparison on Page Load ========
+  id: 158829530277853323
+  identification: 
+    name: Load Comparison on Page Load
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+
+  when: 
+    event: Page Load
+
+  actions: 
+  - # ====== Action: Execute Server-side Code ====================
+    id: 158829681371853324
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: loadComparisonWinners();
+
+    execution: 
+      sequence: 10
+      event: Load Comparison on Page Load # 158829530277853323
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+    server-side-condition: 
+      type: Item is NOT NULL
+      item: P708_DEPLOYMENT_A,P708_DEPLOYMENT_B
+
+- # ====== Dynamic Action: Refresh on Deployment Change ========
+  id: 158829784313853325
+  identification: 
+    name: Refresh on Deployment Change
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P708_DEPLOYMENT_A
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 158829817820853326
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: loadComparisonWinners();
+
+    execution: 
+      sequence: 10
+      event: Refresh on Deployment Change # 158829784313853325
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 158829904246853327
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Metrics Comparison # 158827587707853303
+
+    execution: 
+      sequence: 20
+      event: Refresh on Deployment Change # 158829784313853325
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 158830031222853328
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Performance Trends Comparison # 158828746791853315
+
+    execution: 
+      sequence: 30
+      event: Refresh on Deployment Change # 158829784313853325
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: New =================================
+  id: 158830944082853337
+  identification: 
+    name: New
+
+  execution: 
+    sequence: 30
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P708_DEPLOYMENT_B
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 158831018334853338
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: loadComparisonWinners();
+
+    execution: 
+      sequence: 10
+      event: New # 158830944082853337
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 158831335879853341
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Metrics Comparison # 158827587707853303
+
+    execution: 
+      sequence: 20
+      event: New # 158830944082853337
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 158831451655853342
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Performance Trends Comparison # 158828746791853315
+
+    execution: 
+      sequence: 30
+      event: New # 158830944082853337
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: New_1 ===============================
+  id: 158831182674853339
+  identification: 
+    name: New_1
+
+  execution: 
+    sequence: 40
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P708_DATE_RANGE
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 158831264445853340
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: loadComparisonWinners();
+
+    execution: 
+      sequence: 10
+      event: New_1 # 158831182674853339
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 158831556272853343
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Metrics Comparison # 158827587707853303
+
+    execution: 
+      sequence: 20
+      event: New_1 # 158831182674853339
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 158831684023853344
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Performance Trends Comparison # 158828746791853315
+
+    execution: 
+      sequence: 30
+      event: New_1 # 158831182674853339
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: CALCULATE_WINNERS ==========================
+  id: 158829443803853322
+  identification: 
+    name: CALCULATE_WINNERS
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_deployment_a_id NUMBER := TO_NUMBER(:P708_DEPLOYMENT_A);
+          v_deployment_b_id NUMBER := TO_NUMBER(:P708_DEPLOYMENT_B);
+          v_date_range NUMBER := TO_NUMBER(:P708_DATE_RANGE);
+          
+          -- Deployment A metrics
+          v_a_name VARCHAR2(200);
+          v_a_calls NUMBER := 0;
+          v_a_latency NUMBER := 0;
+          v_a_cost NUMBER := 0;
+          v_a_success NUMBER := 0;
+          
+          -- Deployment B metrics
+          v_b_name VARCHAR2(200);
+          v_b_calls NUMBER := 0;
+          v_b_latency NUMBER := 0;
+          v_b_cost NUMBER := 0;
+          v_b_success NUMBER := 0;
+          
+          -- Winners
+          v_latency_winner VARCHAR2(200);
+          v_cost_winner VARCHAR2(200);
+          v_success_winner VARCHAR2(200);
+          v_overall_winner VARCHAR2(200);
+          
+          -- Differences
+          v_latency_diff NUMBER;
+          v_cost_diff NUMBER;
+          v_success_diff NUMBER;
+          
+          -- Statistical significance
+          v_p_value NUMBER;
+      BEGIN
+          -- Get Deployment A metrics
+          SELECT 
+              d.deployment_name,
+              COUNT(m.message_id),
+              ROUND(AVG(m.processing_time_ms), 2),
+              ROUND(SUM(m.tokens_used) * 0.002 / 1000, 4),
+              ROUND(SUM(CASE WHEN m.message_content IS NOT NULL THEN 1 ELSE 0 END) * 100.0 / 
+                    NULLIF(COUNT(m.message_id), 0), 2)
+          INTO v_a_name, v_a_calls, v_a_latency, v_a_cost, v_a_success
+          FROM DEPLOYMENT_VERSIONS d
+          LEFT JOIN AI_CHAT_MESSAGES m ON m.deployment_id = d.deployment_id
+              AND m.created_at >= TRUNC(SYSDATE) - v_date_range
+          WHERE d.deployment_id = v_deployment_a_id
+          GROUP BY d.deployment_name;
+          
+          -- Get Deployment B metrics
+          SELECT 
+              d.deployment_name,
+              COUNT(m.message_id),
+              ROUND(AVG(m.processing_time_ms), 2),
+              ROUND(SUM(m.tokens_used) * 0.002 / 1000, 4),
+              ROUND(SUM(CASE WHEN m.message_content IS NOT NULL THEN 1 ELSE 0 END) * 100.0 / 
+                    NULLIF(COUNT(m.message_id), 0), 2)
+          INTO v_b_name, v_b_calls, v_b_latency, v_b_cost, v_b_success
+          FROM DEPLOYMENT_VERSIONS d
+          LEFT JOIN AI_CHAT_MESSAGES m ON m.deployment_id = d.deployment_id
+              AND m.created_at >= TRUNC(SYSDATE) - v_date_range
+          WHERE d.deployment_id = v_deployment_b_id
+          GROUP BY d.deployment_name;
+          
+          -- Determine winners (lower is better for latency and cost, higher for success)
+          v_latency_winner := CASE WHEN v_a_latency <= v_b_latency THEN v_a_name ELSE v_b_name END;
+          v_cost_winner := CASE WHEN v_a_cost <= v_b_cost THEN v_a_name ELSE v_b_name END;
+          v_success_winner := CASE WHEN v_a_success >= v_b_success THEN v_a_name ELSE v_b_name END;
+          
+          -- Calculate differences
+          v_latency_diff := ROUND(ABS(v_a_latency - v_b_latency), 2);
+          v_cost_diff := ROUND(ABS(v_a_cost - v_b_cost), 6);
+          v_success_diff := ROUND(ABS(v_a_success - v_b_success), 2);
+          
+          -- Calculate statistical significance
+          v_p_value := DEPLOYMENT_MANAGER_PKG.calculate_statistical_significance(
+              v_deployment_a_id,
+              v_deployment_b_id,
+              'latency'
+          );
+          
+          -- Determine overall recommendation
+          IF v_latency_winner = v_cost_winner AND v_latency_winner = v_success_winner THEN
+              v_overall_winner := v_latency_winner;
+          ELSIF v_latency_winner = v_cost_winner THEN
+              v_overall_winner := v_latency_winner;
+          ELSE
+              v_overall_winner := 'Mixed Results';
+          END IF;
+          
+          -- Return JSON
+          apex_json.open_object;
+          apex_json.write('latency_winner', v_latency_winner);
+          apex_json.write('cost_winner', v_cost_winner);
+          apex_json.write('success_winner', v_success_winner);
+          apex_json.write('overall_winner', v_overall_winner);
+          apex_json.write('latency_diff', v_latency_diff);
+          apex_json.write('cost_diff', v_cost_diff);
+          apex_json.write('success_diff', v_success_diff);
+          apex_json.write('p_value', NVL(v_p_value, 0.99));
+          apex_json.close_object;
+          
+      EXCEPTION
+          WHEN OTHERS THEN
+              apex_json.open_object;
+              apex_json.write('error', SQLERRM);
+              apex_json.close_object;
+      END;
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+

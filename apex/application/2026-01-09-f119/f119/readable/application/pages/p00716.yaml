@@ -1,0 +1,1343 @@
+---
+# ====== Page: Debug Configuration 🛠️ ========================
+id: 716
+identification: 
+  name: Debug Configuration 🛠️
+  alias: DEBUG-CONFIGURATION2
+  title: Debug Configuration 🛠️
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  width: 1000
+  height: 500
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Breadcrumb ==================================
+  id: 158831906845853347
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 123954626239486075
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--compactTitle
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  configuration: 
+    build-option: Commented Out # 123954063565486069
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region: Debug Configuration =========================
+  id: 302083000816703227
+  identification: 
+    name: Debug Configuration
+    type: Interactive Grid
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: DEBUG_CONFIG
+    include-rowid-column: false
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 302083444073703229
+    edit: 
+      enabled: false
+
+    performance: 
+      lazy-loading: false
+
+    appearance: 
+      select-first-row: true
+      fixed-row-height: true
+
+    pagination: 
+      type: Scroll
+      show-total-count: true
+
+    toolbar: 
+      show: true
+      controls: 
+      - Search Column Selection
+      - Search Field
+      - Actions Menu
+      - Reset Button
+      - Save Button
+
+    enable-users-to: 
+      save-public-report: false
+      flashback: true
+      define-chart-view: true
+      download: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - PDF
+      - Excel
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 302083885718703231
+      identification: 
+        name: Primary Report
+        alias: 1427663
+
+  columns: 
+  - # ====== Column: SCOPE_LEVEL =================================
+    id: 163910354212754828
+    identification: 
+      column-name: SCOPE_LEVEL
+      type: Select List
+
+    heading: 
+      heading: Scope Level
+      alignment: start
+
+    layout: 
+      sequence: 40
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: DEBUG SCOPE (ID) # 163948941785212525
+      display-extra-values: true
+      display-null-value: true
+
+    source: 
+      type: Database Column
+      database-column: SCOPE_LEVEL
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Use List of Values
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: APEX$LINK ===================================
+    id: 302084251829703234
+    identification: 
+      column-name: APEX$LINK
+      type: Link
+
+    heading: 
+      alignment: center
+
+    layout: 
+      sequence: 10
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:717:&SESSION.::&DEBUG.:RP,717:P717_CONFIG_ID:&CONFIG_ID.'
+        page: 717 # Debug Configuration
+        clear-cache: RP,717
+        values: 
+          p717_config_id: '&CONFIG_ID.'
+
+      link-text: <span role="img" aria-label="Edit" class="fa fa-edit" title="Edit"></span>
+
+    source: 
+      type: None
+
+    enable-users-to: 
+      hide: true
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CONFIG_ID ===================================
+    id: 302085287180703238
+    identification: 
+      column-name: CONFIG_ID
+      type: Hidden
+
+    settings: 
+      value-protected: true
+
+    layout: 
+      sequence: 20
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: CONFIG_ID
+      data-type: NUMBER
+      query-only: true
+      primary-key: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+
+  - # ====== Column: IS_ENABLED ==================================
+    id: 302086225260703241
+    identification: 
+      column-name: IS_ENABLED
+      type: Select List
+
+    heading: 
+      heading: Active
+      alignment: start
+
+    layout: 
+      sequence: 30
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: 'YES_NO ' # 124111059557222693
+      display-extra-values: true
+      display-null-value: true
+
+    source: 
+      type: Database Column
+      database-column: IS_ENABLED
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Use List of Values
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: APP_ID ======================================
+    id: 302088279336703247
+    identification: 
+      column-name: APP_ID
+      type: Select List
+
+    heading: 
+      heading: Application
+      alignment: start
+
+    layout: 
+      sequence: 50
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: APP LIST # 142784952100993911
+      display-extra-values: true
+      display-null-value: true
+
+    source: 
+      type: Database Column
+      database-column: APP_ID
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Use List of Values
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: USER_ID =====================================
+    id: 302089274735703249
+    identification: 
+      column-name: USER_ID
+      type: Select List
+
+    heading: 
+      heading: User
+      alignment: start
+
+    layout: 
+      sequence: 60
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: USERS(USERID) # 142784559434972307
+      display-extra-values: true
+      display-null-value: true
+
+    source: 
+      type: Database Column
+      database-column: USER_ID
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Use List of Values
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: SESSION_ID ==================================
+    id: 302090223047703252
+    identification: 
+      column-name: SESSION_ID
+      type: Number Field
+
+    heading: 
+      heading: Session Id
+      alignment: end
+
+    settings: 
+      number-alignment: Start
+      virtual-keyboard: Decimal
+
+    layout: 
+      sequence: 70
+      column-alignment: end
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: SESSION_ID
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: MODULE_NAME =================================
+    id: 302091302094703254
+    identification: 
+      column-name: MODULE_NAME
+      type: Select List
+
+    heading: 
+      heading: Module Name
+      alignment: start
+
+    layout: 
+      sequence: 80
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: USER MODULES (DB PKGS) # 142785128474004023
+      display-extra-values: true
+      display-null-value: true
+      null-display-value: '--All Modules--'
+
+    source: 
+      type: Database Column
+      database-column: MODULE_NAME
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Use List of Values
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: MIN_DEBUG_LEVEL =============================
+    id: 302092289758703257
+    identification: 
+      column-name: MIN_DEBUG_LEVEL
+      type: Select List
+
+    heading: 
+      heading: Min Debug Level
+      alignment: start
+
+    layout: 
+      sequence: 90
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: DEBUG LEVEL (DEBUG_LEVEL) # 142783886284945216
+      display-extra-values: false
+      display-null-value: true
+
+    source: 
+      type: Database Column
+      database-column: MIN_DEBUG_LEVEL
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      type: Static
+      static-value: 4
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Use List of Values
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: CREATED_ON ==================================
+    id: 302093242553703259
+    identification: 
+      column-name: CREATED_ON
+      type: Date Picker
+
+    heading: 
+      heading: Created On
+      alignment: start
+
+    settings: 
+      show-time: false
+      display-as: Popup
+      minimum-date: None
+      maximum-date: None
+      multiple-months: No
+      use-defaults: true
+
+    layout: 
+      sequence: 100
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: CREATED_ON
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+      date-ranges: All
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: CREATED_BY ==================================
+    id: 302094306527703262
+    identification: 
+      column-name: CREATED_BY
+      type: Text Field
+
+    heading: 
+      heading: Created By
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 110
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 100
+
+    source: 
+      type: Database Column
+      database-column: CREATED_BY
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  printing: 
+    page: 
+      size: Letter
+      orientation: Landscape
+      units: Inches
+      width: 11
+      height: 8.5
+      border-width: 0.5
+      border-color: '#666666'
+
+    page-header: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 12
+      font-color: '#000000'
+      alignment: center
+      page-header-text: Debug Configuration
+
+    column-headings: 
+      font: Helvetica
+      font-weight: Bold
+      font-size: 10
+      font-color: '#000000'
+      background-color: '#EEEEEE'
+
+    columns: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 10
+      font-color: '#000000'
+      background-color: '#FFFFFF'
+
+    page-footer: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 12
+      font-color: '#000000'
+      alignment: center
+
+- # ====== Region: Quick Pick ==================================
+  id: 302596925043069141
+  identification: 
+    name: Quick Pick
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 3
+
+  appearance: 
+    template: Collapsible
+    template-options: 
+    - '#DEFAULT#'
+    - is-expanded
+    - t-Region--noUI
+    - t-Region--scrollBody
+    - t-Form--standardPadding
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P716_DEBUG_DTL_URL =======================
+  id: 160902675221492336
+  identification: 
+    name: P716_DEBUG_DTL_URL
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 30
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: CREATE ======================================
+  id: 159323753875953554
+  identification: 
+    button-name: CREATE
+    label: Create
+
+  layout: 
+    sequence: 10
+    region: Debug Configuration # 302083000816703227
+    slot: PREVIOUS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--large
+    - t-Button--noUI
+    icon: fa-plus
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:717:&SESSION.::&DEBUG.:707::'
+      page: 717 # Debug Configuration
+      clear-cache: 707
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: ENABLE_SESSION_DEBUG ========================
+  id: 159324554650953558
+  identification: 
+    button-name: ENABLE_SESSION_DEBUG
+    label: Enable Debug for This Session
+
+  layout: 
+    sequence: 10
+    region: Quick Pick # 302596925043069141
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-heartbeat
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: DISABLE_SESSION_DEBUG =======================
+  id: 159324961253953559
+  identification: 
+    button-name: DISABLE_SESSION_DEBUG
+    label: Disable Debug for This Session
+
+  layout: 
+    sequence: 10
+    region: Quick Pick # 302596925043069141
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    - t-Button--gapTop
+    icon: fa-heart-o
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: OPEN_DEBUG ==================================
+  id: 160902151497492331
+  identification: 
+    button-name: OPEN_DEBUG
+    label: ' Debug Results Window'
+
+  layout: 
+    sequence: 30
+    region: Quick Pick # 302596925043069141
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    - t-Button--gapTop
+    icon: fa-nurse
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: Purge_Log ===================================
+  id: 160903698981492346
+  identification: 
+    button-name: Purge_Log
+    label: Purge Log
+
+  layout: 
+    sequence: 40
+    region: Quick Pick # 302596925043069141
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-cut
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+dynamic-actions: 
+- # ====== Dynamic Action: Enable Debug for This Session =======
+  id: 159326256835953581
+  identification: 
+    name: Enable Debug for This Session
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: ENABLE_SESSION_DEBUG # 159324554650953558
+
+  actions: 
+  - # ====== Action: Execute Server-side Code ====================
+    id: 159326744356953583
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: |
+        DECLARE
+            l_app_id     NUMBER := TO_NUMBER(NVL(V('APP_ID'),'0'));
+            l_session_id NUMBER := TO_NUMBER(NVL(V('APP_SESSION'),'0'));
+            l_user       VARCHAR2(100) := V('APP_USER');
+        BEGIN
+            -- Safety: if no session, do nothing
+            IF l_session_id = 0 THEN
+                RETURN;
+            END IF;
+        
+            -- Remove any existing SESSION-scoped entries for this session/app to avoid duplicates
+            DELETE FROM debug_config
+             WHERE scope_level = 'SESSION'
+               AND app_id      = l_app_id
+               AND session_id  = l_session_id;
+        
+            -- Insert a fresh SESSION-scoped debug config at DEBUG level
+            INSERT INTO debug_config (
+                is_enabled,
+                scope_level,
+                app_id,
+                session_id,
+                min_debug_level,
+                created_by
+            ) VALUES (
+                'Y',
+                'SESSION',
+                l_app_id,
+                l_session_id,
+                4,               -- DEBUG (most verbose)
+                NVL(l_user, 'SYSTEM')
+            );
+        END;
+        
+
+    execution: 
+      sequence: 10
+      event: Enable Debug for This Session # 159326256835953581
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Refresh =====================================
+    id: 159327268232953585
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Debug Configuration # 302083000816703227
+
+    execution: 
+      sequence: 20
+      event: Enable Debug for This Session # 159326256835953581
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Disable Debug for This Session ======
+  id: 159327612042953586
+  identification: 
+    name: Disable Debug for This Session
+
+  execution: 
+    sequence: 30
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: DISABLE_SESSION_DEBUG # 159324961253953559
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 159328132826953588
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Debug Configuration # 302083000816703227
+
+    execution: 
+      sequence: 20
+      event: Disable Debug for This Session # 159327612042953586
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Execute Server-side Code ====================
+    id: 159328672346953589
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: |
+        DECLARE
+            l_app_id     NUMBER := TO_NUMBER(NVL(V('APP_ID'),'0'));
+            l_session_id NUMBER := TO_NUMBER(NVL(V('APP_SESSION'),'0'));
+        BEGIN
+            DELETE FROM debug_config
+             WHERE scope_level = 'SESSION'
+               AND app_id      = l_app_id
+               AND session_id  = l_session_id;
+        END;
+        
+
+    execution: 
+      sequence: 10
+      event: Disable Debug for This Session # 159327612042953586
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+- # ====== Dynamic Action: Edit Report - Dialog Closed =========
+  id: 159329098285953589
+  identification: 
+    name: Edit Report - Dialog Closed
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Region
+    region: Debug Configuration # 302083000816703227
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 159329551751953591
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Debug Configuration # 302083000816703227
+
+    execution: 
+      sequence: 10
+      event: Edit Report - Dialog Closed # 159329098285953589
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: open Window =========================
+  id: 160902231681492332
+  identification: 
+    name: open Window
+
+  execution: 
+    sequence: 40
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: OPEN_DEBUG # 160902151497492331
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 160902302252492333
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        let urlValue = $v("P716_DEBUG_DTL_URL");
+        
+        // Check if it's an APEX action URL
+        if (urlValue.includes('target=')) {
+            // Extract the actual URL from the target parameter
+            let cleanUrl = decodeURIComponent(urlValue.split('target=')[1].split('&')[0]);
+            window.open(cleanUrl, '_blank');
+        } else {
+            // If it's already a clean URL
+            window.open(urlValue, '_blank');
+        }
+
+    execution: 
+      sequence: 10
+      event: open Window # 160902231681492332
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: get_debug_dtl_info ==================
+  id: 160902413974492334
+  identification: 
+    name: get_debug_dtl_info
+
+  execution: 
+    sequence: 50
+    event-scope: Static
+
+  when: 
+    event: Page Load
+
+  actions: 
+  - # ====== Action: Execute Server-side Code ====================
+    id: 160902557146492335
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: ':P716_DEBUG_DTL_URL:= apex_page.get_url(   p_page   => 718,   p_items  => null,  p_values => null  );'
+      items-to-return: 
+      - P716_DEBUG_DTL_URL
+      suppress-change-event: false
+
+    execution: 
+      sequence: 10
+      event: get_debug_dtl_info # 160902413974492334
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+- # ====== Dynamic Action: Purge Log ===========================
+  id: 160903763468492347
+  identification: 
+    name: Purge Log
+
+  execution: 
+    sequence: 60
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: Purge_Log # 160903698981492346
+
+  actions: 
+  - # ====== Action: Confirm =====================================
+    id: 160903875812492348
+    identification: 
+      action: Confirm
+
+    settings: 
+      message: Purge All , Are You sure?
+      style: Default
+      icon: fa-exclamation-diamond
+      confirm-label: Confirm Purge
+      cancel-label: Cancel Purge
+
+    execution: 
+      sequence: 10
+      event: Purge Log # 160903763468492347
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Execute Server-side Code ====================
+    id: 160903910537492349
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: |
+        delete DEBUG_LOG;
+        commit;
+
+    execution: 
+      sequence: 20
+      event: Purge Log # 160903763468492347
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Refresh =====================================
+    id: 163910020073754825
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Debug Configuration # 302083000816703227
+
+    execution: 
+      sequence: 30
+      event: Purge Log # 160903763468492347
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+    configuration: 
+      build-option: Commented Out # 123954063565486069
+

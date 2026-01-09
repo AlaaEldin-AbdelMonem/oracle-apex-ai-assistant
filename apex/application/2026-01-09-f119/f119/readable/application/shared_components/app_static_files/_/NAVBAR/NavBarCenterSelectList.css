@@ -1,0 +1,36 @@
+/* Find the navigation bar item with user-secret icon and center it */
+.t-NavigationBar-item:has(.fa-user-secret) {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+}
+
+/* Make sure other items stay on the right */
+.t-NavigationBar-items {
+    justify-content: flex-end;
+    width: 100%;
+    position: relative;
+}
+
+/* Style the centered project selector */
+.t-NavigationBar-item:has(.fa-user-secret) .t-Button {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.t-NavigationBar-item:has(.fa-user-secret) .t-Button:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.t-NavigationBar-item:has(.fa-user-secret) .fa-user-secret {
+    color: #51fd57;
+    font-size: 18px;
+    margin-right: 10px;
+}

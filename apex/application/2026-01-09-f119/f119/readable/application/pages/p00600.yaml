@@ -1,0 +1,759 @@
+---
+# ====== Page: Document Dashboard ============================
+id: 600
+identification: 
+  name: Document Dashboard
+  alias: DOCUMENT-DASHBOARD
+  title: Document Dashboard
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Summary Cards ===============================
+  id: 125439594405652007
+  identification: 
+    name: Summary Cards
+    type: Badge
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 
+             COUNT(*) as value,
+             'Total Documents' as label,
+             'fa fa-file-text' as icon,
+             'u-color-1' as color_class
+         FROM docs
+         union all
+          SELECT 
+             COUNT(*) as value,
+             'RAG Ready' as label,
+             'fa fa-check-circle' as icon,
+             'u-color-9' as color_class
+         FROM docs
+         WHERE rag_ready_flag = 'Y'
+         union all
+          SELECT 
+             NVL(SUM(embedding_count), 0) as value,
+             'Total Chunks' as label,
+             'fa fa-cubes' as icon,
+             'u-color-5' as color_class
+         FROM docs
+         union all 
+         SELECT 
+             COUNT(*) as value,
+             'Pending' as label,
+             'fa fa-clock-o' as icon,
+             'u-color-14' as color_class
+         FROM docs
+         WHERE rag_ready_flag = 'N'
+           AND text_extracted IS NOT NULL
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes (No Grid)
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Region
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      display: Multiple (Report)
+
+    settings: 
+      label: '&LABEL.'
+      value: VALUE
+      state: COLOR_CLASS
+      icon: '&ICON.'
+      display-label: true
+      style: Default
+      shape: Circular
+      size: Large
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Page
+      entities-per-page: 15
+      show-total-count: false
+
+  columns: 
+  - # ====== Column: VALUE =======================================
+    id: 125440796738652019
+    identification: 
+      name: VALUE
+
+    layout: 
+      sequence: 10
+
+    source: 
+      type: Database Column
+      database-column: VALUE
+      data-type: NUMBER
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: LABEL =======================================
+    id: 125440851247652020
+    identification: 
+      name: LABEL
+
+    layout: 
+      sequence: 20
+
+    source: 
+      type: Database Column
+      database-column: LABEL
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: ICON ========================================
+    id: 125440976059652021
+    identification: 
+      name: ICON
+
+    layout: 
+      sequence: 30
+
+    source: 
+      type: Database Column
+      database-column: ICON
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: COLOR_CLASS =================================
+    id: 125441070687652022
+    identification: 
+      name: COLOR_CLASS
+
+    layout: 
+      sequence: 40
+
+    source: 
+      type: Database Column
+      database-column: COLOR_CLASS
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+- # ====== Region: Chunking Strategy Distribution ==============
+  id: 125441394775652025
+  identification: 
+    name: Chunking Strategy Distribution
+    type: Chart
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |2
+         SELECT 
+             NVL(s.strategy_name, 'Not Processed') as label,
+             COUNT(d.doc_id) as value
+         FROM lkp_chunking_strategy s
+         LEFT JOIN docs d ON d.last_chunking_strategy = s.strategy_code
+         WHERE s.is_active = 'Y'
+         GROUP BY s.strategy_name
+         ORDER BY COUNT(d.doc_id) DESC
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 20
+    parent-region: cnt # 161679419728437934
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 4
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--removeHeader js-removeLandmark
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  security: 
+    escape-special-characters: true
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 125441464871652026
+    chart: 
+      type: Donut
+
+    layout: 
+      height: 300
+
+    data-cursor: 
+      cursor: Automatic
+      behavior: Automatic
+      dim-on-hover: true
+
+    settings: 
+      pie-selection-effect: Highlight
+
+    value: 
+      pie-chart-other-threshold: 0
+      format: Decimal
+      decimal-places: 0
+      format-scaling: None
+
+    animation: 
+      on-display: Automatic
+      on-data-change: Automatic
+
+    tooltip: 
+      show: true
+      show-series-name: true
+      show-value: true
+
+    legend: 
+      show: true
+      title: Chunking Strategy Distribution
+      position: Automatic
+      hide-and-show-behavior: Rescale
+
+    series: 
+    - # ====== Series: Chunking Strategy Distribution ==============
+      id: 125441574999652027
+      identification: 
+        name: Chunking Strategy Distribution
+
+      execution: 
+        sequence: 10
+
+      source: 
+        location: Region Source
+
+      column-mapping: 
+        label: LABEL
+        value-aggregation: No Aggregation
+        value: VALUE
+
+      label: 
+        show: false
+
+- # ====== Region: Recent Chunking Activity ====================
+  id: 125441895349652030
+  identification: 
+    name: Recent Chunking Activity
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT d.doc_id,
+             d.doc_title,
+             c.category_name,
+             s.strategy_name,
+             d.embedding_count as chunks,
+             TO_CHAR(d.last_chunked_at, 'DD-MON-YYYY HH24:MI') as processed_at,
+             d.created_by
+         FROM docs d
+         LEFT JOIN lkp_doc_category c ON c.category_code = d.doc_category
+         LEFT JOIN lkp_chunking_strategy s ON s.strategy_code = d.last_chunking_strategy
+         WHERE d.last_chunked_at IS NOT NULL
+         ORDER BY d.last_chunked_at DESC
+         FETCH FIRST 10 ROWS ONLY
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 10
+    parent-region: cnt # 161679419728437934
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 6
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+
+    pagination: 
+      type: Row Ranges X to Y (with next and previous links)
+      display-position: Bottom - Right
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: DOC_TITLE ===================================
+    id: 125441975983652031
+    identification: 
+      column-name: DOC_TITLE
+      type: Plain Text
+
+    heading: 
+      heading: Doc Title
+      alignment: start
+
+    layout: 
+      sequence: 20
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CATEGORY_NAME ===============================
+    id: 125442004713652032
+    identification: 
+      column-name: CATEGORY_NAME
+      type: Plain Text
+
+    heading: 
+      heading: Category Name
+      alignment: start
+
+    layout: 
+      sequence: 30
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: STRATEGY_NAME ===============================
+    id: 125442111611652033
+    identification: 
+      column-name: STRATEGY_NAME
+      type: Plain Text
+
+    heading: 
+      heading: Strategy Name
+      alignment: start
+
+    layout: 
+      sequence: 40
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CHUNKS ======================================
+    id: 125442222277652034
+    identification: 
+      column-name: CHUNKS
+      type: Plain Text
+
+    heading: 
+      heading: Chunks
+      alignment: end
+
+    layout: 
+      sequence: 50
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: PROCESSED_AT ================================
+    id: 125442364631652035
+    identification: 
+      column-name: PROCESSED_AT
+      type: Plain Text
+
+    heading: 
+      heading: Processed At
+      alignment: start
+
+    layout: 
+      sequence: 60
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CREATED_BY ==================================
+    id: 125442470720652036
+    identification: 
+      column-name: CREATED_BY
+      type: Plain Text
+
+    heading: 
+      heading: Created By
+      alignment: start
+
+    layout: 
+      sequence: 70
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: DOC_ID ======================================
+    id: 125442564351652037
+    identification: 
+      column-name: DOC_ID
+      type: Link
+
+    heading: 
+      heading: Doc Id
+      alignment: end
+
+    layout: 
+      sequence: 10
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:630:&SESSION.::&DEBUG.:630:P630_DOC_ID:#DOC_ID#'
+        page: 630 # Document Details
+        clear-cache: 630
+        values: 
+          p630_doc_id: '#DOC_ID#'
+
+      link-text: '#DOC_ID#'
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+- # ====== Region: cnt =========================================
+  id: 161679419728437934
+  identification: 
+    name: cnt
+    type: Static Content
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+buttons: 
+- # ====== Button: UPLOAD_NEW ==================================
+  id: 125442786411652039
+  identification: 
+    button-name: UPLOAD_NEW
+    label: Upload New Document
+
+  layout: 
+    sequence: 10
+    region: Recent Chunking Activity # 125441895349652030
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-cloud-upload
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:620:&SESSION.::&DEBUG.:620::'
+      page: 620
+      clear-cache: 620
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: VIEW_ALL ====================================
+  id: 125442897919652040
+  identification: 
+    button-name: VIEW_ALL
+    label: View All Documents
+
+  layout: 
+    sequence: 20
+    region: Recent Chunking Activity # 125441895349652030
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-list
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:610:&SESSION.::&DEBUG.:610::'
+      page: 610 # Document Library
+      clear-cache: 610
+
+    warn-on-unsaved-changes: Do Not Check
+

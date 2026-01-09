@@ -1,0 +1,1842 @@
+---
+# ====== Page: Smart Document Search =========================
+id: 650
+identification: 
+  name: Smart Document Search
+  alias: SMART-DOCUMENT-SEARCH
+  title: Smart Document Search
+
+appearance: 
+  page-mode: Normal
+  page-template: Left Side Column
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+javascript: 
+  function-and-global-variable-declaration: |
+    /**
+     * Highlight search terms in card content
+     * @param {string} selector - CSS selector for cards
+     * @param {string} searchTerms - Comma or space separated search terms
+     */
+    function highlightSearchTerms(selector, searchTerms) {
+        if (!searchTerms || searchTerms.trim() === '') {
+            return;
+        }
+        
+        // Parse search terms
+        const terms = searchTerms
+            .split(/[,\s]+/)
+            .map(term => term.trim())
+            .filter(term => term.length > 0);
+        
+        if (terms.length === 0) {
+            return;
+        }
+        
+        // Get all card elements
+        const cards = document.querySelectorAll(selector);
+        
+        cards.forEach(card => {
+            // Get text nodes in the card
+            highlightInElement(card, terms);
+        });
+    }
+    
+    /**
+     * Recursively highlight terms in element
+     */
+    function highlightInElement(element, terms) {
+        // Skip if already highlighted or script/style tag
+        if (element.nodeType === Node.TEXT_NODE) {
+            highlightTextNode(element, terms);
+        } else if (element.nodeType === Node.ELEMENT_NODE && 
+                   element.tagName !== 'SCRIPT' && 
+                   element.tagName !== 'STYLE') {
+            
+            // Skip already highlighted spans
+            if (element.classList && element.classList.contains('highlight-term')) {
+                return;
+            }
+            
+            // Process child nodes
+            Array.from(element.childNodes).forEach(child => {
+                highlightInElement(child, terms);
+            });
+        }
+    }
+    
+    /**
+     * Highlight terms in a text node
+     */
+    function highlightTextNode(textNode, terms) {
+        const text = textNode.textContent;
+        let highlightedText = text;
+        
+        // Create regex pattern for all terms (case-insensitive)
+        terms.forEach(term => {
+            // Escape special regex characters
+            const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            
+            // Match whole words (with word boundaries)
+            const regex = new RegExp(`(\\b${escapedTerm}\\b)`, 'gi');
+            
+            highlightedText = highlightedText.replace(
+                regex, 
+                '<span class="highlight-term">$1</span>'
+            );
+        });
+        
+        // Only update if text changed
+        if (highlightedText !== text) {
+            const span = document.createElement('span');
+            span.innerHTML = highlightedText;
+            textNode.parentNode.replaceChild(span, textNode);
+        }
+    }
+    
+    /**
+     * Remove all highlights
+     */
+    function removeHighlights(selector) {
+        const highlights = document.querySelectorAll(selector + ' .highlight-term');
+        highlights.forEach(span => {
+            const text = document.createTextNode(span.textContent);
+            span.parentNode.replaceChild(text, span);
+        });
+    }
+  execute-when-page-loads: |
+    // Highlight search terms when page loads
+    highlightSearchTerms(
+        '.t-Card',  // Adjust selector based on your card class
+        apex.item('P650_HIGHLIGHT_TERMS').getValue()
+    );
+    
+    // Re-highlight when search terms change
+    apex.item('P650_HIGHLIGHT_TERMS').onChange = function() {
+        // Remove old highlights
+        removeHighlights('.t-Card');
+        
+        // Apply new highlights
+        highlightSearchTerms(
+            '.t-Card',
+            apex.item('P650_HIGHLIGHT_TERMS').getValue()
+        );
+    };
+
+css: 
+  inline: |2
+     /* Highlight styling */
+    .highlight-term {
+        background-color: #fff59d; /* Light yellow */
+        color: #000;
+        font-weight: 600;
+        padding: 2px 4px;
+        border-radius: 3px;
+        box-shadow: 0 1px 3px rgba(255, 235, 59, 0.5);
+        transition: all 0.2s ease;
+    }
+    
+    /* Hover effect */
+    .highlight-term:hover {
+        background-color: #ffeb3b; /* Brighter yellow */
+        box-shadow: 0 2px 6px rgba(255, 235, 59, 0.8);
+    }
+    
+    /* Alternative highlight colors for different contexts */
+    .highlight-term.primary {
+        background-color: #bbdefb; /* Light blue */
+        color: #1565c0;
+    }
+    
+    .highlight-term.secondary {
+        background-color: #c8e6c9; /* Light green */
+        color: #2e7d32;
+    }
+    
+    /* Dark mode support */
+    body.t-PageBody--dark .highlight-term {
+        background-color: #fbc02d;
+        color: #000;
+    }
+    
+    /* Animation for newly highlighted terms */
+    @keyframes highlight-pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.8; }
+    }
+    
+    .highlight-term.new {
+        animation: highlight-pulse 0.5s ease-in-out 2;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Search Results ==============================
+  id: 129606414030647841
+  identification: 
+    name: Search Results
+    type: Cards
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          seq_id as result_number,
+          n001 as chunk_id,
+          n002 as doc_id,
+          c001 as doc_title,
+          n003 as chunk_sequence,
+          CASE 
+              WHEN LENGTH(clob001) > 400 
+              THEN SUBSTR(clob001, 1, 400) || '...'
+              ELSE clob001
+          END as chunk_preview,
+          clob001 as CHUNK_FULL_TEXT, 
+          n004 as relevance_score,
+          n005 as relevance_pct,
+          CASE 
+              WHEN n005 >= 90 THEN 'success'
+              WHEN n005 >= 75 THEN 'warning'
+              WHEN n005 >= 60 THEN 'info'
+              ELSE 'default'
+          END as badge_color,
+          CASE 
+              WHEN n005 >= 90 THEN '🥇 Excellent Match'
+              WHEN n005 >= 75 THEN '🥈 Very Good'
+              WHEN n005 >= 60 THEN '🥉 Good Match'
+              ELSE '📄 Relevant'
+          END as relevance_label,
+          c002 as embedding_model,
+          -- New: Add highlighting for search terms
+          REGEXP_REPLACE(
+              SUBSTR(clob001, 1, 400),
+              c003, -- search query
+              '<mark>\1</mark>',
+              1, 0, 'i'
+          ) as highlighted_preview,
+          -- New: Calculate reading time
+       
+          -- New: Add chunk position indicator
+          ROUND(n003 / 184 * 100, 0) as position_pct
+      FROM apex_collections
+      WHERE collection_name = 'SMART_SEARCH_RESULTS'
+      ORDER BY n005 DESC
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 120
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: 9
+
+  appearance: 
+    template: Cards Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
+    - t-CardsRegion--styleA
+    css-classes: 
+    - search-results-grid
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 131996172787453003
+    appearance: 
+      layout: Grid
+      grid-columns: Auto
+
+    title: 
+      advanced-formatting: true
+      html-expression: '&DOC_TITLE.'
+
+    subtitle: 
+      advanced-formatting: true
+      html-expression: 'Chunk #&CHUNK_SEQUENCE. of 184 (&POSITION_PCT.% through document)'
+
+    body: 
+      advanced-formatting: true
+      html-expression: '&CHUNK_FULL_TEXT!RAW.'
+
+    secondary-body: 
+      advanced-formatting: true
+      html-expression: '`📖 ~ &RELEVANCE_LABEL.'
+
+    icon-and-badge: 
+      icon-source: Icon Class Column
+      icon-column: BADGE_COLOR
+      icon-css-classes: fa-file-text-o
+      icon-position: Start
+
+    media: 
+      advanced-formatting: false
+      source: No Media
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Scroll
+      show-total-count: false
+
+    actions: 
+    - # ====== Action: New =========================================
+      id: 131997672938453018
+      identification: 
+        type: Button
+        label: New
+
+      layout: 
+        position: Primary
+        sequence: 10
+
+      link: 
+        type: Redirect to Page in this Application
+        target: 
+          url: 'f?p=&APP_ID.:100:&SESSION.::&DEBUG.:::'
+          page: 100
+
+      appearance: 
+        display-type: Text
+        hot: false
+
+- # ====== Region: Search Statistics ===========================
+  id: 129606563135647842
+  identification: 
+    name: Search Statistics
+    type: Static Content
+
+  layout: 
+    sequence: 130
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Advanced ====================================
+  id: 129606623936647843
+  identification: 
+    name: Advanced
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: Search Input # 131997188365453013
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Collapsible
+    template-options: 
+    - '#DEFAULT#'
+    - js-useLocalStorage
+    - is-collapsed
+    - t-Region--scrollBody
+    icon: fa-cog
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  configuration: 
+    build-option: Commented Out # 123954063565486069
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Breadcrumb ==================================
+  id: 131979125975579931
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 123954626239486075
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--compactTitle
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region: Search Input ================================
+  id: 131997188365453013
+  identification: 
+    name: Search Input
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--removeHeader js-removeLandmark
+    - t-Region--scrollBody
+    css-classes: 
+    - hero-search-region
+    icon: fa-search
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Search Overview =============================
+  id: 131997234370453014
+  identification: 
+    name: Search Overview
+    type: Static Content
+
+  layout: 
+    sequence: 70
+    parent-region: No Parent
+    slot: REGION_POSITION_02
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--showIcon
+    - t-Region--noUI
+    - t-Region--scrollBody
+    css-classes: 
+    - sidebar-stats
+    icon: fa-dashboard
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Statistics Cards ============================
+  id: 131997346041453015
+  identification: 
+    name: Statistics Cards
+    type: Static Content
+
+  source: 
+    html-code: |
+      <div class="search-stats-container">
+          <div class="stat-card">
+              <span class="stat-icon">✅</span>
+              <span class="stat-value">&P650_RESULT_COUNT.</span>
+              <span class="stat-label">Results Found</span>
+          </div>
+          <div class="stat-card">
+              <span class="stat-icon">⏱️</span>
+              <span class="stat-value">&P650_SEARCH_TIME.s</span>
+              <span class="stat-label">Search Time</span>
+          </div>
+          <div class="stat-card">
+              <span class="stat-icon">🎯</span>
+              <span class="stat-value">184</span>
+              <span class="stat-label">Chunks Scanned</span>
+          </div>
+      </div>
+
+  layout: 
+    sequence: 10
+    parent-region: Search Overview # 131997234370453014
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Document Filter List ========================
+  id: 131997464480453016
+  identification: 
+    name: Document Filter List
+    type: Static Content
+
+  source: 
+    html-code: |
+      <div class="document-filter">
+          <h4>📂 Filter by Document</h4>
+          <ul class="doc-list">
+              <li class="doc-item active">
+                  <input type="checkbox" id="doc_all" checked>
+                  <label for="doc_all">All Documents (184)</label>
+              </li>
+              <li class="doc-item">
+                  <input type="checkbox" id="doc_2">
+                  <label for="doc_2">Cobit Design 2019 (184)</label>
+              </li>
+          </ul>
+      </div>
+
+  layout: 
+    sequence: 20
+    parent-region: Search Overview # 131997234370453014
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Quick Tips ==================================
+  id: 131997554246453017
+  identification: 
+    name: Quick Tips
+    type: Static Content
+
+  source: 
+    html-code: |
+      <div class="quick-tips">
+          <h4>💡 Search Tips</h4>
+          <ul>
+              <li>✨ Ask in natural language</li>
+              <li>🎯 Be specific & clear</li>
+              <li>📝 Use complete questions</li>
+              <li>🔄 Try different phrasings</li>
+          </ul>
+          <button class="tips-more">Show Examples</button>
+      </div>
+
+  layout: 
+    sequence: 30
+    parent-region: Search Overview # 131997234370453014
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: btn =========================================
+  id: 131998158597453023
+  identification: 
+    name: btn
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: Search Input # 131997188365453013
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-ButtonRegion--noPadding
+    - t-ButtonRegion--noBorder
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P650_SEARCH_QUERY ========================
+  id: 129606734545647844
+  identification: 
+    name: P650_SEARCH_QUERY
+    type: Textarea
+
+  label: 
+    label: What are you looking for?
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 10
+    region: Search Input # 131997188365453013
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: 12
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 5
+    value-placeholder: e.g., What is COBIT framework? or Explain IT governance principles
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: Enter your question or keywords. AI will find relevant content based on meaning, not just exact matches.
+
+- # ====== Page Item: P650_DOCUMENT_ID =========================
+  id: 129606832387647845
+  identification: 
+    name: P650_DOCUMENT_ID
+    type: Select List
+
+  label: 
+    label: Document
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 20
+    region: Search Input # 131997188365453013
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: 3
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    icon: fa-book
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: SELECT doc_title, doc_id FROM docs WHERE is_active = 'Y'
+    display-extra-values: true
+    display-null-value: true
+    null-display-value: 🌐 Search All Documents
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P650_MAX_RESULTS =========================
+  id: 129606976962647846
+  identification: 
+    name: P650_MAX_RESULTS
+    type: Select List
+
+  label: 
+    label: '# of Results'
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 30
+    region: Search Input # 131997188365453013
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 2
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC2:3;3,5;5,10;10,20;20,50;50'
+    display-extra-values: true
+    display-null-value: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: 5
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: true
+    label-1: 3
+    value-1: 3
+    label-2: 5
+    value-2: 5
+    label-3: 10
+    value-3: 10
+    label-4: 15
+    value-4: 15
+    label-5: 20
+    value-5: 20
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P650_THRESHOLD ===========================
+  id: 129607122346647848
+  identification: 
+    name: P650_THRESHOLD
+    type: Number Field
+
+  label: 
+    label: Relevance Threshold
+    alignment: Left
+
+  settings: 
+    minimum-value: 0
+    maximum-value: 1
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 40
+    region: Search Input # 131997188365453013
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: 0.5
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: Higher = More selective (only highly relevant), Lower = More results (less relevant)
+
+- # ====== Page Item: P650_SHOW_SCORES =========================
+  id: 129607211826647849
+  identification: 
+    name: P650_SHOW_SCORES
+    type: Range Slider (v1.0)
+
+  label: 
+    label: Show Similarity Scores
+    alignment: Left
+
+  settings: 
+    minimum-value: 0
+    maximum-value: 1
+    step-size: 0.1
+    default-value: 0
+
+  layout: 
+    sequence: 10
+    region: Advanced # 129606623936647843
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: 3
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 1
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    restricted-characters: All characters can be saved.
+
+  configuration: 
+    build-option: Commented Out # 123954063565486069
+
+- # ====== Page Item: P650_CHUNK_CONTEXT =======================
+  id: 131995944398453001
+  identification: 
+    name: P650_CHUNK_CONTEXT
+    type: Select List
+
+  label: 
+    label: Context Window
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 30
+    region: Advanced # 129606623936647843
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:Just This Chunk;Just This Chunk,±1 Chunk;±1 Chunk,±2 Chunks;±2 Chunks'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P650_HIGHLIGHT_TERMS =====================
+  id: 131996084919453002
+  identification: 
+    name: P650_HIGHLIGHT_TERMS
+    type: Switch
+
+  label: 
+    label: Highlight Key Terms
+    alignment: Left
+
+  settings: 
+    use-defaults: true
+
+  layout: 
+    sequence: 50
+    region: Search Input # 131997188365453013
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: Y
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P650_SEARCH_TIME =========================
+  id: 131996607547453008
+  identification: 
+    name: P650_SEARCH_TIME
+    type: Display Only
+
+  label: 
+    label: Search Time
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 60
+    region: Search Input # 131997188365453013
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P650_RESULT_COUNT ========================
+  id: 131996790384453009
+  identification: 
+    name: P650_RESULT_COUNT
+    type: Display Only
+
+  label: 
+    label: Result Count
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 80
+    region: Search Input # 131997188365453013
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P650_ERROR_MESSAGE =======================
+  id: 131996957906453011
+  identification: 
+    name: P650_ERROR_MESSAGE
+    type: Display Only
+
+  label: 
+    label: Error Message
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 140
+    region: No Parent
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P650_SUCCESS_MESSAGE =====================
+  id: 131997083345453012
+  identification: 
+    name: P650_SUCCESS_MESSAGE
+    type: Display Only
+
+  label: 
+    label: Error Message
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 150
+    region: No Parent
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P650_ORDER_BY ============================
+  id: 131998072952453022
+  identification: 
+    name: P650_ORDER_BY
+    type: Select List
+
+  label: 
+    label: Order By
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 90
+    region: Search Input # 131997188365453013
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC2:Relevance Pct;RELEVANCE_PCT'
+    display-extra-values: false
+    display-null-value: false
+
+  advanced: 
+    warn-on-unsaved-changes: Ignore
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: RELEVANCE_PCT
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: search ======================================
+  id: 131996361836453005
+  identification: 
+    button-name: search
+    label: Search
+
+  layout: 
+    sequence: 10
+    region: btn # 131998158597453023
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-search
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: Clear =======================================
+  id: 131996556527453007
+  identification: 
+    button-name: Clear
+    label: Clear
+
+  layout: 
+    sequence: 10
+    region: btn # 131998158597453023
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-eraser
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: init ================================
+  id: 131997843004453020
+  identification: 
+    name: init
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+
+  when: 
+    event: Page Load
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 131997984042453021
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        // ============================================
+        // PAGE 650: SMART DOCUMENT SEARCH JAVASCRIPT
+        // ============================================
+        
+        // Initialize on page load
+        $(document).ready(function() {
+            initializeSmartSearch();
+        });
+        
+        function initializeSmartSearch() {
+            // 1. Add character counter to search input
+            addCharacterCounter();
+        
+            // 2. Initialize rotating placeholder examples
+            rotatePlaceholderExamples();
+        
+            // 3. Add keyboard shortcuts
+            addKeyboardShortcuts();
+        
+            // 4. Enhanced result card interactions
+            enhanceResultCards();
+        
+            // 5. Add copy to clipboard functionality
+            addCopyToClipboard();
+        
+            // 6. Initialize threshold slider visuals
+            initializeThresholdSlider();
+        
+            // 7. Add search suggestions
+            addSearchSuggestions();
+        }
+        
+        // Character Counter
+        function addCharacterCounter() {
+            const maxChars = 2000;
+            const $textarea = $('#P650_SEARCH_QUERY');
+            const $counter = $('<div class="char-counter">0 / ' + maxChars + '</div>');
+        
+            $textarea.after($counter);
+        
+            $textarea.on('input', function() {
+                const length = $(this).val().length;
+                $counter.text(length + ' / ' + maxChars);
+        
+                if (length > maxChars * 0.9) {
+                    $counter.addClass('warning');
+                } else {
+                    $counter.removeClass('warning');
+                }
+            });
+        }
+        
+        // Rotating Placeholder Examples
+        function rotatePlaceholderExamples() {
+            const examples = [
+                "What is COBIT framework?",
+                "Explain IT governance principles",
+                "How to implement risk management?",
+                "What are the key components of COBIT?",
+                "Tell me about compliance requirements"
+            ];
+        
+            let currentIndex = 0;
+            const $textarea = $('#P650_SEARCH_QUERY');
+        
+            setInterval(function() {
+                if ($textarea.val() === '' && !$textarea.is(':focus')) {
+                    currentIndex = (currentIndex + 1) % examples.length;
+                    $textarea.attr('placeholder', '💡 Try: "' + examples[currentIndex] + '"');
+                }
+            }, 4000);
+        }
+        
+        // Keyboard Shortcuts
+        function addKeyboardShortcuts() {
+            $(document).on('keydown', function(e) {
+                // Ctrl/Cmd + Enter = Search
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                    e.preventDefault();
+                    $('#search').click();
+                }
+        
+                // Ctrl/Cmd + K = Focus search
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    $('#P650_SEARCH_QUERY').focus();
+                }
+        
+                // Esc = Clear search
+                if (e.key === 'Escape' && $('#P650_SEARCH_QUERY').is(':focus')) {
+                    $('#Clear').click();
+                }
+            });
+        
+            // Add keyboard shortcut hints
+            const $hint = $('<div class="keyboard-hints">' +
+                '<span><kbd>Ctrl</kbd> + <kbd>Enter</kbd> Search</span> ' +
+                '<span><kbd>Ctrl</kbd> + <kbd>K</kbd> Focus</span> ' +
+                '<span><kbd>Esc</kbd> Clear</span>' +
+                '</div>');
+            $('.hero-search-region').append($hint);
+        }
+        
+        // Enhance Result Cards
+        function enhanceResultCards() {
+            // Add hover preview
+            $('.t-Card').hover(
+                function() {
+                    $(this).find('.card-preview-popup').fadeIn(200);
+                },
+                function() {
+                    $(this).find('.card-preview-popup').fadeOut(200);
+                }
+            );
+        
+            // Add smooth scroll to result
+            $('.t-Card').on('click', function(e) {
+                if (!$(e.target).is('button, a')) {
+                    $(this).addClass('highlighted');
+                    setTimeout(() => $(this).removeClass('highlighted'), 2000);
+                }
+            });
+        }
+        
+        // Copy to Clipboard
+        function addCopyToClipboard() {
+            $('.copy-chunk-btn').on('click', function(e) {
+                e.preventDefault();
+                const text = $(this).data('chunk-text');
+        
+                navigator.clipboard.writeText(text).then(function() {
+                    // Show success message
+                    apex.message.showPageSuccess('Copied to clipboard!');
+                }).catch(function(err) {
+                    apex.message.showErrors('Failed to copy: ' + err);
+                });
+            });
+        }
+         
+
+    execution: 
+      sequence: 10
+      event: init # 131997843004453020
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+    configuration: 
+      build-option: Commented Out # 123954063565486069
+
+processes: 
+- # ====== Process: Perform Smart Search =======================
+  id: 131996212138453004
+  identification: 
+    name: Perform Smart Search
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      /*******************************************************************************
+       * CORRECTED APEX PAGE PROCESS: Perform Smart Search
+       * 
+       * Page: 650 - Smart Document Search
+       * Process Point: After Submit
+       * Button: P650_SEARCH
+       * 
+       * ISSUE FIXED: Removed APEX_ERROR calls causing stack issues
+       *******************************************************************************/
+      
+      DECLARE
+          v_start_time TIMESTAMP := SYSTIMESTAMP;
+          v_duration NUMBER;
+          v_result_count NUMBER := 0;
+          v_query CLOB;
+          v_doc_id NUMBER;
+          v_max_results NUMBER;
+          v_threshold NUMBER;
+         v_chunk_text clob;
+      BEGIN
+          -- Get page item values
+          v_query := :P650_SEARCH_QUERY;
+          v_doc_id := :P650_DOCUMENT_ID;
+          v_max_results := NVL(:P650_MAX_RESULTS, 10);
+          v_threshold := NVL(:P650_THRESHOLD, 0.5);
+          
+          -- Clear previous results
+          BEGIN
+              APEX_COLLECTION.DELETE_COLLECTION('SMART_SEARCH_RESULTS');
+          EXCEPTION
+              WHEN OTHERS THEN NULL; -- Collection might not exist
+          END;
+          
+          APEX_COLLECTION.CREATE_COLLECTION('SMART_SEARCH_RESULTS');
+          
+          -- Validate input
+          IF v_query IS NULL OR TRIM(v_query) IS NULL THEN
+              :P650_ERROR_MESSAGE := 'Please enter a search query';
+              :P650_RESULT_COUNT := 0;
+              RETURN;
+          END IF;
+          
+          -- Perform search and populate collection
+          BEGIN
+              FOR rec IN (
+                  SELECT * 
+                  FROM TABLE(rag_search_util.smart_search(
+                      p_query => v_query,
+                      p_doc_id => v_doc_id,
+                      p_max_results => v_max_results,
+                      p_threshold => v_threshold
+                  ))
+              ) LOOP
+               v_chunk_text:= null;
+                  v_result_count := v_result_count + 1;
+                  
+                   
+                if  :P650_HIGHLIGHT_TERMS='Y' then
+                    v_chunk_text:=  RAG_SEARCH_UTIL.highlight_search_terms(rec.chunk_text, :P650_SEARCH_QUERY) ;--as chunk_text_highlighted,
+                 else 
+                 v_chunk_text :=rec.chunk_text;  end if;
+      
+                  APEX_COLLECTION.ADD_MEMBER(
+                      p_collection_name => 'SMART_SEARCH_RESULTS',
+                      p_n001 => rec.chunk_id,
+                      p_n002 => rec.doc_id,
+                      p_c001 => rec.doc_title,
+                      p_n003 => rec.chunk_sequence,
+                      p_clob001 =>v_chunk_text ,
+                      p_n004 => rec.relevance_score,
+                      p_n005 => rec.relevance_pct,
+                      p_c002 => rec.embedding_model,
+                      p_c003 => v_query
+                  );
+              END LOOP;
+              
+          EXCEPTION
+              WHEN OTHERS THEN
+                  :P650_ERROR_MESSAGE := 'Search error: ' || SUBSTR(SQLERRM, 1, 500);
+                  :P650_RESULT_COUNT := 0;
+                  RETURN;
+          END;
+          
+          -- Calculate duration
+          v_duration := EXTRACT(SECOND FROM (SYSTIMESTAMP - v_start_time));
+          
+          -- Set statistics
+          :P650_SEARCH_TIME := ROUND(v_duration, 3);
+          :P650_RESULT_COUNT := v_result_count;
+          :P650_ERROR_MESSAGE := NULL; -- Clear any previous errors
+          
+          -- Set success message based on results
+          IF v_result_count = 0 THEN
+              :P650_ERROR_MESSAGE := 'No results found. Try adjusting your search or lowering the relevance threshold.';
+          ELSE
+              :P650_SUCCESS_MESSAGE := 
+                  'Found ' || v_result_count || ' relevant result' || 
+                  CASE WHEN v_result_count > 1 THEN 's' END || 
+                  ' in ' || ROUND(v_duration, 2) || ' seconds';
+          END IF;
+          
+      EXCEPTION
+          WHEN OTHERS THEN
+              :P650_ERROR_MESSAGE := 'Unexpected error: ' || SUBSTR(SQLERRM, 1, 500);
+              :P650_RESULT_COUNT := 0;
+      END;
+
+  execution: 
+    sequence: 10
+    point: After Submit
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: search # 131996361836453005
+
+- # ====== Process: clear ======================================
+  id: 131996433669453006
+  identification: 
+    name: clear
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      
+      BEGIN
+          APEX_COLLECTION.DELETE_COLLECTION('SMART_SEARCH_RESULTS');
+          :P650_SEARCH_QUERY := NULL;
+          :P650_RESULT_COUNT := NULL;
+          :P650_SEARCH_TIME := NULL;
+      END;
+       
+
+  execution: 
+    sequence: 20
+    point: After Submit
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: Clear # 131996556527453007
+

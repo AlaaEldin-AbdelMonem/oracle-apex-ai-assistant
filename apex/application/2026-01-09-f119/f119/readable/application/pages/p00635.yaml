@@ -1,0 +1,1068 @@
+---
+# ====== Page: Chunking Configuration ========================
+id: 635
+identification: 
+  name: Chunking Configuration
+  alias: CHUNKING-CONFIGURATION
+  title: Chunking Configuration
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: 1 ===========================================
+  id: 125683196445257450
+  identification: 
+    name: 1
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Select Chunking Strategy ====================
+  id: 125707594410557102
+  identification: 
+    name: Select Chunking Strategy
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Strategy Details ============================
+  id: 125707930401557106
+  identification: 
+    name: Strategy Details
+    type: Static Content
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Alert
+    template-options: 
+    - '#DEFAULT#'
+    - t-Alert--horizontal
+    - t-Alert--defaultIcons
+    - t-Alert--warning
+    icon: fa-info-circle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Chunk Preview (First 5 Chunks) ==============
+  id: 125708461412557111
+  identification: 
+    name: Chunk Preview (First 5 Chunks)
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 
+       chunk_sequence,
+       LENGTH(chunk_text) as chunk_size,
+       SUBSTR(chunk_text, 1, 150) || '...' as preview
+      FROM (
+       SELECT 
+           ROWNUM as chunk_sequence,
+           chunk_text,
+           LENGTH(chunk_text) as chunk_size
+       FROM (
+           -- This is a simplified preview
+           -- In production, you'd call the chunking function
+           SELECT SUBSTR(text_extracted, 
+                         ((LEVEL-1) * :P635_CHUNK_SIZE) + 1, 
+                         :P635_CHUNK_SIZE) as chunk_text
+           FROM docs
+           WHERE doc_id = :P635_DOC_ID
+           CONNECT BY LEVEL <= CEIL(LENGTH(text_extracted) / :P635_CHUNK_SIZE)
+       )
+       WHERE ROWNUM <= 5
+      )
+    page-items-to-submit: 
+    - P635_CHUNK_SIZE
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 40
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+
+    pagination: 
+      type: Row Ranges X to Y (with next and previous links)
+      display-position: Bottom - Right
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: CHUNK_SEQUENCE ==============================
+    id: 125708534153557112
+    identification: 
+      column-name: CHUNK_SEQUENCE
+      type: Plain Text
+
+    heading: 
+      heading: Chunk Sequence
+      alignment: end
+
+    layout: 
+      sequence: 10
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CHUNK_SIZE ==================================
+    id: 125708613235557113
+    identification: 
+      column-name: CHUNK_SIZE
+      type: Plain Text
+
+    heading: 
+      heading: Chunk Size
+      alignment: end
+
+    layout: 
+      sequence: 20
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: PREVIEW =====================================
+    id: 125708770442557114
+    identification: 
+      column-name: PREVIEW
+      type: Plain Text
+
+    heading: 
+      heading: Preview
+      alignment: start
+
+    layout: 
+      sequence: 30
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+page-items: 
+- # ====== Page Item: P635_DOC_ID ==============================
+  id: 125707451188557101
+  identification: 
+    name: P635_DOC_ID
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 10
+    region: 1 # 125683196445257450
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P635_STRATEGY ============================
+  id: 125707616171557103
+  identification: 
+    name: P635_STRATEGY
+    type: Radio Group
+
+  label: 
+    label: Chunking Strategy
+    alignment: Left
+
+  settings: 
+    number-of-columns: 1
+    page-action-on-selection: None
+
+  layout: 
+    sequence: 10
+    region: Select Chunking Strategy # 125707594410557102
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          strategy_name || ' - ' || 
+          SUBSTR(best_for, 1, 50) as display_value,
+          strategy_code as return_value
+      FROM lkp_chunking_strategy
+      WHERE is_active = 'Y'
+      ORDER BY display_order
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    escape-special-characters: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P635_CHUNK_SIZE ==========================
+  id: 125707710971557104
+  identification: 
+    name: P635_CHUNK_SIZE
+    type: Number Field
+
+  label: 
+    label: Chunk Size
+    alignment: Left
+
+  settings: 
+    minimum-value: 50
+    maximum-value: 8000
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 20
+    region: Select Chunking Strategy # 125707594410557102
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: 512
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P635_OVERLAP_PCT =========================
+  id: 125707883649557105
+  identification: 
+    name: P635_OVERLAP_PCT
+    type: Number Field
+
+  label: 
+    label: Overlap Percentage
+    alignment: Left
+
+  settings: 
+    minimum-value: 0
+    maximum-value: 50
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 30
+    region: Select Chunking Strategy # 125707594410557102
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: 20
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: |
+      - Minimum Value: `0`
+      - Maximum Value: `50`
+      - Step: `5`
+      - Default Value: `20`
+
+- # ====== Page Item: P635_STRATEGY_NAME =======================
+  id: 125708092823557107
+  identification: 
+    name: P635_STRATEGY_NAME
+    type: Display Only
+
+  label: 
+    label: 'Strategy '
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: Strategy Details # 125707930401557106
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: SQL Query (return single value)
+    sql-query: |
+      
+      SELECT strategy_name
+      FROM lkp_chunking_strategy
+      WHERE strategy_code = :P635_STRATEGY
+    used: Always, replacing any existing value in session state
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P635_STRATEGY_DESC =======================
+  id: 125708134320557108
+  identification: 
+    name: P635_STRATEGY_DESC
+    type: Display Only
+
+  label: 
+    label: Description
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 20
+    region: Strategy Details # 125707930401557106
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: SQL Query (return single value)
+    sql-query: |
+      
+      SELECT strategy_description
+      FROM lkp_chunking_strategy
+      WHERE strategy_code = :P635_STRATEGY
+    used: Always, replacing any existing value in session state
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P635_METRICS =============================
+  id: 125708245594557109
+  identification: 
+    name: P635_METRICS
+    type: Display Only
+
+  label: 
+    label: Performance
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 30
+    region: Strategy Details # 125707930401557106
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: SQL Query (return single value)
+    sql-query: |
+      SELECT 
+        '⚡ Speed: ' || relative_speed || 'x  |  ' ||
+        '💾 Storage: ' || storage_overhead || 'x  |  ' ||
+        '⭐ Quality: ' || semantic_preservation
+      FROM lkp_chunking_strategy
+      WHERE strategy_code = :P635_STRATEGY
+    used: Always, replacing any existing value in session state
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P635_BEST_FOR ============================
+  id: 125708321857557110
+  identification: 
+    name: P635_BEST_FOR
+    type: Display Only
+
+  label: 
+    label: Best For
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 40
+    region: Strategy Details # 125707930401557106
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: SQL Query (return single value)
+    sql-query: |
+      SELECT best_for
+      FROM lkp_chunking_strategy
+      WHERE strategy_code = :P635_STRATEGY
+    used: Always, replacing any existing value in session state
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: APPLY_GENERATE ==============================
+  id: 125709399994557120
+  identification: 
+    button-name: APPLY_GENERATE
+    label: Apply & Generate Chunks
+
+  layout: 
+    sequence: 10
+    region: No Parent
+    slot: REGION_POSITION_03
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL UPDATE action
+
+- # ====== Button: SAVE_CONFIG =================================
+  id: 125709471430557121
+  identification: 
+    button-name: SAVE_CONFIG
+    label: Save Configuration Only
+
+  layout: 
+    sequence: 20
+    region: No Parent
+    slot: REGION_POSITION_03
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: CANCEL ======================================
+  id: 125709574364557122
+  identification: 
+    button-name: CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 30
+    region: No Parent
+    slot: REGION_POSITION_03
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: New =================================
+  id: 125708894014557115
+  identification: 
+    name: New
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P635_STRATEGY
+
+  actions: 
+  - # ====== Action: Execute Server-side Code ====================
+    id: 125708944371557116
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: |
+        DECLARE
+            v_chunk_size NUMBER;
+            v_overlap NUMBER;
+        BEGIN
+            SELECT default_chunk_size, default_overlap_pct
+            INTO v_chunk_size, v_overlap
+            FROM lkp_chunking_strategy
+            WHERE strategy_code = :P635_STRATEGY;
+        
+            :P635_CHUNK_SIZE := v_chunk_size;
+            :P635_OVERLAP_PCT := v_overlap;
+        END;
+      items-to-submit: 
+      - P635_STRATEGY
+      items-to-return: 
+      - P635_CHUNK_SIZE
+      - P635_OVERLAP_PCT
+      suppress-change-event: false
+
+    execution: 
+      sequence: 10
+      event: New # 125708894014557115
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Refresh =====================================
+    id: 125709098006557117
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Strategy Details # 125707930401557106
+
+    execution: 
+      sequence: 20
+      event: New # 125708894014557115
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 125709188692557118
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Chunk Preview (First 5 Chunks) # 125708461412557111
+
+    execution: 
+      sequence: 30
+      event: New # 125708894014557115
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: Apply and Generate Chunks ==================
+  id: 125709666287557123
+  identification: 
+    name: Apply and Generate Chunks
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+      v_chunk_count NUMBER;
+      BEGIN
+      -- Update configuration
+      UPDATE docs
+      SET chunking_strategy = :P635_STRATEGY,
+         chunk_size_override = :P635_CHUNK_SIZE,
+         overlap_pct_override = :P635_OVERLAP_PCT
+      WHERE doc_id = :P635_DOC_ID;
+      /*
+      -- Generate chunks
+      v_chunk_count := CHUNK_PROXY_UTIL.chunk_document_intelligent(
+         p_doc_id => :P635_DOC_ID,
+         p_force_strategy => :P635_STRATEGY,
+         p_force_chunk_size => :P635_CHUNK_SIZE,
+         p_force_overlap_pct => :P635_OVERLAP_PCT
+      );
+      */
+      apex_application.g_print_success_message := 
+         'Configuration applied and ' || v_chunk_count || ' chunks generated!';
+      END;
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: APPLY_GENERATE # 125709399994557120
+
+- # ====== Process: Save Configuration =========================
+  id: 125709821593557125
+  identification: 
+    name: Save Configuration
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      UPDATE docs
+      SET chunking_strategy = :P635_STRATEGY,
+      chunk_size_override = :P635_CHUNK_SIZE,
+      overlap_pct_override = :P635_OVERLAP_PCT
+      WHERE doc_id = :P635_DOC_ID;
+      apex_application.g_print_success_message := 'Configuration saved!';
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: SAVE_CONFIG # 125709471430557121
+
+branches: 
+- # ====== Branch: goto 630 ====================================
+  id: 125709772994557124
+  identification: 
+    name: goto 630
+
+  execution: 
+    sequence: 10
+    point: After Processing
+
+  behavior: 
+    type: Page or URL (Redirect)
+    target: 
+      url: 'f?p=&APP_ID.:630:&SESSION.::&DEBUG.:630:P630_DOC_ID:&P635_DOC_ID.&success_msg=#SUCCESS_MSG#'
+      page: 630 # Document Details
+      clear-cache: 630
+      values: 
+        p630_doc_id: '&P635_DOC_ID.'
+

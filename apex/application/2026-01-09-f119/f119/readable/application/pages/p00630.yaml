@@ -1,0 +1,4227 @@
+---
+# ====== Page: Document Details ==============================
+id: 630
+identification: 
+  name: Document Details
+  alias: DOCUMENT-DETAILS
+  title: Document Details
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+javascript: 
+  function-and-global-variable-declaration: ' '
+  execute-when-page-loads: ' '
+
+css: 
+  inline: ' '
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Document Information ========================
+  id: 125605735455662109
+  identification: 
+    name: Document Information
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Tabs Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-TabsRegion-mod--simple
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Basic Info ==================================
+  id: 125605801996662110
+  identification: 
+    name: Basic Info
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: Document Information # 125605735455662109
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Chunking Configuration ======================
+  id: 125605910514662111
+  identification: 
+    name: Chunking Configuration
+    type: Static Content
+
+  layout: 
+    sequence: 30
+    parent-region: Document Information # 125605735455662109
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Extracted Text ==============================
+  id: 125606003988662112
+  identification: 
+    name: Extracted Text
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: Document Information # 125605735455662109
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Chunks & Embeddings =========================
+  id: 125606157451662113
+  identification: 
+    name: Chunks & Embeddings
+    type: Static Content
+
+  layout: 
+    sequence: 60
+    parent-region: Document Information # 125605735455662109
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: AI Summary ==================================
+  id: 125606382248662115
+  identification: 
+    name: AI Summary
+    type: Static Content
+
+  layout: 
+    sequence: 70
+    parent-region: Document Information # 125605735455662109
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Related Documents ===========================
+  id: 125606441541662116
+  identification: 
+    name: Related Documents
+    type: Static Content
+
+  layout: 
+    sequence: 80
+    parent-region: Document Information # 125605735455662109
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Current Strategy Settings ===================
+  id: 125608370085662135
+  identification: 
+    name: Current Strategy Settings
+    type: Static Content
+
+  layout: 
+    sequence: 60
+    parent-region: Chunking Configuration # 125605910514662111
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Strategy Recommendation =====================
+  id: 125608997391662141
+  identification: 
+    name: Strategy Recommendation
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: Chunking Configuration # 125605910514662111
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Alert
+    template-options: 
+    - '#DEFAULT#'
+    - t-Alert--horizontal
+    - t-Alert--defaultIcons
+    - t-Alert--warning
+    icon: fa-lightbulb-o
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Edit Strategy ===============================
+  id: 125609007983662142
+  identification: 
+    name: Edit Strategy
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: Chunking Configuration # 125605910514662111
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Collapsible
+    template-options: 
+    - '#DEFAULT#'
+    - js-useLocalStorage
+    - is-collapsed
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Strategy Information ========================
+  id: 125609700271662149
+  identification: 
+    name: Strategy Information
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          strategy_name,
+          strategy_description,
+          '⚡ ' || relative_speed || 'x' as speed,
+          '💾 ' || storage_overhead || 'x' as storage,
+          '⭐ ' || semantic_preservation as quality,
+          best_for
+      FROM lkp_chunking_strategy
+      WHERE strategy_code = NVL(:P630_CHUNKING_STRATEGY, 
+                                (SELECT chunking_strategy FROM docs WHERE doc_id = :P630_DOC_ID))
+    page-items-to-submit: 
+    - P630_DOC_ID
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 40
+    parent-region: Document Information # 125605735455662109
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+
+    pagination: 
+      type: Row Ranges X to Y (with next and previous links)
+      display-position: Bottom - Right
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: STRATEGY_NAME ===============================
+    id: 125609891332662150
+    identification: 
+      column-name: STRATEGY_NAME
+      type: Plain Text
+
+    heading: 
+      heading: Strategy Name
+      alignment: start
+
+    layout: 
+      sequence: 10
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: STRATEGY_DESCRIPTION ========================
+    id: 125678293264257401
+    identification: 
+      column-name: STRATEGY_DESCRIPTION
+      type: Plain Text
+
+    heading: 
+      heading: Strategy Description
+      alignment: start
+
+    layout: 
+      sequence: 20
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: SPEED =======================================
+    id: 125678372435257402
+    identification: 
+      column-name: SPEED
+      type: Plain Text
+
+    heading: 
+      heading: Speed
+      alignment: start
+
+    layout: 
+      sequence: 30
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: STORAGE =====================================
+    id: 125678456935257403
+    identification: 
+      column-name: STORAGE
+      type: Plain Text
+
+    heading: 
+      heading: Storage
+      alignment: start
+
+    layout: 
+      sequence: 40
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: QUALITY =====================================
+    id: 125678587968257404
+    identification: 
+      column-name: QUALITY
+      type: Plain Text
+
+    heading: 
+      heading: Quality
+      alignment: start
+
+    layout: 
+      sequence: 50
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: BEST_FOR ====================================
+    id: 125678687788257405
+    identification: 
+      column-name: BEST_FOR
+      type: Plain Text
+
+    heading: 
+      heading: Best For
+      alignment: start
+
+    layout: 
+      sequence: 60
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+- # ====== Region: Breadcrumb ==================================
+  id: 125610784710811288
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 123954626239486075
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--compactTitle
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region: Pros & Cons =================================
+  id: 125678768747257406
+  identification: 
+    name: Pros & Cons
+    type: Static Content
+
+  layout: 
+    sequence: 50
+    parent-region: Document Information # 125605735455662109
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Generate Chunks =============================
+  id: 125680355511257422
+  identification: 
+    name: Generate Chunks
+    type: Static Content
+
+  layout: 
+    sequence: 30
+    parent-region: Chunks & Embeddings # 125606157451662113
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Document Chunks =============================
+  id: 125680820681257427
+  identification: 
+    name: Document Chunks
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          c.DOC_CHUNK_ID,
+          c.chunk_sequence,
+          LENGTH(c.chunk_text) as chunk_size,
+          CASE 
+              WHEN LENGTH(c.chunk_text) <= 200 THEN c.chunk_text
+              ELSE SUBSTR(c.chunk_text, 1, 197) || '...'
+          END as preview,
+          c.chunk_text as full_text,  -- For modal
+          TO_CHAR(c.created_at, 'DD-MON-YYYY HH24:MI') as created_at,
+       
+          CASE 
+              WHEN c.embedding_vector IS NOT NULL THEN '✅ Yes'
+              ELSE '❌ No'
+          END as has_embedding
+      FROM doc_chunks c
+      WHERE c.doc_id = :P630_DOC_ID
+      ORDER BY c.chunk_sequence
+      
+      
+       
+    page-items-to-submit: 
+    - P630_DOC_ID
+
+  layout: 
+    sequence: 10
+    parent-region: Chunks & Embeddings # 125606157451662113
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: document-chunks
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 125680937440257428
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 1000000
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 125702038937505007
+      identification: 
+        name: Primary Report
+        alias: 1257021
+
+    columns: 
+    - # ====== Column: CHUNK_SEQUENCE ==============================
+      id: 125681025965257429
+      identification: 
+        column-name: CHUNK_SEQUENCE
+        type: Plain Text
+
+      heading: 
+        heading: Chunk Sequence
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 10
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CHUNK_SIZE ==================================
+      id: 125681136428257430
+      identification: 
+        column-name: CHUNK_SIZE
+        type: Plain Text
+
+      heading: 
+        heading: Size (chars)
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 30
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PREVIEW =====================================
+      id: 125681246207257431
+      identification: 
+        column-name: PREVIEW
+        type: Link
+
+      heading: 
+        heading: Preview
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 40
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      link: 
+        target: 
+          url: 'f?p=&APP_ID.:632:&SESSION.::&DEBUG.:632:P632_CHUNK_ID:#DOC_CHUNK_ID##CHUNK_ID#'
+          page: 632 # View Chunk Detail
+          clear-cache: 632
+          values: 
+            p632_chunk_id: '#DOC_CHUNK_ID##CHUNK_ID#'
+
+        link-text: '#PREVIEW#'
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: None
+
+      enable-users-to: 
+        hide: true
+        sort: false
+        filter: true
+        highlight: true
+        control-break: false
+        aggregate: false
+        compute: false
+        chart: false
+        group-by: false
+        pivot: false
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: CREATED_AT ==================================
+      id: 125681477610257433
+      identification: 
+        column-name: CREATED_AT
+        type: Plain Text
+
+      heading: 
+        heading: Created At
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 100
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: HAS_EMBEDDING ===============================
+      id: 129603574321647812
+      identification: 
+        column-name: HAS_EMBEDDING
+        type: Plain Text
+
+      heading: 
+        heading: Has Embedding
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 80
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: FULL_TEXT ===================================
+      id: 129605498533647831
+      identification: 
+        column-name: FULL_TEXT
+        type: Hidden
+
+      heading: 
+        heading: Full Text
+
+      layout: 
+        sequence: 130
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DOC_CHUNK_ID ================================
+      id: 145721447386757242
+      identification: 
+        column-name: DOC_CHUNK_ID
+        type: Plain Text
+
+      heading: 
+        heading: Doc Chunk Id
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 140
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+- # ====== Region: Document Summary ============================
+  id: 125681809853257437
+  identification: 
+    name: Document Summary
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: AI Summary # 125606382248662115
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: New =========================================
+  id: 125682358509257442
+  identification: 
+    name: New
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          r.relation_type,
+          CASE 
+              WHEN r.parent_doc_id = TO_NUMBER(:P630_DOC_ID) THEN 'Child: ' || d_child.doc_title
+              ELSE 'Parent: ' || d_parent.doc_title
+          END as related_document,
+          CASE 
+              WHEN r.parent_doc_id = TO_NUMBER(:P630_DOC_ID) THEN r.child_doc_id
+              ELSE r.parent_doc_id
+          END as doc_id
+      FROM doc_relations r
+      LEFT JOIN docs d_child ON r.child_doc_id = d_child.doc_id
+      LEFT JOIN docs d_parent ON r.parent_doc_id = d_parent.doc_id
+      WHERE r.parent_doc_id = TO_NUMBER(:P630_DOC_ID) 
+         OR r.child_doc_id = TO_NUMBER(:P630_DOC_ID)
+    page-items-to-submit: 
+    - P630_DOC_ID
+
+  layout: 
+    sequence: 10
+    parent-region: Related Documents # 125606441541662116
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 125682429498257443
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 1000000
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 125702588482505031
+      identification: 
+        name: Primary Report
+        alias: 1257026
+
+    columns: 
+    - # ====== Column: RELATION_TYPE ===============================
+      id: 125682577267257444
+      identification: 
+        column-name: RELATION_TYPE
+        type: Plain Text
+
+      heading: 
+        heading: Relation Type
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 10
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: RELATED_DOCUMENT ============================
+      id: 125682608404257445
+      identification: 
+        column-name: RELATED_DOCUMENT
+        type: Link
+
+      heading: 
+        heading: Related Document
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      link: 
+        target: 
+          url: 'f?p=&APP_ID.:630:&SESSION.::&DEBUG.:630:P630_DOC_ID:#DOC_ID#'
+          page: 630 # Document Details
+          clear-cache: 630
+          values: 
+            p630_doc_id: '#DOC_ID#'
+
+        link-text: '#RELATED_DOCUMENT#'
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DOC_ID ======================================
+      id: 125682769251257446
+      identification: 
+        column-name: DOC_ID
+        type: Plain Text
+
+      heading: 
+        heading: Doc Id
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 30
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+page-items: 
+- # ====== Page Item: P630_DOC_ID ==============================
+  id: 125606549392662117
+  identification: 
+    name: P630_DOC_ID
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 10
+    region: Basic Info # 125605801996662110
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_DOC_TITLE ===========================
+  id: 125606600638662118
+  identification: 
+    name: P630_DOC_TITLE
+    type: Display Only
+
+  label: 
+    label: Document Title
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 20
+    region: Basic Info # 125605801996662110
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_LANGUAGE_CODE =======================
+  id: 125606736832662119
+  identification: 
+    name: P630_LANGUAGE_CODE
+    type: Display Only
+
+  label: 
+    label: 'Language '
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 60
+    region: Basic Info # 125605801996662110
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_DOC_CATEGORY ========================
+  id: 125606898502662120
+  identification: 
+    name: P630_DOC_CATEGORY
+    type: Display Only
+
+  label: 
+    label: Category
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 30
+    region: Basic Info # 125605801996662110
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_FILE_SIZE ===========================
+  id: 125606977691662121
+  identification: 
+    name: P630_FILE_SIZE
+    type: Display Only
+
+  label: 
+    label: File Size (KB)
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 80
+    region: Basic Info # 125605801996662110
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_DOC_STATUS ==========================
+  id: 125607059986662122
+  identification: 
+    name: P630_DOC_STATUS
+    type: Display Only
+
+  label: 
+    label: Status
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 50
+    region: Basic Info # 125605801996662110
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_FILE_NAME ===========================
+  id: 125607152582662123
+  identification: 
+    name: P630_FILE_NAME
+    type: Display Only
+
+  label: 
+    label: File Name
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 70
+    region: Basic Info # 125605801996662110
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_RAG_READY_FLAG ======================
+  id: 125607273540662124
+  identification: 
+    name: P630_RAG_READY_FLAG
+    type: Switch
+
+  label: 
+    label: 'Rag Ready '
+    alignment: Left
+
+  settings: 
+    use-defaults: true
+
+  layout: 
+    sequence: 90
+    region: Basic Info # 125605801996662110
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  read-only: 
+    type: Always
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_LAST_CHUNKED_AT =====================
+  id: 125607315952662125
+  identification: 
+    name: P630_LAST_CHUNKED_AT
+    type: Display Only
+
+  label: 
+    label: Last Chunked
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 130
+    region: Basic Info # 125605801996662110
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    format-mask: 'DD-MON-YYYY HH24:MI'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_CREATED_BY ==========================
+  id: 125607476445662126
+  identification: 
+    name: P630_CREATED_BY
+    type: Display Only
+
+  label: 
+    label: Created By
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 110
+    region: Basic Info # 125605801996662110
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_TEXT_EXTRACTED ======================
+  id: 125607549054662127
+  identification: 
+    name: P630_TEXT_EXTRACTED
+    type: Textarea
+
+  label: 
+    label: Text Extracted
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 10
+    region: Extracted Text # 125606003988662112
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 20
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Always, replacing any existing value in session state
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Always
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  configuration: 
+    build-option: Commented Out # 123954063565486069
+
+- # ====== Page Item: P630_EMBEDDING_COUNT =====================
+  id: 125607696672662128
+  identification: 
+    name: P630_EMBEDDING_COUNT
+    type: Display Only
+
+  label: 
+    label: Total Chunks
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 100
+    region: Basic Info # 125605801996662110
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_CREATED_AT ==========================
+  id: 125607776562662129
+  identification: 
+    name: P630_CREATED_AT
+    type: Display Only
+
+  label: 
+    label: Created At
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 120
+    region: Basic Info # 125605801996662110
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    format-mask: 'DD-MON-YYYY HH24:MI'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_CURRENT_STRATEGY ====================
+  id: 125607840720662130
+  identification: 
+    name: P630_CURRENT_STRATEGY
+    type: Display Only
+
+  label: 
+    label: Current Strategy
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 20
+    region: Current Strategy Settings # 125608370085662135
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_LAST_STRATEGY_USED ==================
+  id: 125607964156662131
+  identification: 
+    name: P630_LAST_STRATEGY_USED
+    type: Display Only
+
+  label: 
+    label: Last Strategy Used
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 30
+    region: Current Strategy Settings # 125608370085662135
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_RECOMMENDED_STRATEGY ================
+  id: 125608432924662136
+  identification: 
+    name: P630_RECOMMENDED_STRATEGY
+    type: Display Only
+
+  label: 
+    label: System Recommends
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: Strategy Recommendation # 125608997391662141
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Function Body
+    language: PL/SQL
+    pl/sql-function-body: |
+      DECLARE
+          v_strategy VARCHAR2(100);
+      BEGIN
+           SELECT s.strategy_code 
+           INTO v_strategy
+           FROM docs d ,lkp_chunking_strategy s  
+              WHERE s.strategy_code = d.recommended_strategy
+              AND  d.doc_id = :P630_DOC_ID;
+          RETURN v_strategy;
+      EXCEPTION
+          WHEN OTHERS THEN
+              RETURN NULL;
+      END;
+    used: Always, replacing any existing value in session state
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_RECOMMENDATION_REASON ===============
+  id: 125608527184662137
+  identification: 
+    name: P630_RECOMMENDATION_REASON
+    type: Display Only
+
+  label: 
+    label: ' Reason'
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: Strategy Recommendation # 125608997391662141
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: SQL Query (return single value)
+    sql-query: |
+      SELECT recommendation_reason
+      FROM docs
+      WHERE doc_id = :P630_DOC_ID
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_CHUNKING_STRATEGY_CODE ==============
+  id: 125608638325662138
+  identification: 
+    name: P630_CHUNKING_STRATEGY_CODE
+    type: Display Only
+
+  label: 
+    label: Chunking Strategy Code
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: Current Strategy Settings # 125608370085662135
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_CHUNKING_STRATEGY ===================
+  id: 125609117629662143
+  identification: 
+    name: P630_CHUNKING_STRATEGY
+    type: Select List
+
+  label: 
+    label: Chunking Strategy
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Edit Strategy # 125609007983662142
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      SELECT 
+        strategy_name || 
+        CASE WHEN is_default = 'Y' THEN ' ⭐ (Default)' ELSE '' END ||
+        ' (' || semantic_preservation || ' quality)' as d,
+        strategy_code as r
+      FROM lkp_chunking_strategy
+      WHERE is_active = 'Y'
+      ORDER BY 
+        CASE WHEN is_default = 'Y' THEN 0 ELSE 1 END,
+        display_order
+    display-extra-values: true
+    display-null-value: true
+    null-display-value: '- Auto-Detect -'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: SQL Query (return single value)
+    sql-query: 'SELECT chunking_strategy FROM docs WHERE doc_id = :P630_DOC_ID'
+    used: Always, replacing any existing value in session state
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_CHUNK_SIZE_OVERRIDE =================
+  id: 125609291764662144
+  identification: 
+    name: P630_CHUNK_SIZE_OVERRIDE
+    type: Number Field
+
+  label: 
+    label: Chunk Size Override
+    alignment: Left
+
+  settings: 
+    minimum-value: 50
+    maximum-value: 8000
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 20
+    region: Edit Strategy # 125609007983662142
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_OVERLAP_PCT_OVERRIDE ================
+  id: 125609385761662145
+  identification: 
+    name: P630_OVERLAP_PCT_OVERRIDE
+    type: Number Field
+
+  label: 
+    label: Overlap % Override
+    alignment: Left
+
+  settings: 
+    minimum-value: 0
+    maximum-value: 50
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 30
+    region: Edit Strategy # 125609007983662142
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_CHUNKING_NOTES ======================
+  id: 125609498465662146
+  identification: 
+    name: P630_CHUNKING_NOTES
+    type: Textarea
+
+  label: 
+    label: Configuration Notes
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 40
+    region: Edit Strategy # 125609007983662142
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 5
+
+  validation: 
+    value-required: false
+    maximum-length: 1000
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_STRATEGY_PROS =======================
+  id: 125679465871257413
+  identification: 
+    name: P630_STRATEGY_PROS
+    type: Display Only
+
+  label: 
+    label: ✅ Advantages
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: Pros & Cons # 125678768747257406
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_STRATEGY_CONS =======================
+  id: 125679517746257414
+  identification: 
+    name: P630_STRATEGY_CONS
+    type: Display Only
+
+  label: 
+    label: ⚠️ Limitations
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 20
+    region: Pros & Cons # 125678768747257406
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_STRATEGY_USE_CASES ==================
+  id: 125679607323257415
+  identification: 
+    name: P630_STRATEGY_USE_CASES
+    type: Display Only
+
+  label: 
+    label: 💡 Best Use Cases`
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 30
+    region: Pros & Cons # 125678768747257406
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: SQL Query (return single value)
+    sql-query: |
+      SELECT use_cases
+      FROM lkp_chunking_strategy
+      WHERE strategy_code = NVL(:P630_CHUNKING_STRATEGY,
+                              (SELECT chunking_strategy FROM docs WHERE doc_id = :P630_DOC_ID))
+    used: Always, replacing any existing value in session state
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_TOTAL_CHUNKS ========================
+  id: 125681552104257434
+  identification: 
+    name: P630_TOTAL_CHUNKS
+    type: Display Only
+
+  label: 
+    label: Total Chunks
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: Document Chunks # 125680820681257427
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_AVG_CHUNK_SIZE ======================
+  id: 125681620295257435
+  identification: 
+    name: P630_AVG_CHUNK_SIZE
+    type: Display Only
+
+  label: 
+    label: Average Chunk Size
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 20
+    region: Document Chunks # 125680820681257427
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_CHUNK_SIZE_RANGE ====================
+  id: 125681723049257436
+  identification: 
+    name: P630_CHUNK_SIZE_RANGE
+    type: Display Only
+
+  label: 
+    label: Size Range
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 30
+    region: Document Chunks # 125680820681257427
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_TEXT_SUMMARY ========================
+  id: 125681923396257438
+  identification: 
+    name: P630_TEXT_SUMMARY
+    type: Textarea
+
+  label: 
+    label: AI-Generated Summary
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 10
+    region: Document Summary # 125681809853257437
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 10
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Always
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P630_RECOMMENDATION_CONFIDENCE ===========
+  id: 129604072314647817
+  identification: 
+    name: P630_RECOMMENDATION_CONFIDENCE
+    type: Text Field
+
+  label: 
+    label: Recommendation Confidence
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 20
+    region: Strategy Recommendation # 125608997391662141
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: SQL Query (return single value)
+    sql-query: |
+      SELECT recommendation_confidence || '%'
+      FROM docs
+      WHERE doc_id = :P630_DOC_ID
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Always
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: DOWNLOAD_TEXT ===============================
+  id: 125608022267662132
+  identification: 
+    button-name: DOWNLOAD_TEXT
+    label: Download as Text File
+
+  layout: 
+    sequence: 20
+    region: Extracted Text # 125606003988662112
+    slot: ORDER_BY_ITEM
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-download
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: SAVE_STRATEGY_CONFIG ========================
+  id: 125609595332662147
+  identification: 
+    button-name: SAVE_STRATEGY_CONFIG
+    label: Save Configuration
+
+  layout: 
+    sequence: 50
+    region: Edit Strategy # 125609007983662142
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: a-save
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: GENERATE_CHUNKS =============================
+  id: 125680246323257421
+  identification: 
+    button-name: GENERATE_CHUNKS
+    label: 🧠 Generate Chunks (Auto Strategy)
+
+  layout: 
+    sequence: 10
+    region: Generate Chunks # 125680355511257422
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-magic
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: REGENERATE_CHUNKS ===========================
+  id: 125680595723257424
+  identification: 
+    button-name: REGENERATE_CHUNKS
+    label: 🔄 Re-generate Chunks
+
+  layout: 
+    sequence: 30
+    region: Generate Chunks # 125680355511257422
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-refresh
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: GENERATE_SUMMARY ============================
+  id: 125682032467257439
+  identification: 
+    button-name: GENERATE_SUMMARY
+    label: Generate Summary
+
+  layout: 
+    sequence: 20
+    region: Document Summary # 125681809853257437
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-magic
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: CLOSE =======================================
+  id: 125682800255257447
+  identification: 
+    button-name: CLOSE
+    label: Close
+
+  layout: 
+    sequence: 20
+    region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:610:&SESSION.::&DEBUG.:::'
+      page: 610 # Document Library
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: TEST_STRATEGY ===============================
+  id: 125709933737557126
+  identification: 
+    button-name: TEST_STRATEGY
+    label: Test Strategy Configuration
+
+  layout: 
+    sequence: 70
+    region: Chunking Configuration # 125605910514662111
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-flask
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:635:&SESSION.::&DEBUG.:635:P635_DOC_ID:&P630_DOC_ID.'
+      page: 635 # Chunking Configuration
+      clear-cache: 635
+      values: 
+        p635_doc_id: '&P630_DOC_ID.'
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: ViewFullText ================================
+  id: 128258704371285021
+  identification: 
+    button-name: ViewFullText
+    label: 📄 View Full Text
+
+  layout: 
+    sequence: 20
+    region: Extracted Text # 125606003988662112
+    slot: ORDER_BY_ITEM
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:631:&SESSION.::&DEBUG.:631:P631_CURRENT_PAGE,P631_DOC_ID:1,&P630_DOC_ID.'
+      page: 631 # Document Text Viewer
+      clear-cache: 631
+      values: 
+        p631_current_page: 1
+        p631_doc_id: '&P630_DOC_ID.'
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: View_Summary ================================
+  id: 129603655838647813
+  identification: 
+    button-name: View_Summary
+    label: View Summary
+
+  layout: 
+    sequence: 30
+    region: Document Summary # 125681809853257437
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: Extract_Text ================================
+  id: 132481599033108006
+  identification: 
+    button-name: Extract_Text
+    label: Extract Text
+
+  layout: 
+    sequence: 30
+    region: Extracted Text # 125606003988662112
+    slot: ORDER_BY_ITEM
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-database-application
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P630_DOC_ID
+
+dynamic-actions: 
+- # ====== Dynamic Action: downlaod ============================
+  id: 125608124229662133
+  identification: 
+    name: downlaod
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: DOWNLOAD_TEXT # 125608022267662132
+
+  actions: 
+  - # ====== Action: document_#P630_DOC_ID#.txt ==================
+    id: 125608215031662134
+    identification: 
+      name: document_#P630_DOC_ID#.txt
+      action: Download
+
+    settings: 
+      multiple-files: false
+      view-file-as: Attachment
+
+    source: 
+      sql-query: |
+        select  TEXT_EXTRACTED  
+            , FILE_NAME --'document_#P630_DOC_ID#.txt'
+             ,FILE_MIME_TYPE
+        FROM DOCS
+         where DOC_ID = :P630_DOC_ID
+         
+      items-to-submit: 
+      - P630_DOC_ID
+
+    execution: 
+      sequence: 10
+      event: downlaod # 125608124229662133
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Refresh =============================
+  id: 125679779457257416
+  identification: 
+    name: Refresh
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P630_CHUNKING_STRATEGY
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 125679810632257417
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Pros & Cons # 125678768747257406
+
+    execution: 
+      sequence: 10
+      event: Refresh # 125679779457257416
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 125679951842257418
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Strategy Recommendation # 125608997391662141
+
+    execution: 
+      sequence: 20
+      event: Refresh # 125679779457257416
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 125680018920257419
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Current Strategy Settings # 125608370085662135
+
+    execution: 
+      sequence: 30
+      event: Refresh # 125679779457257416
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 125680102517257420
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Strategy Information # 125609700271662149
+
+    execution: 
+      sequence: 40
+      event: Refresh # 125679779457257416
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: New =================================
+  id: 125682117935257440
+  identification: 
+    name: New
+
+  execution: 
+    sequence: 30
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: GENERATE_SUMMARY # 125682032467257439
+
+  actions: 
+  - # ====== Action: Confirm =====================================
+    id: 125682296698257441
+    identification: 
+      action: Confirm
+
+    settings: 
+      message: 'Note: Can be implemented later with LLM integration'
+      style: Default
+
+    execution: 
+      sequence: 10
+      event: New # 125682117935257440
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: New_1 ===============================
+  id: 129603847806647815
+  identification: 
+    name: New_1
+
+  execution: 
+    sequence: 40
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: View_Summary # 129603655838647813
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 129603984403647816
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        // JavaScript Expression for Dynamic Action
+        apex.item("P630_TEXT_SUMMARY").setValue(
+            apex.server.process("LOAD_TEXT_SUMMARY", {
+                x01: apex.item("P630_DOC_ID").getValue()
+            }).done(function(data) {
+                apex.message.showPageSuccess("Summary loaded");
+            })
+        );
+
+    execution: 
+      sequence: 10
+      event: New_1 # 129603847806647815
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Extract Text from blob ==============
+  id: 132481641641108007
+  identification: 
+    name: Extract Text from blob
+
+  execution: 
+    sequence: 50
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: Extract_Text # 132481599033108006
+
+  actions: 
+  - # ====== Action: Execute Server-side Code ====================
+    id: 132481716650108008
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: |
+        IF :P630_DOC_ID is not null then
+        
+        RAG_PROCESSING_PKG.Generate_DOC_TEXT(   p_doc_id=> :P630_DOC_ID, p_commit_flag =>'Y' ) ;
+        
+        end if;
+      items-to-submit: 
+      - P630_DOC_ID
+
+    execution: 
+      sequence: 10
+      event: Extract Text from blob # 132481641641108007
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Set Value ===================================
+    id: 132481959642108010
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: SQL Statement
+      sql-statement: |
+        select  text_Extracted from DOCS where doc_id =:P630_DOC_ID
+              
+      items-to-submit: 
+      - P630_DOC_ID
+      escape-special-characters: true
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P630_TEXT_EXTRACTED
+
+    execution: 
+      sequence: 20
+      event: Extract Text from blob # 132481641641108007
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+processes: 
+- # ====== Process: Save Chunking Configuration ================
+  id: 125609658204662148
+  identification: 
+    name: Save Chunking Configuration
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      UPDATE docs
+      SET chunking_strategy = :P630_CHUNKING_STRATEGY,
+      chunk_size_override = :P630_CHUNK_SIZE_OVERRIDE,
+      overlap_pct_override = :P630_OVERLAP_PCT_OVERRIDE,
+      chunking_notes = :P630_CHUNKING_NOTES,
+      updated_by = :APP_USER,
+      updated_at = SYSTIMESTAMP
+      WHERE doc_id = :P630_DOC_ID;
+      
+      apex_application.g_print_success_message := 'Chunking configuration saved successfully!';
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: SAVE_STRATEGY_CONFIG # 125609595332662147
+
+- # ====== Process: Generate Intelligent Chunks ================
+  id: 125680684535257425
+  identification: 
+    name: Generate Intelligent Chunks
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+      v_chunk_count NUMBER;
+      v_strategy VARCHAR2(100);
+      BEGIN
+      -- Generate chunks based on the doc characteristics 
+        CHUNK_PROXY_UTIL.run_chunk(p_doc_id => :P630_DOC_ID,
+                                      p_recommend_strategy   => 'Y',
+                                      p_force_rechunk     =>TRUE,
+                                      p_commit_after      =>TRUE
+      );
+      
+      v_chunk_count:=CHUNK_PROXY_UTIL.chunks_count(p_doc_id => :P630_DOC_ID);
+      
+      -- Update statistics for a specific document (use in APEX after chunking)
+      DECLARE
+          v_stats_json VARCHAR2(1000);
+      BEGIN
+          SELECT JSON_OBJECT(
+              'avg_size' VALUE ROUND(AVG(LENGTH(chunk_text)), 0),
+              'min_size' VALUE MIN(LENGTH(chunk_text)),
+              'max_size' VALUE MAX(LENGTH(chunk_text)),
+              'count' VALUE COUNT(*)
+          )
+          INTO v_stats_json
+          FROM doc_chunks
+          WHERE doc_id = :P630_DOC_ID
+          HAVING COUNT(*) > 0;  -- Only if chunks exist
+          
+          UPDATE docs
+          SET chunk_stats_json = v_stats_json,
+              chunk_stats_updated_at = SYSTIMESTAMP
+          WHERE doc_id = :P630_DOC_ID;
+          
+          COMMIT;
+          
+      EXCEPTION
+          WHEN NO_DATA_FOUND THEN
+              -- No chunks found, set stats to NULL
+              UPDATE docs
+              SET chunk_stats_json = NULL,
+                  chunk_stats_updated_at = SYSTIMESTAMP
+              WHERE doc_id = :P630_DOC_ID;
+              COMMIT;
+      END;
+      
+      
+      -- Get strategy that was used
+      SELECT last_chunking_strategy INTO v_strategy
+      FROM docs
+      WHERE doc_id = :P630_DOC_ID;
+      
+      
+      
+      
+      apex_application.g_print_success_message := 
+         'Successfully created ' || v_chunk_count || ' chunks using ' || v_strategy || ' strategy!';
+      
+      EXCEPTION
+       WHEN OTHERS THEN
+       apex_error.add_error(p_message => 'Error generating chunks: ' || SQLERRM,
+                            p_display_location => apex_error.c_inline_in_notification
+                           );
+      END;
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: GENERATE_CHUNKS # 125680246323257421
+
+- # ====== Process: Generate Intelligent Chunks_1 ==============
+  id: 125680744927257426
+  identification: 
+    name: Generate Intelligent Chunks_1
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+      v_chunk_count NUMBER;
+      v_strategy VARCHAR2(100);
+      BEGIN
+      -- Generate chunks based on the doc characteristics 
+         CHUNK_PROXY_UTIL.run_chunk(p_doc_id => :P630_DOC_ID,
+                                      p_recommend_strategy   => 'Y',
+                                      p_force_rechunk     =>TRUE,
+                                      p_commit_after      =>TRUE
+      );
+      
+      v_chunk_count:=CHUNK_PROXY_UTIL.chunks_count(p_doc_id => :P630_DOC_ID);
+      
+      -- Update statistics for a specific document (use in APEX after chunking)
+      DECLARE
+          v_stats_json VARCHAR2(1000);
+      BEGIN
+          SELECT JSON_OBJECT(
+              'avg_size' VALUE ROUND(AVG(LENGTH(chunk_text)), 0),
+              'min_size' VALUE MIN(LENGTH(chunk_text)),
+              'max_size' VALUE MAX(LENGTH(chunk_text)),
+              'count' VALUE COUNT(*)
+          )
+          INTO v_stats_json
+          FROM doc_chunks
+          WHERE doc_id = :P630_DOC_ID
+          HAVING COUNT(*) > 0;  -- Only if chunks exist
+          
+          UPDATE docs
+          SET chunk_stats_json = v_stats_json,
+              chunk_stats_updated_at = SYSTIMESTAMP
+          WHERE doc_id = :P630_DOC_ID;
+          
+          COMMIT;
+          
+      EXCEPTION
+          WHEN NO_DATA_FOUND THEN
+              -- No chunks found, set stats to NULL
+              UPDATE docs
+              SET chunk_stats_json = NULL,
+                  chunk_stats_updated_at = SYSTIMESTAMP
+              WHERE doc_id = :P630_DOC_ID;
+              COMMIT;
+      END;
+      
+      
+      -- Get strategy that was used
+      SELECT last_chunking_strategy INTO v_strategy
+      FROM docs
+      WHERE doc_id = :P630_DOC_ID;
+      
+      
+      
+      
+      apex_application.g_print_success_message := 
+         'Successfully created ' || v_chunk_count || ' chunks using ' || v_strategy || ' strategy!';
+      
+      EXCEPTION
+       WHEN OTHERS THEN
+       apex_error.add_error(p_message => 'Error generating chunks: ' || SQLERRM,
+                            p_display_location => apex_error.c_inline_in_notification
+                           );
+      END;
+
+  execution: 
+    sequence: 30
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: REGENERATE_CHUNKS # 125680595723257424
+
+- # ====== Process: Load Document Data =========================
+  id: 125683025680257449
+  identification: 
+    name: Load Document Data
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_doc_id NUMBER := :P630_DOC_ID;
+      BEGIN
+          -- ========================================
+          -- SECTION 1: EXISTING PAGE ITEMS
+          -- ========================================
+          SELECT 
+              d.doc_title,
+              d.doc_category,
+              d.doc_status,
+              d.language_code,
+              d.file_name,
+              d.file_size,
+              d.chunking_strategy,
+              d.chunk_size_override,
+              d.overlap_pct_override,
+              d.chunking_notes,
+              d.last_chunked_at,
+              d.embedding_count,
+              d.rag_ready_flag,
+              d.created_by,
+              d.created_at,
+              -- d.text_extracted,--loaded directly at the item bz of size
+              -- d.text_summary,--loaded directly at the item bz of size
+              d.last_chunking_strategy,
+              -- Lookup display names for existing items
+             -- cat.category_name,
+              NVL(chunk.strategy_name, 'Not Set') AS chunking_strategy_name,
+               JSON_VALUE(chunk_stats_json, '$.avg_size') AVG_CHUNK_SIZE,
+               JSON_VALUE(chunk_stats_json, '$.min_size') || ' - ' || 
+               JSON_VALUE(chunk_stats_json, '$.max_size') || ' chars'  CHUNK_SIZE_RANGE
+              -- ========================================
+              -- SECTION 2: FUTURE PAGE ITEMS (COMMENTED)
+              -- Uncomment when page items are created
+              -- ========================================
+              /*
+              ,d.doc_description
+              ,d.doc_topic
+              ,d.doc_tags
+              ,d.file_mime_type
+              ,d.source_system
+              ,d.related_project
+              ,d.file_version_no
+              ,d.file_version_label
+              ,d.approval_user
+              ,d.approval_date
+              ,d.embedding_model
+              ,d.summary_model
+              ,d.vector_indexed_flag
+              ,d.retention_period_days
+              ,d.is_active
+              ,d.classification_level
+              ,d.sensitivity_label
+              ,d.updated_by
+              ,d.updated_at
+              -- Future lookup display names
+              ,NVL(stat.status_name, 'Unknown') AS status_name
+              ,NVL(cls.classification_name, 'Unclassified') AS classification_name
+              ,NVL(sens.label_name, 'None') AS sensitivity_name
+              ,NVL(lang.language_name, 'Not Specified') AS language_name
+              ,NVL(last_chunk.strategy_name, 'Never Chunked') AS last_chunking_strategy_name
+              */
+              
+          INTO 
+              -- ========================================
+              -- SECTION 1: EXISTING PAGE ITEMS
+              -- ========================================
+              :P630_DOC_TITLE,
+              :P630_DOC_CATEGORY,
+              :P630_DOC_STATUS,
+              :P630_LANGUAGE_CODE,
+              :P630_FILE_NAME,
+              :P630_FILE_SIZE,
+              :P630_CHUNKING_STRATEGY,
+              :P630_CHUNK_SIZE_OVERRIDE,
+              :P630_OVERLAP_PCT_OVERRIDE,
+              :P630_CHUNKING_NOTES,
+              :P630_LAST_CHUNKED_AT,
+              :P630_EMBEDDING_COUNT,
+              :P630_RAG_READY_FLAG,
+              :P630_CREATED_BY,
+              :P630_CREATED_AT,
+              -- :P630_TEXT_EXTRACTED,
+              -- :P630_TEXT_SUMMARY,
+              :P630_LAST_STRATEGY_USED,  -- Uses last_chunking_strategy
+             -- :P630_DOC_CATEGORY_DISPLAY,  -- New display item for category name
+              :P630_CURRENT_STRATEGY,        -- New display item for current strategy name
+              :P630_AVG_CHUNK_SIZE,
+              :P630_CHUNK_SIZE_RANGE
+              -- ========================================
+              -- SECTION 2: FUTURE PAGE ITEMS (COMMENTED)
+              -- Uncomment when corresponding page items are created
+              -- ========================================
+              /*
+              ,:P630_DOC_DESCRIPTION
+              ,:P630_DOC_TOPIC
+              ,:P630_DOC_TAGS
+              ,:P630_FILE_MIME_TYPE
+              ,:P630_SOURCE_SYSTEM
+              ,:P630_RELATED_PROJECT
+              ,:P630_FILE_VERSION_NO
+              ,:P630_FILE_VERSION_LABEL
+              ,:P630_APPROVAL_USER
+              ,:P630_APPROVAL_DATE
+              ,:P630_EMBEDDING_MODEL
+              ,:P630_SUMMARY_MODEL
+              ,:P630_VECTOR_INDEXED_FLAG
+              ,:P630_RETENTION_PERIOD_DAYS
+              ,:P630_IS_ACTIVE
+              ,:P630_CLASSIFICATION_LEVEL
+              ,:P630_SENSITIVITY_LABEL
+              ,:P630_UPDATED_BY
+              ,:P630_UPDATED_AT
+              -- Future display items for lookup names
+              ,:P630_DOC_STATUS_DISPLAY
+              ,:P630_CLASSIFICATION_DISPLAY
+              ,:P630_SENSITIVITY_DISPLAY
+              ,:P630_LANGUAGE_DISPLAY
+              ,:P630_LAST_CHUNKING_DISPLAY
+              */
+              
+          FROM docs d,
+               lkp_doc_category cat,
+               lkp_chunking_strategy chunk
+               -- ========================================
+               -- FUTURE LOOKUP TABLES (COMMENTED)
+               -- Uncomment when future page items are added
+               -- ========================================
+               /*
+               ,lkp_doc_status stat
+               ,lkp_classification_level cls
+               ,lkp_sensitivity_label sens
+               ,lkp_language_code lang
+               ,lkp_chunking_strategy last_chunk
+               */
+          WHERE d.doc_id = v_doc_id
+            AND cat.category_code(+) = d.doc_category
+            AND chunk.strategy_code(+) = d.chunking_strategy;  -- ✅ FIXED: Was truncated as 'strategy_cod'
+            
+          -- ========================================
+          -- SECTION 3: LOAD LARGE TEXT FIELDS SEPARATELY
+          -- (Loaded directly at item level due to size)
+          -- ========================================
+          -- Text fields are loaded via separate item source queries
+          -- to avoid performance issues with main SELECT
+          
+      EXCEPTION
+          WHEN NO_DATA_FOUND THEN
+              -- Document not found - provide helpful error message
+              apex_error.add_error(
+                  p_message => 'Document ID ' || v_doc_id || ' not found. It may have been deleted.',
+                  p_display_location => apex_error.c_inline_in_notification
+              );
+              
+          WHEN TOO_MANY_ROWS THEN
+              -- Should never happen with PK, but handle gracefully
+              apex_error.add_error(
+                  p_message => 'Data integrity error: Multiple documents found with ID ' || v_doc_id,
+                  p_display_location => apex_error.c_inline_in_notification
+              );
+              
+          WHEN OTHERS THEN
+              -- Log unexpected errors with full context
+              apex_error.add_error(
+                  p_message => 'Error loading document: ' || SQLERRM,
+                  p_additional_info => 'DOC_ID=' || v_doc_id || ', USER=' || :APP_USER,
+                  p_display_location => apex_error.c_inline_in_notification
+              );
+              RAISE;
+      END;
+      
+      
+       
+      
+      
+      
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: LOAD_TEXT_SUMMARY ==========================
+  id: 129603730222647814
+  identification: 
+    name: LOAD_TEXT_SUMMARY
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_summary CLOB;
+      BEGIN
+          SELECT text_summary
+          INTO v_summary
+          FROM docs
+          WHERE doc_id = apex_application.g_x01;
+          
+          apex_json.open_object;
+          apex_json.write('summary', v_summary);
+          apex_json.close_object;
+      END;
+
+  execution: 
+    sequence: 40
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: View_Summary # 129603655838647813
+
+branches: 
+- # ====== Branch: Go To Page 1 ================================
+  id: 125643936639811425
+  identification: 
+    name: Go To Page 1
+
+  execution: 
+    sequence: 1
+    point: After Processing
+
+  behavior: 
+    type: Page or URL (Redirect)
+    target: 
+      url: 'f?p=&APP_ID.:1:&APP_SESSION.::&DEBUG.:::&success_msg=#SUCCESS_MSG#'
+      page: 1 # Home
+

@@ -1,0 +1,557 @@
+---
+# ====== Page: test ==========================================
+id: 14
+identification: 
+  name: test
+  alias: TEST
+  title: test
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+javascript: 
+  function-and-global-variable-declaration: |
+    /* ============================================================
+     * HELP SYSTEM LOGGER
+     * ============================================================ */
+    window.HELP_LOG = {
+      enabled: true,        // 🔴 set false in PROD
+      level: 'DEBUG',       // DEBUG | INFO | WARN | ERROR
+    
+      log(level, msg, data) {
+        if (!this.enabled) return;
+    
+        const levels = { DEBUG: 1, INFO: 2, WARN: 3, ERROR: 4 };
+        if (levels[level] < levels[this.level]) return;
+    
+        const time = new Date().toISOString().substring(11, 23);
+        const prefix = `%c[HELP ${level}] ${time}`;
+    
+        const style = {
+          DEBUG: 'color:#64748b',
+          INFO:  'color:#2563eb',
+          WARN:  'color:#d97706',
+          ERROR: 'color:#dc2626;font-weight:bold'
+        }[level];
+    
+        console.log(prefix, style, msg, data ?? '');
+      },
+    
+      debug(msg, d) { this.log('DEBUG', msg, d); },
+      info(msg, d)  { this.log('INFO',  msg, d); },
+      warn(msg, d)  { this.log('WARN',  msg, d); },
+      error(msg, d) { this.log('ERROR', msg, d); }
+    };
+  execute-when-page-loads: |
+    (function () {
+    
+      let hoverEnabled = true;
+      let lastHoverItem = null;
+    
+      window.userHasTechHelp = window.userHasTechHelp ?? false;
+    
+      HELP_LOG.info('Bootstrapping Help System');
+    
+      apex.util.invokeAfterPaint(initHelpSystem);
+    
+      function initHelpSystem() {
+    
+        HELP_LOG.debug('invokeAfterPaint fired');
+    
+        const trigger  = document.getElementById('helpTrigger');
+        const menu     = document.getElementById('helpMenu');
+        const sidebar  = document.getElementById('helpSidebar');
+        const overlay  = document.getElementById('helpOverlay');
+        const closeBtn = document.getElementById('closeHelp');
+        const content  = document.getElementById('helpContent');
+    
+        if (!trigger || !menu || !sidebar || !overlay || !content) {
+          HELP_LOG.error('Missing required DOM elements', {
+            trigger, menu, sidebar, overlay, content
+          });
+          return;
+        }
+    
+        if (trigger.dataset.init === 'Y') {
+          HELP_LOG.warn('Help system already initialized — skipping');
+          return;
+        }
+    
+        trigger.dataset.init = 'Y';
+        HELP_LOG.info('Help system initialized');
+    
+        /* ================================
+         * FAB → MENU
+         * ================================ */
+        trigger.addEventListener('click', function (e) {
+          e.stopPropagation();
+          const open = menu.style.display === 'block';
+          menu.style.display = open ? 'none' : 'block';
+          HELP_LOG.debug('FAB clicked', { menuOpen: !open });
+        });
+    
+        document.addEventListener('click', function () {
+          if (menu.style.display === 'block') {
+            menu.style.display = 'none';
+            HELP_LOG.debug('Menu closed by document click');
+          }
+        });
+    
+        if (!window.userHasTechHelp) {
+          menu.querySelectorAll('.tech-only').forEach(el => el.remove());
+          HELP_LOG.info('TECH help hidden (role not allowed)');
+        }
+    
+        menu.addEventListener('click', function (e) {
+          const mode = e.target.dataset.helpMode;
+    
+          if (mode) {
+            HELP_LOG.info('Help mode selected', mode);
+            openHelp({ mode });
+          }
+    
+          if (e.target.id === 'toggleHoverHelp') {
+            hoverEnabled = !hoverEnabled;
+            HELP_LOG.info('Hover help toggled', hoverEnabled);
+            apex.message.showPageSuccess(
+              hoverEnabled ? 'Hover help enabled' : 'Hover help disabled'
+            );
+          }
+    
+          menu.style.display = 'none';
+          e.stopPropagation();
+        });
+    
+        /* ================================
+         * SIDEBAR
+         * ================================ */
+        function openHelp({ mode = 'USER' } = {}) {
+          HELP_LOG.info('Opening help sidebar', mode);
+          sidebar.classList.add('active');
+          overlay.classList.add('active');
+          document.body.style.overflow = 'hidden';
+          loadHelpContent(mode);
+        }
+    
+        function closeHelp() {
+          HELP_LOG.info('Closing help sidebar');
+          sidebar.classList.remove('active');
+          overlay.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+    
+        closeBtn?.addEventListener('click', closeHelp);
+        overlay.addEventListener('click', closeHelp);
+    
+        window.openHelp  = openHelp;
+        window.closeHelp = closeHelp;
+    
+        /* ================================
+         * AJAX CONTENT LOAD
+         * ================================ */
+        function loadHelpContent(mode) {
+          const pageId = $v('pFlowStepId');
+          HELP_LOG.debug('Loading help content', { pageId, mode });
+    
+          content.innerHTML = `
+            <div class="help-loading">
+              <i class="fa fa-spinner fa-spin fa-2x"></i>
+              <p>Loading help…</p>
+            </div>
+          `;
+    
+          apex.server.process(
+            'GET_PAGE_HELP',
+            { x01: pageId, x02: mode },
+            {
+              success: function (data) {
+                HELP_LOG.debug('Help AJAX success', data);
+                content.innerHTML = data?.success
+                  ? data.html_content
+                  : getDefaultHelp(pageId);
+              },
+              error: function (err) {
+                HELP_LOG.error('Help AJAX failed', err);
+                content.innerHTML = getDefaultHelp(pageId);
+              }
+            }
+          );
+        }
+    
+        function getDefaultHelp(pageId) {
+          HELP_LOG.warn('Using default help content', pageId);
+          return `
+            <h3>Page ${pageId} Help</h3>
+            <p>This page is currently being documented.</p>
+          `;
+        }
+    
+        /* ================================
+         * KEYBOARD
+         * ================================ */
+        document.addEventListener('keydown', function (e) {
+    
+          if (e.key === 'F1') {
+            HELP_LOG.debug('F1 pressed');
+            e.preventDefault();
+            openHelp({ mode: 'USER' });
+          }
+    
+          if (e.ctrlKey && e.key.toLowerCase() === 'h' && window.userHasTechHelp) {
+            HELP_LOG.debug('CTRL+H pressed');
+            e.preventDefault();
+            openHelp({ mode: 'TECH' });
+          }
+    
+          if (e.key === 'Escape' && sidebar.classList.contains('active')) {
+            HELP_LOG.debug('ESC pressed');
+            closeHelp();
+          }
+        });
+    
+        /* ================================
+         * HOVER HELP
+         * ================================ */
+        document.addEventListener('mouseover', function (e) {
+          if (!hoverEnabled) return;
+    
+          const item = e.target.closest('[id^="P"]');
+          if (!item || item === lastHoverItem) return;
+    
+          lastHoverItem = item;
+    
+          HELP_LOG.debug('Hover help requested', item.id);
+    
+          window.showHoverHelp?.({
+            pageId: $v('pFlowStepId'),
+            itemName: item.id
+          });
+        });
+    
+        HELP_LOG.info('Help System READY');
+      }
+    
+    })();
+
+css: 
+  inline: |
+    /* Floating Help Button (SINGLE SOURCE OF TRUTH) */
+    .help-fab {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        width: 56px;
+        height: 56px;
+    
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: #fff;
+    
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+    
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    
+        font-size: 20px;
+        z-index: 100000;
+    
+        /* NO transitions here */
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+    
+    /* Hidden state – JS ONLY */
+    .help-fab.is-hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+    .help-fab-container {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 100000;
+    }
+    
+    .help-menu {
+        position: absolute;
+        bottom: 64px;
+        right: 0;
+    
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0,0,0,.15);
+        display: none;
+        overflow: hidden;
+        min-width: 180px;
+    }
+    
+    .help-menu button {
+        width: 100%;
+        padding: 10px 14px;
+        background: none;
+        border: none;
+        text-align: left;
+        cursor: pointer;
+    }
+    
+    .help-menu button:hover {
+        background: #f3f4f6;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: helpPanel ===================================
+  id: 161679535171437935
+  identification: 
+    name: helpPanel
+    type: Static Content
+
+  source: 
+    html-code: |
+      <div id="helpSidebar" class="help-sidebar">
+          <div class="help-sidebar-header">
+              <h2>
+                  <i class="fa fa-question-circle"></i>
+                  Page Help
+              </h2>
+              <button id="closeHelp" class="help-close-btn">
+                  <i class="fa fa-times"></i>
+              </button>
+          </div>
+          
+          <div class="help-sidebar-content" id="helpContent">
+              <!-- Dynamic content will be loaded here -->
+              <div class="help-loading">
+                  <i class="fa fa-spinner fa-spin fa-2x"></i>
+                  <p>Loading help...</p>
+              </div>
+          </div>
+          
+          <div class="help-sidebar-footer">
+              <a href="mailto:support@company.com?subject=Help Request - Page &APP_PAGE_ID." class="help-contact-link">
+                  <i class="fa fa-envelope"></i> Contact Support
+              </a>
+              <a href="f?p=&APP_ID.:9999:&SESSION.::&DEBUG.:::" class="help-docs-link">
+                  <i class="fa fa-book"></i> Full Documentation
+              </a>
+          </div>
+      </div>
+      
+      <div id="helpOverlay" class="help-overlay"></div>
+      
+      <!-- Floating Help Button -->
+      <button id="helpTrigger" class="help-fab" title="Page Help">
+          <i class="fa fa-question-circle"></i>
+      </button>
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: helpPanel
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: New =========================================
+  id: 161680136639437941
+  identification: 
+    name: New
+    type: Static Content
+
+  source: 
+    html-code: |
+      <div class="help-fab-container">
+      
+        <button id="helpTrigger" class="help-fab" title="Help (F1)">
+          <i class="fa fa-question-circle"></i>
+        </button>
+      
+        <div id="helpMenu" class="help-menu">
+          <button data-help-mode="USER">👤 User Help</button>
+          <button data-help-mode="TECH" class="tech-only">🛠 Technical Help</button>
+          <button id="toggleHoverHelp">🛈 Toggle Hover Help</button>
+        </div>
+      
+      </div>
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: REGION_POSITION_04
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Breadcrumb ==================================
+  id: 162216223443776694
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 123954626239486075
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+processes: 
+- # ====== Process: GET_PAGE_HELP ==============================
+  id: 161679680308437936
+  identification: 
+    name: GET_PAGE_HELP
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_page_id     NUMBER := apex_application.g_x01;
+          v_help_html   CLOB;
+      BEGIN
+          -- Get help content from help table
+          BEGIN
+              SELECT help_content
+              INTO v_help_html
+              FROM apex_page_help
+              WHERE application_id = :APP_ID
+                AND page_id = v_page_id
+                AND is_active = 'Y';
+          EXCEPTION
+              WHEN NO_DATA_FOUND THEN
+                  -- Generate default help based on page
+                --  v_help_html := generate_default_help(v_page_id);
+                Null;
+          END;
+          
+          -- Return JSON
+          apex_json.open_object;
+          apex_json.write('success', TRUE);
+          apex_json.write('html_content', v_help_html);
+          apex_json.close_object;
+      EXCEPTION
+          WHEN OTHERS THEN
+              apex_json.open_object;
+              apex_json.write('success', FALSE);
+              apex_json.write('error', SQLERRM);
+              apex_json.close_object;
+      END;
+
+  execution: 
+    sequence: 10
+    point: Ajax Callback
+    run-process: Once Per Page Visit (default)
+

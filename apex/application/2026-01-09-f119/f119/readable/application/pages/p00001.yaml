@@ -1,0 +1,974 @@
+---
+# ====== Page: Home ==========================================
+id: 1
+identification: 
+  name: Home
+  alias: HOME
+  title: Enterprise Chatpot
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    /* ============================================================
+       ORACLE AI CHATPOT — HOME PAGE (APEX 24.2)
+       FINAL CLEAN CSS
+       ============================================================ */
+    
+    
+    /* ============================================================
+       HERO BANNER
+       Region Static ID: homeHero
+       ============================================================ */
+    
+    #homeHero {
+      margin-bottom: 1.5rem;
+    }
+    
+    #homeHero .home-hero {
+      text-align: center;
+      padding: 2.5rem 1rem 1.75rem;
+    }
+    
+    #homeHero .home-hero h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: .4rem;
+    }
+    
+    #homeHero .home-hero h1 .fa {
+      color: #0078D4;
+      margin-right: .6rem;
+    }
+    
+    #homeHero .home-hero p {
+      font-size: 1.1rem;
+      color: #666;
+      margin: 0;
+    }
+    
+    
+    /* ============================================================
+       HERO CTA BUTTONS (Buttons Container)
+       Sub-region template: Buttons Container (noUI)
+       ============================================================ */
+    
+    /* Center the buttons container */
+    #homeHero .t-ButtonRegion {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 1.75rem;
+    }
+    
+    /* Prevent Universal Theme full-width buttons */
+    #homeHero .t-ButtonRegion .t-Button {
+      width: auto !important;
+      min-width: unset;
+      flex: 0 0 auto;
+    }
+    
+    
+    /* ============================================================
+       PRIMARY CTA — Start New Chat
+       Button ID: BTN_START_CHAT
+       ============================================================ */
+    
+    #BTN_START_CHAT {
+      border-radius: 999px;
+      padding: 0.9rem 2.4rem;
+      font-size: 1.15rem;
+      font-weight: 600;
+    
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+    }
+    
+    #BTN_START_CHAT.t-Button--hot {
+      box-shadow: 0 10px 28px rgba(0,120,212,.35);
+    }
+    
+    #BTN_START_CHAT.t-Button--hot:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 36px rgba(0,120,212,.45);
+    }
+    
+    
+    /* ============================================================
+       SECONDARY CTA — Resume Last Chat
+       Button ID: BTN_RESUME_CHAT
+       ============================================================ */
+    
+    #BTN_RESUME_CHAT {
+      border-radius: 999px;
+      padding: 0.85rem 2.2rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+    
+      background: #fff;
+      border: 2px solid #0078D4;
+      color: #0078D4;
+    
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+    
+      transition: all .2s ease;
+    }
+    
+    #BTN_RESUME_CHAT:hover {
+      background: rgba(0,120,212,.08);
+      transform: translateY(-2px);
+    }
+    
+    
+    /* ============================================================
+       SYSTEM STATUS STRIP
+       Region Static ID: system-status
+       ============================================================ */
+    
+    #system-status {
+      margin: .75rem 0 1.75rem;
+    }
+    
+    #system-status .t-BadgeList {
+      justify-content: center;
+      gap: .75rem;
+    }
+    
+    #system-status .t-Badge {
+      padding: .5rem .75rem;
+      font-size: .85rem;
+      font-weight: 600;
+      border-radius: 10px;
+    }
+    
+    
+    /* ============================================================
+       CORE ACTIONS CARDS
+       Region Static ID: core-actions
+       ============================================================ */
+    
+    #core-actions {
+      margin-bottom: 2.5rem;
+    }
+    
+    #core-actions .t-Cards {
+      padding: 0;
+      margin: -1rem;
+    }
+    
+    #core-actions .t-Cards--row {
+      row-gap: 2rem;
+      column-gap: 2rem;
+    }
+    
+    
+    /* ------------------------------------------------------------
+       BASE CARD
+       ------------------------------------------------------------ */
+    
+    #core-actions .t-Card {
+      position: relative;
+      background: #fff;
+      border: 1px solid #e8e8e8;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.04);
+      transition: transform .25s ease,
+                  box-shadow .25s ease,
+                  border-color .25s ease;
+      overflow: hidden;
+    }
+    
+    #core-actions .t-Card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 28px rgba(0,0,0,.12);
+      border-color: #d0d0d0;
+    }
+    
+    
+    /* Accent line */
+    #core-actions .t-Card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 4px;
+      background: linear-gradient(90deg, #0078D4, #106EBE);
+      opacity: 0;
+      transition: opacity .25s ease;
+    }
+    
+    #core-actions .t-Card:hover::before {
+      opacity: 1;
+    }
+    
+    
+    /* ------------------------------------------------------------
+       PRIMARY CARD (via hidden marker)
+       ------------------------------------------------------------ */
+    
+    #core-actions .t-Card:has(.card-marker.PRIMARY) {
+      border-left: 4px solid #0078D4;
+      background: linear-gradient(to bottom right, #ffffff, #f0f7ff);
+      box-shadow: 0 14px 36px rgba(0,120,212,.18);
+      transform: translateY(-6px);
+    }
+    
+    #core-actions .t-Card:has(.card-marker.PRIMARY):hover {
+      transform: translateY(-6px);
+    }
+    
+    #core-actions .t-Card:not(:has(.card-marker.PRIMARY)) {
+      opacity: .95;
+    }
+    
+    
+    /* ------------------------------------------------------------
+       ICON
+       ------------------------------------------------------------ */
+    
+    #core-actions .t-Card-icon {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 16px;
+      font-size: 2rem;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      color: #0078D4;
+      transition: transform .25s ease,
+                  background .25s ease,
+                  box-shadow .25s ease;
+    }
+    
+    #core-actions .t-Card:hover .t-Card-icon {
+      transform: scale(1.08) rotate(4deg);
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      box-shadow: 0 8px 16px rgba(102,126,234,.35);
+    }
+    
+    #core-actions .t-Card:has(.card-marker.PRIMARY) .t-Card-icon {
+      background: linear-gradient(135deg, #0078D4, #106EBE);
+      color: #fff;
+    }
+    
+    
+    /* ------------------------------------------------------------
+       TITLE & BODY
+       ------------------------------------------------------------ */
+    
+    #core-actions .t-Card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: .75rem;
+      letter-spacing: -0.02em;
+    }
+    
+    #core-actions .t-Card-body {
+      padding: 0 1.5rem 1.5rem;
+      font-size: .95rem;
+      color: #555;
+      line-height: 1.6;
+    }
+    
+    #core-actions .card-description {
+      margin: 0;
+    }
+    
+    
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    
+    @media (max-width: 1200px) {
+      #core-actions .t-Cards--row {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      #core-actions .t-Cards--row {
+        grid-template-columns: 1fr !important;
+        row-gap: 1.5rem;
+      }
+    
+      #core-actions .t-Card-icon {
+        width: 56px;
+        height: 56px;
+        font-size: 1.75rem;
+      }
+    
+      #core-actions .t-Card-title {
+        font-size: 1.1rem;
+      }
+    }
+    
+    
+    /* ============================================================
+       ACCESSIBILITY & PRINT
+       ============================================================ */
+    
+    #core-actions .t-Card:focus-within {
+      outline: 3px solid #0078D4;
+      outline-offset: 4px;
+    }
+    
+    @media print {
+      #core-actions .t-Card {
+        box-shadow: none;
+        border: 1px solid #000;
+        break-inside: avoid;
+      }
+    
+      #core-actions .t-Card::before {
+        display: none;
+      }
+    }
+    
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Hero Banner =================================
+  id: 132580668266302014
+  identification: 
+    name: Hero Banner
+    type: Static Content
+
+  source: 
+    html-code: |
+      <div class="home-hero">
+        <h1>
+          <span class="fa fa-robot"></span>
+          Oracle Enterprise AI Assistant
+        </h1>
+        <p>Ask. Analyze. Govern.</p>
+      </div>
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    icon: fa-robot
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: homeHero
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Core Actions ================================
+  id: 152785161068832311
+  identification: 
+    name: Core Actions
+    type: Cards
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT
+          1 AS card_id,
+          'fa fa-robot' AS icon,
+          'Enterprise AI Assistant' AS title,
+          'Start a new AI conversation or resume your latest session.' AS description,
+          apex_page.get_url(p_application => :APP_ID,p_page => 114) AS target_url,
+          
+          'PRIMARY' AS card_type
+      FROM dual
+      
+      UNION ALL
+      
+      SELECT
+          2,
+          'fa fa-history' icon,
+          'Conversation History' title,
+          'Browse, search, and manage previous conversations.' AS description,
+          apex_page.get_url(p_page => 150) target_url,
+          'SECONDARY' card_type
+      FROM dual
+      
+      UNION ALL
+      
+      SELECT
+          3,
+          'fa fa-book'icon,
+          'Knowledge Base' title,
+          'Documents, RAG domains, and intelligent search.' AS description,
+          apex_page.get_url(p_page => 600) target_url,
+          'SECONDARY' card_type
+      FROM dual
+      
+      UNION ALL
+      
+      SELECT
+          4,
+          'fa fa-line-chart' icon,
+          'Audit & Performance' title,
+          'Usage, performance, and cost analytics.' AS description,
+          apex_page.get_url(p_page => 721) target_url,
+          'OPTIONAL' card_type
+      FROM dual;
+      
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 70
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: 2
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Cards Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-CardsRegion--removeHeader js-removeLandmark
+    - t-CardsRegion--styleC
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: core-actions
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 152785267678832312
+    appearance: 
+      layout: Grid
+      grid-columns: Auto
+
+    card: 
+      primary-key-column-1: CARD_ID
+
+    title: 
+      advanced-formatting: false
+      column: TITLE
+      css-classes: 
+      - card-title
+      - null
+
+    subtitle: 
+      advanced-formatting: false
+
+    body: 
+      advanced-formatting: true
+      html-expression: |
+        <span class="card-marker &CARD_TYPE." style="display:none"></span>
+        
+        <div class="card-description">
+          &DESCRIPTION.
+        </div>
+
+    secondary-body: 
+      advanced-formatting: false
+
+    icon-and-badge: 
+      icon-source: Icon Class Column
+      icon-column: ICON
+      icon-css-classes: t-Card-icon
+      icon-position: Start
+
+    media: 
+      advanced-formatting: false
+      source: No Media
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Scroll
+      show-total-count: false
+
+    actions: 
+    - # ====== Action: Full Card ===================================
+      id: 152785312915832313
+      identification: 
+        type: Full Card
+
+      layout: 
+        sequence: 10
+
+      link: 
+        type: Redirect to URL
+        target: '&TARGET_URL.'
+
+- # ====== Region: System Status ===============================
+  id: 152786457582832324
+  identification: 
+    name: System Status
+    type: Badge
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT
+          'System'        AS label,
+          'Healthy'       AS value,
+          'success'       AS status,
+          1               AS ord
+      FROM dual
+      
+      UNION ALL
+      SELECT
+          'Chats Today',
+          TO_CHAR(COUNT(*)),
+          'info',
+          2
+      FROM chat_calls
+      WHERE TRUNC(db_created_at) = TRUNC(SYSDATE)
+      
+      UNION ALL
+      SELECT
+          'Active Users (1h)',
+          TO_CHAR(COUNT(DISTINCT user_id)),
+          'warning',
+          3
+      FROM chat_sessions
+      --WHERE db_created_at > SYSDATE - (1/24)
+      
+      UNION ALL
+      SELECT
+          'Model',
+          MAX(model),
+          'neutral',
+          4
+      FROM chat_calls
+      WHERE model IS NOT NULL
+      /*
+      UNION ALL
+      SELECT
+          'Governance',
+          CASE 
+              WHEN EXISTS (
+                  SELECT 1
+                  FROM cfg_ai_policy
+                  WHERE policy_code = 'GOVERNANCE'
+                    AND is_enabled = 'Y'
+              )
+              THEN 'Enabled'
+              ELSE 'Disabled'
+          END,
+          'danger',
+          5
+      FROM dual;*/
+      
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 50
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes (No Grid)
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Region
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      display: Multiple (Report)
+
+    settings: 
+      label: '&LABEL.'
+      value: VALUE
+      state: STATUS
+      display-label: false
+      style: Default
+      shape: Default
+      size: Default
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Page
+      entities-per-page: 15
+      show-total-count: false
+
+  columns: 
+  - # ====== Column: LABEL =======================================
+    id: 152786929685832329
+    identification: 
+      name: LABEL
+
+    layout: 
+      sequence: 10
+
+    source: 
+      type: Database Column
+      database-column: LABEL
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: VALUE =======================================
+    id: 152787090518832330
+    identification: 
+      name: VALUE
+
+    layout: 
+      sequence: 20
+
+    source: 
+      type: Database Column
+      database-column: VALUE
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: STATUS ======================================
+    id: 152787106933832331
+    identification: 
+      name: STATUS
+
+    layout: 
+      sequence: 30
+
+    source: 
+      type: Database Column
+      database-column: STATUS
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: ORD =========================================
+    id: 152787250564832332
+    identification: 
+      name: ORD
+
+    layout: 
+      sequence: 40
+
+    source: 
+      type: Database Column
+      database-column: ORD
+      data-type: NUMBER
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+- # ====== Region: btn =========================================
+  id: 152787885436832338
+  identification: 
+    name: btn
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: Hero Banner # 132580668266302014
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-ButtonRegion--noUI
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P1_USER_ID ===============================
+  id: 145720870614757236
+  identification: 
+    name: P1_USER_ID
+    type: Display Only
+
+  label: 
+    label: User Id
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 30
+    region: No Parent
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Function Body
+    language: PL/SQL
+    pl/sql-function-body: return v('G_USER_ID');
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  configuration: 
+    build-option: Commented Out # 123954063565486069
+
+- # ====== Page Item: P1_USER_NAME =============================
+  id: 145720986854757237
+  identification: 
+    name: P1_USER_NAME
+    type: Display Only
+
+  label: 
+    label: Username
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 40
+    region: No Parent
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Function Body
+    language: PL/SQL
+    pl/sql-function-body: return v('APP_USER');
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  configuration: 
+    build-option: Commented Out # 123954063565486069
+
+buttons: 
+- # ====== Button: BTN_START_CHAT ==============================
+  id: 152787592958832335
+  identification: 
+    button-name: BTN_START_CHAT
+    label: Start New Chat
+
+  layout: 
+    sequence: 10
+    region: btn # 152787885436832338
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--success
+    - t-Button--iconLeft
+    - t-Button--pillStart
+    icon: fa-rocket
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:114:&SESSION.::&DEBUG.:114::'
+      page: 114 # Enterprise AI Assistant
+      clear-cache: 114
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: BTN_RESUME_CHAT =============================
+  id: 152787918839832339
+  identification: 
+    button-name: BTN_RESUME_CHAT
+    label: Resume Last Chat
+
+  layout: 
+    sequence: 20
+    region: btn # 152787885436832338
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-history
+
+  behavior: 
+    action: Redirect to URL
+    target: 114
+    execute-validations: true
+    warn-on-unsaved-changes: Do Not Check
+

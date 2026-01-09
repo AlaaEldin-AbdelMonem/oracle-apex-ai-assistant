@@ -1,0 +1,1234 @@
+---
+- # ====== Plugin: Range Slider (v1.0) =========================
+  id: 131987724503454371
+  identification: 
+    name: Range Slider (v1.0)
+    internal-name: RANRANGE_SLIDER
+    type: Item
+
+  advanced: 
+    quick-pick: false
+
+  subscription: 
+    version-number: 38947038540384
+
+  templates: 
+    partial: |
+      // range-slider.js
+      (function(){
+        window.RangeSlider = {
+          init: function(itemId){
+            const el = document.getElementById(itemId);
+            const val = document.getElementById(itemId + "_val");
+            if(el && val){
+              el.addEventListener("input", ()=> val.textContent = el.value);
+            }
+          }
+        };
+      })();
+      
+
+  source: 
+    pl/sql-code: |
+      PROCEDURE render_slider (
+          p_item   IN apex_plugin.t_item,
+          p_plugin IN apex_plugin.t_plugin,
+          p_param  IN apex_plugin.t_item_render_param,
+          p_result IN OUT NOCOPY apex_plugin.t_item_render_result
+      ) IS
+          l_id     VARCHAR2(4000) := p_item.name;
+          l_min    VARCHAR2(50)   := NVL(p_item.attribute_01, '0');
+          l_max    VARCHAR2(50)   := NVL(p_item.attribute_02, '1');
+          l_step   VARCHAR2(50)   := NVL(p_item.attribute_03, '0.1');
+          l_default VARCHAR2(50)  := NVL(p_item.attribute_04, '0.5');
+          l_help   VARCHAR2(4000) := p_item.attribute_05;
+      BEGIN
+          -- Include static JS/CSS
+          apex_css.add_file(p_name=>'range-slider', p_directory=>'#PLUGIN_FILES#');
+          apex_javascript.add_library(p_name=>'range-slider', p_directory=>'#PLUGIN_FILES#', p_key=>'range_slider_js');
+      
+          -- Render slider HTML dynamically
+          htp.p('<div class="range-slider-container">');
+          htp.p('<label for="'||l_id||'">'||p_item.label||'</label><br>');
+          htp.p('<input type="range" id="'||l_id||'" name="'||l_id||'" '||
+                'min="'||l_min||'" max="'||l_max||'" step="'||l_step||'" '||
+                'value="'||NVL(p_param.value,l_default)||'" '||
+                'class="range-slider">');
+          htp.p('<div id="'||l_id||'_val" class="slider-value">'||
+                NVL(p_param.value,l_default)||'</div>');
+      
+          IF l_help IS NOT NULL THEN
+              htp.p('<div class="slider-help">'||apex_escape.html(l_help)||'</div>');
+          END IF;
+          htp.p('</div>');
+      
+          -- JS to update label live
+          apex_javascript.add_onload_code('RangeSlider.init("'||l_id||'");');
+      END render_slider;
+      
+
+  callbacks: 
+    api-interface: Procedure
+    render-procedure/function-name: render_slider
+
+  supported-for: 
+    component-type: 
+    - Page Items
+    - Interactive Grid Columns
+
+  standard-attributes: 
+    attributes: 
+    - Is Visible Widget
+    - Has Read Only Attribute
+    - Has Quick Pick Attributes
+    - Has Element Attributes
+    - Has Width Attributes
+    - Has Height Attribute
+    - Has Placeholder Attribute
+    - Has Icon Attribute
+
+  custom-attributes: 
+    substitute-attribute-values: true
+
+  css: 
+    file-urls: 
+    - '#APP_FILES#RANGESLIDER_PLUGIN/range-slider#MIN#.js'
+
+  javascript: 
+    file-urls: 
+    - '#APP_FILES#RANGESLIDER_PLUGIN/range-slider#MIN#.css'
+
+  information: 
+    version: 1.0
+
+  custom-attributes: 
+  - # ====== Custom Attribute: Minimum Value =====================
+    id: 131992546450541754
+    identification: 
+      static-id: min_value
+      attribute: 1
+      name: Minimum Value
+      scope: Component
+
+    layout: 
+      sequence: 10
+
+    settings: 
+      type: Number
+      common: true
+      show-in-wizard: true
+      required: true
+      translatable: false
+      display-width: 3
+
+    default: 
+      value: 0
+
+  - # ====== Custom Attribute: Maximum Value =====================
+    id: 131993123060546973
+    identification: 
+      static-id: max_value
+      attribute: 2
+      name: Maximum Value
+      scope: Component
+
+    layout: 
+      sequence: 20
+
+    settings: 
+      type: Number
+      common: true
+      show-in-wizard: true
+      required: true
+      translatable: false
+      maximum-length: 1
+
+  - # ====== Custom Attribute: Step Size =========================
+    id: 131993782181552556
+    identification: 
+      static-id: step_size
+      attribute: 3
+      name: Step Size
+      scope: Component
+
+    layout: 
+      sequence: 30
+
+    settings: 
+      type: Number
+      common: true
+      show-in-wizard: true
+      required: false
+      translatable: false
+
+    default: 
+      value: 0.1
+
+  - # ====== Custom Attribute: Default Value =====================
+    id: 131994382129554543
+    identification: 
+      static-id: default_value
+      attribute: 4
+      name: Default Value
+      scope: Component
+
+    layout: 
+      sequence: 40
+
+    settings: 
+      type: Number
+      common: true
+      show-in-wizard: true
+      required: true
+      translatable: false
+
+    default: 
+      value: 0
+
+  - # ====== Custom Attribute: Help Text =========================
+    id: 131994968417560356
+    identification: 
+      static-id: help_text
+      attribute: 5
+      name: Help Text
+      scope: Component
+
+    layout: 
+      sequence: 50
+
+    settings: 
+      type: Textarea
+      common: true
+      show-in-wizard: true
+      required: false
+      translatable: false
+
+- # ====== Plugin: SLIDER ======================================
+  id: 158749235997690264
+  identification: 
+    name: SLIDER
+    internal-name: SLIDER
+    type: Item
+
+  advanced: 
+    quick-pick: false
+
+  subscription: 
+    version-number: 38948184840855
+
+  source: 
+    pl/sql-code: |
+      procedure render_slider (
+          p_item   in            apex_plugin.t_item,
+          p_plugin in            apex_plugin.t_plugin,
+          p_param  in            apex_plugin.t_item_render_param,
+          p_result in out nocopy apex_plugin.t_item_render_result
+      ) as
+          l_name           varchar2(30)   := apex_plugin.get_input_name_for_item;
+          l_min            number         := nvl(p_item.attribute_01, 0);
+          l_max            number         := nvl(p_item.attribute_02, 100);
+          l_step           number         := nvl(p_item.attribute_03, 1);
+          -- Get the target item name from attribute 4
+          l_target_item    varchar2(100)  := p_item.attribute_04; 
+          l_value          varchar2(4000) := nvl(p_param.value, l_min);
+      begin
+          sys.htp.p('<div class="t-Form-inputContainer">');
+          sys.htp.p('  <div class="t-Form-itemWrapper slider-container">');
+          sys.htp.p('    <input type="range" ' ||
+                    'id="'    || p_item.name || '" ' ||
+                    'name="'  || l_name       || '" ' ||
+                    'min="'   || l_min        || '" ' ||
+                    'max="'   || l_max        || '" ' ||
+                    'step="'  || l_step       || '" ' ||
+                    'value="' || sys.htf.escape_sc(l_value) || '" ' ||
+                    'class="slider-item-plugin">');
+          sys.htp.p('    <span id="' || p_item.name || '_val" class="slider-display">' || l_value || '</span>');
+          sys.htp.p('  </div>');
+          sys.htp.p('</div>');
+      
+          -- Pass the target item to the JS init function
+          apex_javascript.add_onload_code (
+              p_code => 'if (window.sliderPlugin) { ' ||
+                        '  sliderPlugin.init("' || p_item.name || '", "' || l_target_item || '"); ' ||
+                        '}'
+          );
+      
+          p_result.is_navigable := true;
+      end render_slider;
+      
+      procedure validate_slider (
+          p_item   in            apex_plugin.t_item,
+          p_plugin in            apex_plugin.t_plugin,
+          p_param  in            apex_plugin.t_item_validation_param,
+          p_result in out nocopy apex_plugin.t_item_validation_result
+      ) as
+          l_value number := p_param.value;
+          l_min   number := nvl(p_item.attribute_01, 0);
+          l_max   number := nvl(p_item.attribute_02, 100);
+      begin
+          if l_value < l_min or l_value > l_max then
+              p_result.message := p_item.plain_label || ' must be between ' || l_min || ' and ' || l_max || '.';
+          end if;
+      end validate_slider;
+
+  callbacks: 
+    api-interface: Procedure
+    render-procedure/function-name: render_slider
+    validation-procedure-name: validate_slider
+
+  supported-for: 
+    component-type: 
+    - Page Items
+    - Interactive Grid Columns
+
+  standard-attributes: 
+    attributes: 
+    - Is Visible Widget
+
+  custom-attributes: 
+    substitute-attribute-values: true
+
+  css: 
+    file-urls: 
+    - ' #WORKSPACE_FILES#Alaa-sliderPlugin/sliderPlugin#MIN#.css'
+
+  javascript: 
+    file-urls: 
+    - '#WORKSPACE_FILES#Alaa-sliderPlugin/slider_plugin#MIN#.js'
+
+  information: 
+    version: 1.0
+
+  custom-attributes: 
+  - # ====== Custom Attribute: Min Value =========================
+    id: 158751819274765585
+    identification: 
+      static-id: min_value
+      attribute: 1
+      name: Min Value
+      scope: Component
+
+    layout: 
+      sequence: 10
+
+    settings: 
+      type: Number
+      common: true
+      show-in-wizard: true
+      required: true
+      translatable: false
+
+    default: 
+      value: 0
+
+  - # ====== Custom Attribute: Max Value =========================
+    id: 158752442077771069
+    identification: 
+      static-id: max_value
+      attribute: 2
+      name: Max Value
+      scope: Component
+
+    layout: 
+      sequence: 20
+
+    settings: 
+      type: Number
+      common: true
+      show-in-wizard: true
+      required: true
+      translatable: false
+
+    default: 
+      value: 100
+
+  - # ====== Custom Attribute: Step ==============================
+    id: 158753098884776729
+    identification: 
+      static-id: step
+      attribute: 3
+      name: Step
+      scope: Component
+
+    layout: 
+      sequence: 30
+
+    settings: 
+      type: Number
+      common: true
+      show-in-wizard: true
+      required: true
+      translatable: false
+
+    default: 
+      value: 1
+
+  - # ====== Custom Attribute: Return Item =======================
+    id: 158761115655197700
+    identification: 
+      static-id: return_item
+      attribute: 4
+      name: Return Item
+      scope: Component
+
+    layout: 
+      sequence: 40
+
+    settings: 
+      type: Page Item
+      common: true
+      show-in-wizard: true
+      required: false
+      translatable: false
+
+- # ====== Plugin: Advanced Slider =============================
+  id: 7101222691435637151
+  identification: 
+    name: Advanced Slider
+    internal-name: HR.BILOG.MGORICKI.ADVANCED_SLIDER
+    type: Item
+
+  advanced: 
+    quick-pick: false
+
+  subscription: 
+    version-number: 38947038381141
+
+  source: 
+    pl/sql-code: |2
+        procedure render_item (
+            p_item   in            apex_plugin.t_item,
+            p_plugin in            apex_plugin.t_plugin,
+            p_param  in            apex_plugin.t_item_render_param,
+            p_result in out nocopy apex_plugin.t_item_render_result) 
+        AS
+          v_css_path    varchar2(200)  := p_plugin.file_prefix||p_plugin.attribute_01;
+          v_js_path     varchar2(200)  := p_plugin.file_prefix||p_plugin.attribute_02;
+          v_onload_code varchar2(2000);
+          v_name        varchar2(30);
+          v_readonly    varchar2(1) := 'N';
+          v_file_version pls_integer := 1;
+        BEGIN
+          v_name := apex_plugin.get_input_name_for_page_item(false);
+          
+          sys.htp.prn('<div class="slider_container"><input type="hidden" id="'||p_item.name||'" value="'||p_param.value||'" name="'||v_name||'" /><div id="'||p_item.name||'_slider"></div></div>');
+          
+          p_result.is_navigable := true;
+          
+          -- add cssPCK_PLUGINS
+      
+          apex_css.add_file (p_name => 'jquery-ui-1.10.4.slider.min.css?v='||v_file_version
+                           , p_directory => v_css_path
+                           , p_skip_extension => true);
+      
+          apex_css.add_file (p_name => 'jquery-ui-slider-pips.css?v='||v_file_version
+                           , p_directory => v_css_path
+                           , p_skip_extension => true);          
+                           
+          apex_css.add_file (p_name => 'advanced.slider.1.0.0.css?v='||v_file_version
+                           , p_directory => v_css_path
+                           , p_skip_extension => true);                      
+                      
+          if p_param.is_readonly then
+            v_readonly := 'Y';
+          end if;
+          
+          -- add JS
+          apex_javascript.add_library (p_name => 'jquery-ui-1.12.1.slider.min.js?v='||v_file_version
+                                     , p_directory => v_js_path
+                                     , p_skip_extension => true);
+                                     
+          apex_javascript.add_library (p_name => 'jquery-ui-slider-pips#MIN#.js?v='||v_file_version
+                                     , p_directory => v_js_path
+                                     , p_skip_extension => true);                               
+                                    
+          apex_javascript.add_library (p_name => 'advanced.slider.1.0.0#MIN#.js?v='||v_file_version
+                                     , p_directory => v_js_path
+                                     , p_skip_extension => true);
+                                     
+                      
+          -- onload kod
+          v_onload_code := 'apex.jQuery("#'||p_item.name||'").advancedslider({  '||
+            apex_javascript.add_attribute (p_name => 'range'
+                                         , p_value => p_item.attribute_01
+                                         , p_add_comma => true)||
+            apex_javascript.add_attribute (p_name => 'sliderColor'
+                                         , p_value => p_item.attribute_10
+                                         , p_add_comma => true)||                                   
+            apex_javascript.add_attribute (p_name => 'min'
+                                         , p_value => p_item.attribute_02
+                                         , p_add_comma => true)||              
+            apex_javascript.add_attribute (p_name => 'max'
+                                         , p_value => p_item.attribute_03
+                                         , p_add_comma => true)|| 
+            apex_javascript.add_attribute (p_name => 'step'
+                                         , p_value => p_item.attribute_07
+                                         , p_add_comma => true)||                                    
+            apex_javascript.add_attribute (p_name => 'showPips'
+                                         , p_value => p_item.attribute_05
+                                         , p_add_comma => true)|| 
+            apex_javascript.add_attribute (p_name => 'pipPrefix'
+                                         , p_value => p_item.attribute_08
+                                         , p_add_comma => true)|| 
+            apex_javascript.add_attribute (p_name => 'pipSufix'
+                                         , p_value => p_item.attribute_09
+                                         , p_add_comma => true)||                                    
+            apex_javascript.add_attribute (p_name => 'showTooltips'
+                                         , p_value => p_item.attribute_06
+                                         , p_add_comma => true)||     
+            apex_javascript.add_attribute (p_name => 'readonly'
+                                         , p_value => v_readonly
+                                         , p_add_comma => true)||    
+            apex_javascript.add_attribute (p_name => 'pipStep'
+                                         , p_value => p_item.attribute_04
+                                         , p_add_comma => false)                                       
+          ||'})';
+          
+          
+          apex_javascript.add_onload_code (p_code => v_onload_code);
+      --  
+          
+        END render_item;
+
+  callbacks: 
+    api-interface: Procedure with Legacy Attributes [deprecated]
+    render-procedure/function-name: p_render_item
+
+  supported-for: 
+    component-type: 
+    - Page Items
+
+  standard-attributes: 
+    attributes: 
+    - Is Visible Widget
+    - Standard Form Element
+    - Session State Changeable
+    - Has Read Only Attribute
+    - Has Source Attributes
+
+  custom-attributes: 
+    substitute-attribute-values: true
+
+  information: 
+    version: 1.0.3
+    about-url: 'https://apex.oracle.com/pls/apex/f?p=apexbyg:advancedslider'
+    help-text: |
+      v1.0.1 Added triggering on change DA event
+      v1.0.3 New version of APEX UI slider (1.12.1) - fixes modal close icon
+
+  custom-attributes: 
+  - # ====== Custom Attribute: CSS URL ===========================
+    id: 169331276814667748
+    identification: 
+      static-id: attribute_01
+      attribute: 1
+      name: CSS URL
+      scope: Application
+
+    layout: 
+      sequence: 10
+
+    settings: 
+      type: Text
+      common: true
+      show-in-wizard: true
+      required: false
+      translatable: false
+
+    default: 
+      value: advanced_slider/css/
+
+    help: 
+      help-text: Path to CSS files
+
+  - # ====== Custom Attribute: JS URL ============================
+    id: 169337021503677501
+    identification: 
+      static-id: attribute_02
+      attribute: 2
+      name: JS URL
+      scope: Application
+
+    layout: 
+      sequence: 20
+
+    settings: 
+      type: Text
+      common: true
+      show-in-wizard: true
+      required: false
+      translatable: false
+
+    default: 
+      value: advanced_slider/js/
+
+    help: 
+      help-text: Path to JS files
+
+  - # ====== Custom Attribute: Steps =============================
+    id: 7091463099010512036
+    identification: 
+      static-id: attribute_07
+      attribute: 7
+      name: Steps
+      scope: Component
+
+    layout: 
+      sequence: 35
+
+    settings: 
+      type: Number
+      common: true
+      show-in-wizard: true
+      required: true
+      translatable: false
+
+    default: 
+      value: 1
+
+    help: 
+      help-text: Steps of slider.
+
+  - # ====== Custom Attribute: Pip Steps =========================
+    id: 7091471520397555498
+    identification: 
+      static-id: attribute_04
+      attribute: 4
+      name: Pip Steps
+      scope: Component
+
+    layout: 
+      sequence: 55
+
+    settings: 
+      type: Number
+      common: true
+      show-in-wizard: true
+      required: true
+      translatable: false
+
+    default: 
+      value: 1
+
+    condition: 
+      depending-on-custom-attribute: Show Pips # 7110160691248757274
+      depending-on-condition-type: equal to
+      expression: Y
+      always-evaluate: true
+
+    help: 
+      help-text: Define pip steps. Only visually, not like slider steps.
+
+  - # ====== Custom Attribute: Pip Prefix ========================
+    id: 7091475530476579380
+    identification: 
+      static-id: attribute_08
+      attribute: 8
+      name: Pip Prefix
+      scope: Component
+
+    layout: 
+      sequence: 57
+
+    settings: 
+      type: Text
+      common: true
+      show-in-wizard: true
+      required: false
+      translatable: false
+
+    condition: 
+      depending-on-custom-attribute: Show Pips # 7110160691248757274
+      depending-on-condition-type: equal to
+      expression: Y
+      always-evaluate: true
+
+    help: 
+      help-text: Prefix of a pip.
+
+  - # ====== Custom Attribute: Pip Sufix =========================
+    id: 7091479154698581694
+    identification: 
+      static-id: attribute_09
+      attribute: 9
+      name: Pip Sufix
+      scope: Component
+
+    layout: 
+      sequence: 59
+
+    settings: 
+      type: Text
+      common: true
+      show-in-wizard: true
+      required: false
+      translatable: false
+
+    condition: 
+      depending-on-custom-attribute: Show Pips # 7110160691248757274
+      depending-on-condition-type: equal to
+      expression: Y
+      always-evaluate: true
+
+    help: 
+      help-text: Sufix of a pip.
+
+  - # ====== Custom Attribute: Background color ==================
+    id: 7091532248198733992
+    identification: 
+      static-id: attribute_10
+      attribute: 10
+      name: Background color
+      scope: Component
+
+    layout: 
+      sequence: 15
+
+    settings: 
+      type: Color
+      common: true
+      show-in-wizard: true
+      required: false
+      translatable: false
+
+    condition: 
+      depending-on-custom-attribute: Range # 7110144996256783060
+      depending-on-condition-type: equal to
+      expression: Y
+      always-evaluate: true
+
+    help: 
+      help-text: Define backgrounc color. By default is defined by jQuery UI theme.
+
+    examples: 
+      examples: '#f6f6f6'
+
+  - # ====== Custom Attribute: Range =============================
+    id: 7110144996256783060
+    identification: 
+      static-id: attribute_01
+      attribute: 1
+      name: Range
+      scope: Component
+
+    layout: 
+      sequence: 10
+
+    settings: 
+      type: Yes/No
+      common: true
+      show-in-wizard: true
+      required: false
+      translatable: false
+
+    default: 
+      value: N
+
+    help: 
+      help-text: "Choose between simple and range slider. If it's range slider values of min and max values are separated with colon (:), for example 1:10."
+
+  - # ====== Custom Attribute: Min. value ========================
+    id: 7110148524423915625
+    identification: 
+      static-id: attribute_02
+      attribute: 2
+      name: Min. value
+      scope: Component
+
+    layout: 
+      sequence: 20
+
+    settings: 
+      type: Number
+      common: true
+      show-in-wizard: true
+      required: true
+      translatable: false
+
+    default: 
+      value: 0
+
+    help: 
+      help-text: Minimal allowed value.
+
+  - # ====== Custom Attribute: Max. value ========================
+    id: 7110149157490917875
+    identification: 
+      static-id: attribute_03
+      attribute: 3
+      name: Max. value
+      scope: Component
+
+    layout: 
+      sequence: 30
+
+    settings: 
+      type: Text
+      common: true
+      show-in-wizard: true
+      required: true
+      translatable: false
+
+    default: 
+      value: 100
+
+    help: 
+      help-text: Maximal allowed value.
+
+  - # ====== Custom Attribute: Show Pips =========================
+    id: 7110160691248757274
+    identification: 
+      static-id: attribute_05
+      attribute: 5
+      name: Show Pips
+      scope: Component
+
+    layout: 
+      sequence: 50
+
+    settings: 
+      type: Yes/No
+      common: true
+      show-in-wizard: true
+      required: false
+      translatable: false
+
+    default: 
+      value: N
+
+    help: 
+      help-text: Show pip line below.
+
+  - # ====== Custom Attribute: Show Tooltip ======================
+    id: 7110162259582758329
+    identification: 
+      static-id: attribute_06
+      attribute: 6
+      name: Show Tooltip
+      scope: Component
+
+    layout: 
+      sequence: 60
+
+    settings: 
+      type: Yes/No
+      common: true
+      show-in-wizard: true
+      required: false
+      translatable: false
+
+    default: 
+      value: N
+
+    help: 
+      help-text: It this option is on, there's no label inside of a slider.
+
+  files: 
+  - # ====== File: advanced_slider/js/jquery-ui-1.12.1.slider.js =
+    id: 141799131353078175
+    identification: 
+      file-name: advanced_slider/js/jquery-ui-1.12.1.slider.js
+
+    attributes: 
+      mime-type: application/javascript
+      file-character-set: Unicode UTF-8
+
+  - # ====== File: advanced_slider/js/jquery-ui-1.12.1.slider.min.
+    id: 141799451693078177
+    identification: 
+      file-name: advanced_slider/js/jquery-ui-1.12.1.slider.min.js
+
+    attributes: 
+      mime-type: application/javascript
+      file-character-set: Unicode UTF-8
+
+  - # ====== File: advanced_slider/css/advanced.slider.1.0.0.css =
+    id: 169369252064760723
+    identification: 
+      file-name: advanced_slider/css/advanced.slider.1.0.0.css
+
+    attributes: 
+      mime-type: text/css
+      file-character-set: Unicode UTF-8
+
+  - # ====== File: advanced_slider/css/jquery-ui-1.10.4.slider.min
+    id: 169369895861760728
+    identification: 
+      file-name: advanced_slider/css/jquery-ui-1.10.4.slider.min.css
+
+    attributes: 
+      mime-type: text/css
+      file-character-set: Unicode UTF-8
+
+  - # ====== File: advanced_slider/css/jquery-ui-slider-pips.css =
+    id: 169370700378760734
+    identification: 
+      file-name: advanced_slider/css/jquery-ui-slider-pips.css
+
+    attributes: 
+      mime-type: text/css
+      file-character-set: Unicode UTF-8
+
+  - # ====== File: advanced_slider/js/advanced.slider.1.0.0.js ===
+    id: 169371536637760741
+    identification: 
+      file-name: advanced_slider/js/advanced.slider.1.0.0.js
+
+    attributes: 
+      mime-type: application/javascript
+      file-character-set: Unicode UTF-8
+
+  - # ====== File: advanced_slider/js/advanced.slider.1.0.0.min.js
+    id: 169372337321760749
+    identification: 
+      file-name: advanced_slider/js/advanced.slider.1.0.0.min.js
+
+    attributes: 
+      mime-type: application/javascript
+      file-character-set: Unicode UTF-8
+
+  - # ====== File: advanced_slider/js/jquery-ui-1.10.4.slider.min.
+    id: 169373073374760756
+    identification: 
+      file-name: advanced_slider/js/jquery-ui-1.10.4.slider.min.js
+
+    attributes: 
+      mime-type: application/x-javascript
+      file-character-set: Unicode UTF-8
+
+  - # ====== File: advanced_slider/js/jquery-ui-slider-pips.js ===
+    id: 169373889568760766
+    identification: 
+      file-name: advanced_slider/js/jquery-ui-slider-pips.js
+
+    attributes: 
+      mime-type: application/x-javascript
+      file-character-set: Unicode UTF-8
+
+  - # ====== File: advanced_slider/js/jquery-ui-slider-pips.min.js
+    id: 169374691769760775
+    identification: 
+      file-name: advanced_slider/js/jquery-ui-slider-pips.min.js
+
+    attributes: 
+      mime-type: application/x-javascript
+      file-character-set: Unicode UTF-8
+
+- # ====== Plugin: JSON Viewer =================================
+  id: 74552526438211160073
+  identification: 
+    name: JSON Viewer
+    internal-name: COM.APEXJSONVIEWER.PLUGIN
+    type: Region
+
+  advanced: 
+    quick-pick: false
+
+  subscription: 
+    version-number: 38947177495529
+
+  source: 
+    pl/sql-code: |
+      -- =============================================================================
+      --
+      --  Created by Richard Baldogi
+      --
+      --  This plug-in helps to visualize JSON data in a canvas.
+      --
+      --  License: MIT
+      --
+      --  GitHub: https://github.com/baldogiRichard/apex-jsoncrack-jsonviewer
+      --
+      -- =============================================================================
+      
+      --This procedure was created to split strings that's length is over 32K
+      procedure splitJSON(p_json in clob,
+                          p_varname in varchar2,
+                          p_splitter in number)
+      is
+          l_chunks_cnt number;
+          l_from number := 1;
+      begin
+          l_chunks_cnt := ceil(length(p_json) / p_splitter);
+          apex_javascript.add_inline_code (p_code => 'var ' || p_varname || ' = "";');
+          for i in 1..l_chunks_cnt loop
+              apex_javascript.add_inline_code (p_code => p_varname || ' += "' || 
+                                                         apex_escape.json(p_string => substr(p_json,l_from,p_splitter))
+                                                         || '";');    
+              l_from := (i * p_splitter) + 1;
+          end loop;
+      end splitJSON;
+      
+      --render
+      function render
+        ( p_region              in apex_plugin.t_region
+        , p_plugin              in apex_plugin.t_plugin
+        , p_is_printer_friendly in boolean
+        )
+      return apex_plugin.t_region_render_result
+      as
+          --region and ajax id
+          l_region_static_id     p_region.static_id%type    := p_region.static_id;
+          l_region_id            p_region.id%type           := p_region.id;
+          l_ajax_id              p_region.static_id%type    := apex_plugin.get_ajax_identifier;
+      
+          l_result               apex_plugin.t_region_render_result;
+      
+          --region source
+          l_context              apex_exec.t_context;
+      
+          --attributes
+          l_theme                p_region.attribute_01%type := p_region.attribute_01;
+          l_plsql_code           p_region.attribute_02%type := p_region.attribute_02;
+      
+          --other variables
+          l_plsql_func_result    varchar2(32767);
+          l_json_text            clob := '{}';
+          l_region_record        apex_application_page_regions%rowtype;
+          l_js_varname           constant varchar2(10)   := sys.dbms_random.string('a',10);
+      
+      begin
+      
+          --debug
+          if apex_application.g_debug
+          then
+              apex_plugin_util.debug_region
+                ( p_plugin => p_plugin
+                , p_region => p_region
+                );
+          end if;
+      
+          --get region data
+          select aapr.*
+          into l_region_record
+          from apex_application_page_regions aapr
+          where aapr.region_id = l_region_id;
+      
+          --creating JSON for JS initialization
+          apex_json.initialize_clob_output;
+      
+          --if both source and function body attr is null
+          --then display empty editor
+          if not (l_region_record.location is null and l_plsql_code is null) then
+      
+              --getting JSON data
+              --if region source is not null
+              if l_plsql_code is null then
+            
+                  l_context := apex_exec.open_query_context(
+                        p_location                => l_region_record.location_code
+                      --
+                      , p_table_owner             => l_region_record.table_owner
+                      , p_table_name              => l_region_record.table_name
+                      , p_where_clause            => l_region_record.where_clause
+                      , p_order_by_clause         => l_region_record.order_by_clause
+                      , p_include_rowid_column    => case l_region_record.include_rowid_column
+                                                          when 'Yes' then TRUE
+                                                          when 'No'  then FALSE
+                                                     end
+                      --          
+                      , p_sql_query               => case when l_region_record.function_body_language is null
+                                                            then l_region_record.region_source
+                                                          else null 
+                                                     end
+                      , p_plsql_function_body     => case when nvl(l_region_record.function_body_language,'') = 'PLSQL'
+                                                            then l_region_record.region_source
+                                                          else null 
+                                                     end
+                      , p_optimizer_hint          => l_region_record.optimizer_hint
+                      --
+                      , p_server_static_id        => l_region_record.remote_database_name
+                      --
+                      , p_module_static_id        => l_region_record.web_source_module_name
+                      , p_external_filter_expr    => l_region_record.external_filter_expr
+                      , p_external_order_by_expr  => l_region_record.external_order_by_expr
+                      );
+      
+                  apex_json.open_object;
+      
+                      apex_json.write_context( p_name => 'data' 
+                                             , p_context => l_context);
+      
+                  apex_json.close_object;
+      
+                  l_json_text := apex_json.get_clob_output;
+      
+              --if pl/sql attribute field is not null apex_plugin_util.get_plsql_function_result
+              else
+                  l_json_text := apex_plugin_util.get_plsql_function_result(p_plsql_function => l_plsql_code);
+              end if;
+      
+              apex_json.free_output;
+      
+          end if;
+      
+          --printing region
+          sys.htp.p('<div id="' || l_region_static_id || '"></div>');
+      
+          --split JSON
+          splitJSON(p_json     => l_json_text,
+                    p_varname  => l_js_varname,
+                    p_splitter => 5000);
+      
+          --Add onload code
+          apex_javascript.add_onload_code(p_code => 'APEXJSONVIEWER.initialize("' || l_theme || '",' || l_js_varname || ',"' || l_region_static_id || '");');
+          
+          --Fix button: adding type button to region buttons
+          apex_javascript.add_onload_code(p_code => 'APEXJSONVIEWER.setButtonType("' || l_region_static_id || '");');
+      
+          return l_result;
+      
+      end render;
+
+  callbacks: 
+    api-interface: Function
+    render-procedure/function-name: render
+
+  standard-attributes: 
+    attributes: 
+    - Region Source supports different Data Sources
+
+  custom-attributes: 
+    substitute-attribute-values: true
+
+  css: 
+    file-urls: 
+    - '#PLUGIN_FILES#css/style#MIN#.css'
+    - '#PLUGIN_FILES#css/editor.main.css'
+
+  javascript: 
+    file-urls: 
+    - '#PLUGIN_FILES#script/362.script.min.js'
+    - '#PLUGIN_FILES#script/863.script.min.js'
+    - '#PLUGIN_FILES#script/script.min.js'
+
+  information: 
+    version: 1.0
+    about-url: 'https://github.com/baldogiRichard/apex-jsoncrack-jsonviewer'
+
+  standard-attributes: 
+  - # ====== Standard Attribute: SOURCE_LOCATION =================
+    id: 74558401686896238049
+    identification: 
+      name: SOURCE_LOCATION
+
+    value: 
+      required: false
+
+  custom-attributes: 
+  - # ====== Custom Attribute: Theme: ============================
+    id: 74558469288348248996
+    identification: 
+      static-id: attribute_01
+      attribute: 1
+      name: 'Theme:'
+      scope: Component
+
+    layout: 
+      sequence: 10
+
+    settings: 
+      type: Select List
+      lov-type: Static
+      common: true
+      show-in-wizard: true
+      required: false
+      translatable: false
+
+    default: 
+      value: light
+
+    entries: 
+    - # ====== Entry: Dark =========================================
+      id: 74558533808588251230
+      entry: 
+        sequence: 20
+        display: Dark
+        return: dark
+
+      advanced: 
+        quick-pick: false
+
+    - # ====== Entry: Light ========================================
+      id: 74559473259692921076
+      entry: 
+        sequence: 10
+        display: Light
+        return: light
+
+      advanced: 
+        quick-pick: false
+
+  - # ====== Custom Attribute: PL/SQL code (returning VARCHAR2): =
+    id: 74610183240536040736
+    identification: 
+      static-id: attribute_02
+      attribute: 2
+      name: 'PL/SQL code (returning VARCHAR2):'
+      scope: Component
+
+    layout: 
+      sequence: 20
+
+    settings: 
+      type: PL/SQL Function Body Returning VARCHAR2
+      common: true
+      show-in-wizard: true
+      required: false
+      translatable: false
+
+  files: 
+  - # ====== File: css/style.css =================================
+    id: 74801227003388197394
+    identification: 
+      file-name: css/style.css
+
+    attributes: 
+      mime-type: text/css
+      file-character-set: Unicode UTF-8
+
+  - # ====== File: css/style.min.css =============================
+    id: 74801240112571198485
+    identification: 
+      file-name: css/style.min.css
+
+    attributes: 
+      mime-type: text/css
+      file-character-set: Unicode UTF-8
+
+  - # ====== File: script/362.script.min.js ======================
+    id: 74836222743875258615
+    identification: 
+      file-name: script/362.script.min.js
+
+    attributes: 
+      mime-type: text/javascript
+      file-character-set: Unicode UTF-8
+
+  - # ====== File: script/863.script.min.js ======================
+    id: 74836223057902258616
+    identification: 
+      file-name: script/863.script.min.js
+
+    attributes: 
+      mime-type: text/javascript
+      file-character-set: Unicode UTF-8
+
+  - # ====== File: css/editor.main.css ===========================
+    id: 74918924642792201349
+    identification: 
+      file-name: css/editor.main.css
+
+    attributes: 
+      mime-type: text/css
+      file-character-set: Unicode UTF-8
+
+  - # ====== File: script/script.min.js ==========================
+    id: 74983769292362222414
+    identification: 
+      file-name: script/script.min.js
+
+    attributes: 
+      mime-type: text/javascript
+      file-character-set: Unicode UTF-8
+

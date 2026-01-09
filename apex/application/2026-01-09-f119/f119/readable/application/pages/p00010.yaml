@@ -1,0 +1,1098 @@
+---
+# ====== Page: Select Role ===================================
+id: 10
+identification: 
+  name: Select Role
+  alias: SELECT-ROLE1
+  title: Select Role
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    /* ========================================
+       PREMIUM ROLE SELECTOR DIALOG
+       Modern, Clean, Professional Design
+       ======================================== */
+    
+    /* ===== REMOVE DEFAULT TITLE BAR ===== */
+    .ui-dialog.ROLE-selector-dialog .ui-dialog-titlebar {
+        display: none !important;
+    }
+    
+    /* ===== ENHANCED DIALOG CONTAINER WITH PREMIUM BORDER ===== */
+    .ui-dialog.ROLE-selector-dialog {
+        border-radius: 16px !important;
+        border: none !important;
+        overflow: hidden !important;
+        background: white !important;
+        
+        /* Premium layered shadow + border effect */
+        box-shadow: 
+            0 0 0 1px rgba(102, 126, 234, 0.2),
+            0 0 0 3px rgba(102, 126, 234, 0.1),
+            0 8px 16px rgba(0, 0, 0, 0.1),
+            0 16px 32px rgba(102, 126, 234, 0.15),
+            0 24px 48px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    /* Optional: Subtle animated glow on hover */
+    .ui-dialog.ROLE-selector-dialog:hover {
+        box-shadow: 
+            0 0 0 1px rgba(102, 126, 234, 0.3),
+            0 0 0 3px rgba(102, 126, 234, 0.15),
+            0 8px 16px rgba(0, 0, 0, 0.12),
+            0 16px 32px rgba(102, 126, 234, 0.2),
+            0 24px 48px rgba(0, 0, 0, 0.12) !important;
+        transition: box-shadow 0.3s ease;
+    }
+    
+    /* ===== CUSTOM HEADER AREA ===== */
+    .custom-dialog-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 24px 32px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .custom-dialog-header::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 200px;
+        height: 200%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transform: skewX(-20deg);
+    }
+    
+    .custom-dialog-header h2 {
+        margin: 0;
+        color: white;
+        font-size: 24px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .custom-dialog-header h2 i {
+        font-size: 22px;
+    }
+    
+    .custom-dialog-header p {
+        margin: 8px 0 0;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 14px;
+    }
+    
+    /* ===== CUSTOM CLOSE BUTTON ===== */
+    .custom-close-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        color: white;
+        font-size: 16px;
+        z-index: 10;
+    }
+    
+    .custom-close-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: rotate(90deg);
+    }
+    
+    /* ===== DIALOG BODY ===== */
+    .t-DialogRegion-body {
+        padding: 32px !important;
+        background: linear-gradient(180deg, #f8f9fb 0%, #ffffff 100%) !important;
+    }
+    
+    /* ===== REGION STYLING ===== */
+    .t-Region.ROLE-selector-region {
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        margin: 0 !important;
+    }
+    
+    .ROLE-selector-region .t-Region-header {
+        display: none;
+    }
+    
+    .ROLE-selector-region .t-Region-body {
+        padding: 0 !important;
+        background: transparent !important;
+        border: none !important;
+    }
+    
+    /* ===== INTRO BANNER ===== */
+    .ROLE-selector-intro {
+        margin-bottom: 28px;
+        padding: 16px 20px;
+        background: linear-gradient(135deg, #e3f2fd 0%, #e8eaf6 100%);
+        border-left: 5px solid #667eea;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .ROLE-selector-intro::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5));
+        pointer-events: none;
+    }
+    
+    .ROLE-selector-intro .intro-text {
+        margin: 0;
+        color: #3949ab;
+        font-size: 14px;
+        line-height: 1.7;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+    }
+    
+    .ROLE-selector-intro .fa-info-circle {
+        margin-right: 12px;
+        font-size: 20px;
+        color: #667eea;
+        flex-shrink: 0;
+    }
+    
+    /* ===== CURRENT ROLE DISPLAY ===== */
+    #P10_CURRENT_ROLE_DISPLAY_CONTAINER {
+        margin-bottom: 28px;
+    }
+    
+    #P10_CURRENT_ROLE_DISPLAY_CONTAINER .t-Form-labelContainer {
+        padding-top: 0 !important;
+    }
+    
+    #P10_CURRENT_ROLE_DISPLAY_CONTAINER label {
+        font-weight: 700 !important;
+        color: #2c3e50 !important;
+        font-size: 13px !important;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 10px !important;
+    }
+    
+    #P10_CURRENT_ROLE_DISPLAY {
+        font-size: 17px !important;
+        font-weight: 600 !important;
+        color: #1a237e !important;
+        padding: 16px 20px !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%) !important;
+        border: 2px solid #e1e8ed !important;
+        border-radius: 12px !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+        transition: all 0.3s ease !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+    
+    #P10_CURRENT_ROLE_DISPLAY:hover {
+        border-color: #667eea !important;
+        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.15) !important;
+        transform: translateY(-2px);
+    }
+    
+    /* ===== ROLE SELECTOR DROPDOWN ===== */
+    #P10_ROLE_ID_CONTAINER {
+        margin-bottom: 32px;
+    }
+    
+    #P10_ROLE_ID_CONTAINER .t-Form-labelContainer label {
+        font-weight: 700 !important;
+        color: #2c3e50 !important;
+        font-size: 13px !important;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 10px !important;
+    }
+    
+    #P10_ROLE_ID_CONTAINER .t-Form-inputContainer {
+        position: relative;
+    }
+    
+    /* Dropdown icon enhancement */
+    #P10_ROLE_ID_CONTAINER .t-Form-inputContainer::after {
+        content: '\f078';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #667eea;
+        pointer-events: none;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+    
+    #P10_ROLE_ID:focus + .t-Form-inputContainer::after {
+        transform: translateY(-50%) rotate(180deg);
+    }
+    
+    #P10_ROLE_ID {
+        font-size: 15px !important;
+        font-weight: 500 !important;
+        padding: 14px 40px 14px 16px !important;
+        border: 2px solid #e1e8ed !important;
+        border-radius: 12px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        background: white !important;
+        color: #2c3e50 !important;
+        cursor: pointer !important;
+        appearance: none !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+    }
+    
+    #P10_ROLE_ID:hover {
+        border-color: #bdc3c7 !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+    }
+    
+    #P10_ROLE_ID:focus {
+        border-color: #667eea !important;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15), 
+                    0 4px 12px rgba(102, 126, 234, 0.2) !important;
+        outline: none !important;
+        background: #fafbfc !important;
+    }
+    
+    /* Dropdown options */
+    #P10_ROLE_ID option {
+        padding: 12px 16px !important;
+        font-size: 14px !important;
+        font-weight: 500;
+        color: #2c3e50;
+        background: white;
+    }
+    
+    #P10_ROLE_ID option:hover,
+    #P10_ROLE_ID option:checked {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        color: white !important;
+    }
+    
+    #P10_ROLE_ID option:disabled {
+        color: #bdc3c7;
+        background: #f5f7fa;
+    }
+    
+    /* Selected animation */
+    #P10_ROLE_ID.ROLE-selected {
+        border-color: #4caf50 !important;
+        background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%) !important;
+        animation: selectPulse 0.4s ease;
+    }
+    
+    @keyframes selectPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.02); }
+    }
+    
+    /* Help text */
+    .apex-item-help {
+        font-size: 13px !important;
+        color: #7f8c8d !important;
+        margin-top: 8px !important;
+        font-style: italic;
+        display: flex;
+        align-items: center;
+    }
+    
+    .apex-item-help::before {
+        content: '\f059';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 400;
+        margin-right: 6px;
+        color: #95a5a6;
+        font-style: normal;
+    }
+    
+    /* ===== DIALOG FOOTER & BUTTONS ===== */
+    .t-Dialog-footer,
+    .t-ButtonRegion {
+        background: linear-gradient(180deg, #fafbfc 0%, #f5f7fa 100%) !important;
+        padding: 20px 32px !important;
+        border-top: 1px solid #e1e8ed !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        gap: 12px !important;
+    }
+    
+    .t-Dialog-footer .t-Button,
+    .t-ButtonRegion .t-Button {
+        padding: 12px 32px !important;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        border-radius: 10px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        border: none !important;
+        cursor: pointer !important;
+        letter-spacing: 0.3px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* Primary button (SWITCH) */
+    .t-Dialog-footer .t-Button--hot,
+    .t-ButtonRegion .t-Button--hot {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        color: white !important;
+        box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4) !important;
+    }
+    
+    .t-Dialog-footer .t-Button--hot::before,
+    .t-ButtonRegion .t-Button--hot::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.5s;
+    }
+    
+    .t-Dialog-footer .t-Button--hot:hover,
+    .t-ButtonRegion .t-Button--hot:hover {
+        transform: translateY(-3px) !important;
+        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.5) !important;
+    }
+    
+    .t-Dialog-footer .t-Button--hot:hover::before,
+    .t-ButtonRegion .t-Button--hot:hover::before {
+        left: 100%;
+    }
+    
+    .t-Dialog-footer .t-Button--hot:active,
+    .t-ButtonRegion .t-Button--hot:active {
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4) !important;
+    }
+    
+    /* Disabled state */
+    .t-Dialog-footer .t-Button--hot.is-disabled,
+    .t-ButtonRegion .t-Button--hot.is-disabled,
+    .t-Dialog-footer .t-Button--hot:disabled,
+    .t-ButtonRegion .t-Button--hot:disabled {
+        opacity: 0.5 !important;
+        cursor: not-allowed !important;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+    
+    /* Secondary button (CANCEL) */
+    .t-Dialog-footer .t-Button:not(.t-Button--hot),
+    .t-ButtonRegion .t-Button:not(.t-Button--hot) {
+        background: white !important;
+        color: #5a6c7d !important;
+        border: 2px solid #e1e8ed !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+    }
+    
+    .t-Dialog-footer .t-Button:not(.t-Button--hot):hover,
+    .t-ButtonRegion .t-Button:not(.t-Button--hot):hover {
+        background: #f5f7fa !important;
+        border-color: #bdc3c7 !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    .t-Dialog-footer .t-Button:not(.t-Button--hot):active,
+    .t-ButtonRegion .t-Button:not(.t-Button--hot):active {
+        transform: translateY(0) !important;
+    }
+    
+    /* Button icons */
+    .t-Button .t-Icon {
+        margin-right: 8px !important;
+        font-size: 16px !important;
+        vertical-align: middle;
+    }
+    
+    /* Loading state */
+    .t-Button .fa-spinner {
+        animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    
+    /* ===== ROLE STATISTICS ===== */
+    .ROLE-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 16px;
+        margin: 24px 0;
+    }
+    
+    .stat-item {
+        display: flex;
+        align-items: center;
+        padding: 18px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        border: 1px solid #f0f0f0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .stat-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        transform: scaleY(0);
+        transition: transform 0.3s ease;
+    }
+    
+    .stat-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+    
+    .stat-item:hover::before {
+        transform: scaleY(1);
+    }
+    
+    .stat-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        color: #1976d2;
+        font-size: 24px;
+        margin-right: 16px;
+        flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(25, 118, 210, 0.15);
+    }
+    
+    .stat-icon.active {
+        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        color: #388e3c;
+        box-shadow: 0 4px 12px rgba(56, 142, 60, 0.15);
+    }
+    
+    .stat-icon.planning {
+        background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+        color: #f57c00;
+        box-shadow: 0 4px 12px rgba(245, 124, 0, 0.15);
+    }
+    
+    .stat-content {
+        flex: 1;
+    }
+    
+    .stat-value {
+        font-size: 28px;
+        font-weight: 800;
+        color: #2c3e50;
+        line-height: 1;
+        letter-spacing: -1px;
+    }
+    
+    .stat-label {
+        font-size: 12px;
+        color: #7f8c8d;
+        margin-top: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+    }
+    
+    /* ===== SUCCESS MESSAGE ===== */
+    .ROLE-switched-success {
+        padding: 16px 20px;
+        background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+        color: white;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 4px 16px rgba(76, 175, 80, 0.3);
+        animation: slideInDown 0.4s ease;
+    }
+    
+    .ROLE-switched-success .fa-check-circle {
+        margin-right: 12px;
+        font-size: 24px;
+        animation: checkBounce 0.6s ease;
+    }
+    
+    @keyframes checkBounce {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+    }
+    
+    @keyframes slideInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* ===== LOADING STATE ===== */
+    .ROLE-selector-dialog.is-loading {
+        position: relative;
+    }
+    
+    .ROLE-selector-dialog.is-loading::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(2px);
+        z-index: 9999;
+    }
+    
+    /* ===== ANIMATIONS ===== */
+    .t-DialogRegion {
+        animation: dialogSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    @keyframes dialogSlideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-30px) scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+    
+    /* ===== RESPONSIVE DESIGN ===== */
+    @media (max-width: 768px) {
+        .t-DialogRegion-body {
+            padding: 20px !important;
+        }
+        
+        .custom-dialog-header {
+            padding: 20px !important;
+        }
+        
+        .ROLE-stats {
+            grid-template-columns: 1fr;
+        }
+        
+        .t-Dialog-footer,
+        .t-ButtonRegion {
+            flex-direction: column-reverse;
+            padding: 16px 20px !important;
+        }
+        
+        .t-Dialog-footer .t-Button,
+        .t-ButtonRegion .t-Button {
+            width: 100% !important;
+        }
+    }
+    
+    /* ===== ACCESSIBILITY ===== */
+    .t-Button:focus,
+    #P10_ROLE_ID:focus {
+        outline: 2px solid #667eea !important;
+        outline-offset: 2px !important;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: buttonContainer =============================
+  id: 372300587219314738
+  identification: 
+    name: buttonContainer
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: cntx # 372301177871314744
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-ButtonRegion--noBorder
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: cntx ========================================
+  id: 372301177871314744
+  identification: 
+    name: cntx
+    type: Static Content
+
+  source: 
+    html-code: |2
+       
+      
+      <div class="project-selector-intro">
+          <p class="intro-text">
+              <i class="fa fa-info-circle"></i>
+              Choose a role to work on. This will update your workspace across all pages.
+          </p>
+      </div>
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    css-classes: 
+    - project-selector-region
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P10_ROLE_ID ==============================
+  id: 370977560516325279
+  identification: 
+    name: P10_ROLE_ID
+    type: Select List
+
+  label: 
+    label: Select Role
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 20
+    region: cntx # 372301177871314744
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      SELECT 
+           ROLE_NAME  display_value,
+          Role_id AS return_value
+      FROM ROLES
+      WHERE is_active = 'Y'
+       
+         
+    display-extra-values: false
+    display-null-value: true
+    null-display-value: '--select a Project---'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Item
+    item: APP_PROJECT_ID
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: Select the project you want to work on. Active projects are shown first.
+
+- # ====== Page Item: P10_ROLE_NAME ============================
+  id: 370977639996325280
+  identification: 
+    name: P10_ROLE_NAME
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 30
+    region: cntx # 372301177871314744
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P10_CURRENT_ROLE_DISPLAY =================
+  id: 372302422731314757
+  identification: 
+    name: P10_CURRENT_ROLE_DISPLAY
+    type: Display Only
+
+  label: 
+    label: Current Role
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: cntx # 372301177871314744
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: SQL Query (return single value)
+    sql-query-(return-single-value): |
+      SELECT 
+          CASE 
+              WHEN v('G_USER_ROLE_NAME') IS NOT NULL 
+              THEN '🎯 ' || v('G_USER_ROLE_NAME')
+              ELSE 'No Role selected'
+          END
+      FROM dual
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: SWITCH ======================================
+  id: 124984427784882342
+  identification: 
+    button-name: SWITCH
+    label: Switch
+
+  layout: 
+    sequence: 10
+    region: buttonContainer # 372300587219314738
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--success
+    - t-Button--iconLeft
+    icon: fa-exchange
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL UPDATE action
+
+- # ====== Button: cancel ======================================
+  id: 124984814550882343
+  identification: 
+    button-name: cancel
+    label: Cancel
+
+  layout: 
+    sequence: 20
+    region: buttonContainer # 372300587219314738
+    slot: PREVIOUS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-times
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+dynamic-actions: 
+- # ====== Dynamic Action: close dialog ========================
+  id: 124985814654882346
+  identification: 
+    name: close dialog
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: cancel # 124984814550882343
+
+  actions: 
+  - # ====== Action: Close Dialog ================================
+    id: 124986310064882347
+    identification: 
+      action: Close Dialog
+
+    execution: 
+      sequence: 10
+      event: close dialog # 124985814654882346
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: Switch Role ================================
+  id: 124985460176882344
+  identification: 
+    name: Switch Role
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_Role_name VARCHAR2(200);
+        
+      BEGIN
+          -- Validate project ID
+          IF :P10_ROLE_ID IS NOT NULL THEN
+              -- Get project details
+              SELECT ROLE_NAME 
+              INTO v_Role_name
+              FROM ROLES
+              WHERE role_id = :P10_ROLE_ID;
+              
+              -- Set application items (THIS IS CRITICAL!)
+              apex_util.set_session_state('G_USER_ROLE_ID', :P10_ROLE_ID);
+              apex_util.set_session_state('G_USER_ROLE_NAME', v_ROLE_name);
+              
+              -- Also set return item
+              :P10_ROLE_NAME := v_Role_name;
+              
+              -- Log for debugging
+              apex_debug.message('Switched to Role: ' || v_Role_name);
+              
+          ELSE
+              -- Handle no selection
+              apex_util.set_session_state('G_USER_ROLE_ID', NULL);
+              apex_util.set_session_state('G_USER_ROLE_NAME', 'No Role');
+              :P10_ROLE_NAME := 'No Role';
+          END IF;
+          
+          -- Force commit to persist session state
+          COMMIT;
+          
+        
+      
+      EXCEPTION
+          WHEN NO_DATA_FOUND THEN
+              apex_error.add_error(
+                  p_message => 'Selected Role not found.',
+                  p_display_location => apex_error.c_inline_in_notification
+              );
+          WHEN OTHERS THEN
+              apex_error.add_error(
+                  p_message => 'Error switching Role: ' || SQLERRM,
+                  p_display_location => apex_error.c_inline_in_notification
+              );
+      END;
+
+  execution: 
+    sequence: 10
+    point: After Submit
+    run-process: Once Per Page Visit (default)
+
+  success-message: 
+    success-message: Project switched to &P10_PROJECT_NAME.
+
+  error: 
+    error-message: Failed to switch project.
+    display-location: Inline in Notification
+
+branches: 
+- # ====== Branch: Close Dialog and Refresh Parent =============
+  id: 124986887239882348
+  identification: 
+    name: Close Dialog and Refresh Parent
+
+  execution: 
+    sequence: 30
+    point: After Processing
+
+  behavior: 
+    type: Page or URL (Redirect)
+    target: 'javascript:apex.navigation.dialog.close(true);parent.location.reload();'
+

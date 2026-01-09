@@ -1,0 +1,1147 @@
+---
+# ====== Page: Redaction Rules ===============================
+id: 400
+identification: 
+  name: Redaction Rules
+  alias: REDACTION-RULES
+  title: Redaction Rules
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+help: 
+  help-text: |2
+     
+        The Redaction Rules Manager allows you to define data masking rules for sensitive fields.
+     
+
+regions: 
+- # ====== Region: Test Redaction ==============================
+  id: 124611347022309329
+  identification: 
+    name: Test Redaction
+    type: Static Content
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Breadcrumb ==================================
+  id: 124679471962841595
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 123954626239486075
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--compactTitle
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region: Redaction Rules =============================
+  id: 124680101450841598
+  identification: 
+    name: Redaction Rules
+    type: Interactive Grid
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: CFG_REDACTION_RULES
+    include-rowid-column: false
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: 3
+    new-column: true
+    column-span: 8
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 124680631963841600
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Add Row
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+      add-row-if-empty: true
+
+    performance: 
+      lazy-loading: false
+
+    appearance: 
+      select-first-row: true
+      fixed-row-height: true
+
+    pagination: 
+      type: Scroll
+      show-total-count: true
+
+    toolbar: 
+      show: true
+      controls: 
+      - Search Column Selection
+      - Search Field
+      - Actions Menu
+      - Reset Button
+      - Save Button
+
+    enable-users-to: 
+      save-public-report: false
+      flashback: true
+      define-chart-view: true
+      download: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - PDF
+      - Excel
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 124681023042841601
+      identification: 
+        name: Primary Report
+        alias: 1246811
+
+  columns: 
+  - # ====== Column: APEX$ROW_ACTION =============================
+    id: 124611052349309326
+    identification: 
+      column-name: APEX$ROW_ACTION
+      type: Actions Menu
+
+    layout: 
+      sequence: 20
+
+  - # ====== Column: APEX$ROW_SELECTOR ===========================
+    id: 124611152833309327
+    identification: 
+      column-name: APEX$ROW_SELECTOR
+      type: Row Selector
+
+    settings: 
+      enable-multi-select: true
+      show-select-all: true
+      hide-control: false
+
+    layout: 
+      sequence: 10
+
+  - # ====== Column: COLUMN_NAME =================================
+    id: 124682445301841610
+    identification: 
+      column-name: COLUMN_NAME
+      type: Text Field
+
+    heading: 
+      heading: Column Name
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 40
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+      maximum-length: 100
+
+    source: 
+      type: Database Column
+      database-column: COLUMN_NAME
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+    help: 
+      help-text: Name of the database column to apply redaction (e.g., SALARY, NATIONAL_ID)
+
+  - # ====== Column: PATTERN =====================================
+    id: 124683412080841613
+    identification: 
+      column-name: PATTERN
+      type: Text Field
+
+    heading: 
+      heading: Pattern
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 50
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+      maximum-length: 200
+
+    source: 
+      type: Database Column
+      database-column: PATTERN
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+    help: 
+      help-text: Regular expression to match sensitive data (e.g., \\d{4,6} for 4-6 digit numbers)
+
+  - # ====== Column: REDACTION_RULE_ID ===========================
+    id: 135395912529142601
+    identification: 
+      column-name: REDACTION_RULE_ID
+      type: Hidden
+
+    settings: 
+      value-protected: true
+
+    layout: 
+      sequence: 60
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: REDACTION_RULE_ID
+      data-type: NUMBER
+      query-only: true
+      primary-key: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: REPLACEMENT_TXT =============================
+    id: 135396017849142602
+    identification: 
+      column-name: REPLACEMENT_TXT
+      type: Text Field
+
+    heading: 
+      heading: Replacement Txt
+      alignment: start
+
+    settings: 
+      trim-spaces: Leading and Trailing
+      text-case: NO CHANGE
+
+    layout: 
+      sequence: 70
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 100
+
+    source: 
+      type: Database Column
+      database-column: REPLACEMENT_TXT
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: RULE_ORDER ==================================
+    id: 135396198024142603
+    identification: 
+      column-name: RULE_ORDER
+      type: Number Field
+
+    heading: 
+      heading: Rule Order
+      alignment: end
+
+    settings: 
+      number-alignment: Start
+      virtual-keyboard: Decimal
+
+    layout: 
+      sequence: 80
+      column-alignment: end
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+
+    source: 
+      type: Database Column
+      database-column: RULE_ORDER
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: IS_ACTIVE ===================================
+    id: 135396383054142605
+    identification: 
+      column-name: IS_ACTIVE
+      type: Select List
+
+    heading: 
+      heading: Active
+      alignment: start
+
+    layout: 
+      sequence: 100
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: 'YES_NO ' # 124111059557222693
+      display-extra-values: true
+      display-null-value: true
+
+    source: 
+      type: Database Column
+      database-column: IS_ACTIVE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Use List of Values
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: REDACTION_APPLY_PHASE_ID ====================
+    id: 143300873118236512
+    identification: 
+      column-name: REDACTION_APPLY_PHASE_ID
+      type: Select List
+
+    heading: 
+      heading: ' Apply Phase '
+      alignment: start
+
+    layout: 
+      sequence: 110
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: REDACTION-APPLY-PHASE LKP # 161637038377549969
+      display-extra-values: true
+      display-null-value: true
+
+    source: 
+      type: Database Column
+      database-column: REDACTION_APPLY_PHASE_ID
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Use List of Values
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  printing: 
+    page: 
+      size: Letter
+      orientation: Landscape
+      units: Inches
+      width: 11
+      height: 8.5
+      border-width: 0.5
+      border-color: '#666666'
+
+    page-header: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 12
+      font-color: '#000000'
+      alignment: center
+      page-header-text: Redaction Rules
+
+    column-headings: 
+      font: Helvetica
+      font-weight: Bold
+      font-size: 10
+      font-color: '#000000'
+      background-color: '#EEEEEE'
+
+    columns: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 10
+      font-color: '#000000'
+      background-color: '#FFFFFF'
+
+    page-footer: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 12
+      font-color: '#000000'
+      alignment: center
+
+- # ====== Region: Info ========================================
+  id: 161546269633169245
+  identification: 
+    name: Info
+    type: Static Content
+
+  source: 
+    html-code: |
+      <div class="redaction-container" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #ffffff; overflow: hidden;">
+          
+          <div style="background-color: #f8fafc; padding: 16px 20px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 24px;">🛡️</span>
+              <h2 style="margin: 0; font-size: 1.25rem; color: #1e293b; font-weight: 600;">Information Protection: Text Redaction</h2>
+          </div>
+      
+          <div style="padding: 20px;">
+              <div style="margin-bottom: 24px;">
+                  <p style="font-size: 1.1rem; line-height: 1.6; color: #334155; margin: 0;">
+                      <strong style="color: #0f172a;">Text Redaction</strong> is the discipline of permanently removing or obscuring sensitive, confidential, or private information from a document before it is distributed.
+                  </p>
+              </div>
+      
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
+                  <div style="background-color: #f1f5f9; padding: 15px; border-radius: 6px;">
+                      <h4 style="margin-top: 0; color: #475569; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em;">Purpose</h4>
+                      <ul style="margin: 0; padding-left: 20px; font-size: 0.95rem; color: #1e293b;">
+                          <li>Compliance (GDPR, HIPAA, PCI)</li>
+                          <li>IP Protection</li>
+                          <li>Privacy Assurance</li>
+                      </ul>
+                  </div>
+                  <div style="background-color: #f1f5f9; padding: 15px; border-radius: 6px;">
+                      <h4 style="margin-top: 0; color: #475569; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em;">Typical Targets</h4>
+                      <ul style="margin: 0; padding-left: 20px; font-size: 0.95rem; color: #1e293b;">
+                          <li>Social Security Numbers</li>
+                          <li>Financial Account Details</li>
+                          <li>Proprietary Trade Secrets</li>
+                      </ul>
+                  </div>
+              </div>
+      
+              <div style="background-color: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px 16px; border-radius: 4px;">
+                  <div style="display: flex; gap: 10px; align-items: flex-start;">
+                      <span style="color: #d97706; font-weight: bold;">⚠️ Critical Note:</span>
+                      <p style="margin: 0; font-size: 0.9rem; color: #92400e; line-height: 1.5;">
+                          True redaction must remove the <strong>underlying metadata</strong> and raw text from the file. Simply drawing a black rectangle over text in a UI does not prevent data extraction by sophisticated tools.
+                      </p>
+                  </div>
+              </div>
+          </div>
+      
+          <div style="background-color: #f8fafc; padding: 12px 20px; text-align: right; border-top: 1px solid #e2e8f0;">
+              <span style="font-size: 0.85rem; color: #64748b; font-style: italic;">Data Security Protocol v2.5</span>
+          </div>
+      </div>
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Collapsible
+    template-options: 
+    - '#DEFAULT#'
+    - js-useLocalStorage
+    - is-collapsed
+    - t-Region--noUI
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P400_TEST_INPUT ==========================
+  id: 124611423048309330
+  identification: 
+    name: P400_TEST_INPUT
+    type: Textarea
+
+  label: 
+    label: Sample Text to Test
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 10
+    region: Test Redaction # 124611347022309329
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 5
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: Employee salary = 12000 and ID = 1234567890
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: Enter text containing sensitive data to test redaction rules
+
+- # ====== Page Item: P400_TEST_OUTPUT =========================
+  id: 124611568688309331
+  identification: 
+    name: P400_TEST_OUTPUT
+    type: Display Only
+
+  label: 
+    label: Test Output
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 20
+    region: Test Redaction # 124611347022309329
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: false
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: BTN_TEST_REDACTION ==========================
+  id: 124611680480309332
+  identification: 
+    button-name: BTN_TEST_REDACTION
+    label: Run Redaction Test
+
+  layout: 
+    sequence: 40
+    region: Test Redaction # 124611347022309329
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-flask
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: BTN_BACK_TO_DASHBOARD =======================
+  id: 124612473957309340
+  identification: 
+    button-name: BTN_BACK_TO_DASHBOARD
+    label: Back to Dashboard
+
+  layout: 
+    sequence: 40
+    region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-arrow-left
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:500:&SESSION.::&DEBUG.:400::'
+      page: 500 # Governance Dashboard
+      clear-cache: 400
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: clear =======================================
+  id: 124612556938309341
+  identification: 
+    button-name: clear
+    label: Clear
+
+  layout: 
+    sequence: 30
+    region: Test Redaction # 124611347022309329
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+dynamic-actions: 
+- # ====== Dynamic Action: New =================================
+  id: 124611739138309333
+  identification: 
+    name: New
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: BTN_TEST_REDACTION # 124611680480309332
+
+  actions: 
+  - # ====== Action: Execute Server-side Code ====================
+    id: 124611887351309334
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: |
+        DECLARE
+          v_output CLOB;
+          v_test_text CLOB;
+        BEGIN
+          -- Get input text
+          v_test_text := :P400_TEST_INPUT;
+        
+          -- Apply redaction using utility package
+          -- Note: The actual function may need adjustment based on your package signature
+          v_output := v_test_text;
+        
+          -- Apply all active redaction rules manually for testing
+          FOR rec IN (
+            SELECT redaction_rule_id, column_name, pattern, replacement_txt
+            FROM cfg_redaction_rules
+            WHERE  1=1
+            ORDER BY redaction_rule_id
+          ) LOOP
+            BEGIN
+              -- Simple regex replacement (Oracle 23ai supports REGEXP_REPLACE)
+              v_output := REGEXP_REPLACE(v_output, rec.pattern, rec.replacement_txt, 1, 0, 'i');
+            EXCEPTION
+              WHEN OTHERS THEN
+                -- Log error but continue
+                NULL;
+            END;
+          END LOOP;
+        
+          -- Set output
+          :P400_TEST_OUTPUT := v_output;
+        
+        EXCEPTION
+          WHEN OTHERS THEN
+            :P400_TEST_OUTPUT := 'Error: ' || SQLERRM;
+        END;
+      items-to-submit: 
+      - P400_TEST_INPUT
+      items-to-return: 
+      - P400_TEST_OUTPUT
+      suppress-change-event: false
+
+    execution: 
+      sequence: 10
+      event: New # 124611739138309333
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 124612168314309337
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |2
+         
+          apex.message.showPageSuccess("Redaction test completed successfully");
+         
+
+    execution: 
+      sequence: 20
+      event: New # 124611739138309333
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Highlight Inactive Rules ============
+  id: 124612246896309338
+  identification: 
+    name: Highlight Inactive Rules
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: After Refresh
+    selection-type: Region
+    region: Redaction Rules # 124680101450841598
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 124612335844309339
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        // Get the Interactive Grid model
+        var grid = apex.region("redaction_rules_grid").widget().interactiveGrid;
+        var model = grid.getViews().grid.model;
+        
+        // Iterate through records and apply styling
+        model.forEach(function(record) {
+         var embedFlag = model.getValue(record, "APPLY_BEFORE_EMBED");
+         var displayFlag = model.getValue(record, "APPLY_BEFORE_DISPLAY");
+         // If both flags are 'N', highlight row in gray
+        if (embedFlag === 'N' && displayFlag === 'N') {
+            var recordId = model.getRecordId(record);
+            var rowElement = grid.getViews().grid.view$.grid("getRecordElement", recordId);
+            if (rowElement) {
+                rowElement.css("background-color", "#f5f5f5");
+                rowElement.css("opacity", "0.7");
+            }
+        }
+        
+        });
+
+    execution: 
+      sequence: 10
+      event: Highlight Inactive Rules # 124612246896309338
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: clear ===============================
+  id: 124612632342309342
+  identification: 
+    name: clear
+
+  execution: 
+    sequence: 30
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: clear # 124612556938309341
+
+  actions: 
+  - # ====== Action: Clear =======================================
+    id: 124612716138309343
+    identification: 
+      action: Clear
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P400_TEST_OUTPUT
+
+    execution: 
+      sequence: 10
+      event: clear # 124612632342309342
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: Redaction Rules - Save Interactive Grid Data
+  id: 124611281948309328
+  identification: 
+    name: Redaction Rules - Save Interactive Grid Data
+    type: Interactive Grid - Automatic Row Processing (DML)
+    execution-chain: None
+    editable-region: Redaction Rules # 124680101450841598
+
+  settings: 
+    target-type: Region Source
+    prevent-lost-updates: true
+    lock-row: Yes
+    return-primary-key(s)-after-insert: true
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    execution-scope: For Created and Modified Rows
+

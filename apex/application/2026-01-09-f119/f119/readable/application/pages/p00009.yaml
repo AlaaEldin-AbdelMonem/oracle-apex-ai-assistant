@@ -1,0 +1,970 @@
+---
+# ====== Page: test_token ====================================
+id: 9
+identification: 
+  name: test_token
+  alias: TEST-TOKEN
+  title: test_token
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+javascript: 
+  function-and-global-variable-declaration: ' '
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: STREAMING TEST ==============================
+  id: 144733177340653646
+  identification: 
+    name: STREAMING TEST
+    type: Static Content
+
+  source: 
+    html-code: |2
+       <div id="stream_out"
+           style="height:260px;overflow:auto;font-family:monospace;white-space:pre-wrap;background:#f3f3f3;padding:10px;border:1px solid #ccc;">
+      </div>
+
+  layout: 
+    sequence: 20
+    parent-region: tab # 145718711625757215
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: stream_out
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Breadcrumb ==================================
+  id: 145254952273705741
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 123954626239486075
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--compactTitle
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region: tab =========================================
+  id: 145718711625757215
+  identification: 
+    name: tab
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Tabs Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-TabsRegion-mod--simple
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: IDCS access token ===========================
+  id: 145718883507757216
+  identification: 
+    name: IDCS access token
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: tab # 145718711625757215
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: New =========================================
+  id: 145719012961757218
+  identification: 
+    name: New
+    type: Static Content
+
+  source: 
+    html-code: |
+      /********************************************************************
+       *  APEX Streaming Test – Oracle ORDS SSE Endpoint
+       *  Works from APEX Dynamic Action → Execute JavaScript Code
+       ********************************************************************/
+      
+      // --- Page Items ---
+      const pToken   = $v("P9_IAM_TOKEN");  // or replace with your item
+      const pPayload = $v("P9_PAYLOAD");    // JSON text area
+      
+      // --- Output region (HTML region with STATIC ID = "stream_out") ---
+      const outDiv = document.getElementById("stream_out");
+      outDiv.innerHTML = "";  // clear
+      
+      // --- Prevent page reload and double submit ---
+      if (window.streamRunning) {
+          outDiv.innerHTML += "\n\n[Stream already running...]";
+          return;
+      }
+      window.streamRunning = true;
+      
+      // --- SSE Fetch ---
+      (async () => {
+          try {
+              const response = await fetch(
+                  "https://g4b5adf6812b04d-mydb.adb.me-jeddah-1.oraclecloudapps.com/ords/ai8p/ai/stream/chat",
+                  {
+                      method: "POST",
+                      headers: {
+                          "Content-Type": "application/json",
+                          "Accept": "text/event-stream",
+                          "Authorization": "Bearer " + pToken
+                      },
+                      body: pPayload
+                  }
+              );
+      
+              if (!response.ok) {
+                  outDiv.innerHTML = "HTTP ERROR: " + response.status;
+                  window.streamRunning = false;
+                  return;
+              }
+      
+              const reader = response.body.getReader();
+              const decoder = new TextDecoder();
+      
+              outDiv.innerHTML += "[Streaming started...]\n";
+      
+              while (true) {
+                  const { done, value } = await reader.read();
+                  if (done) break;
+      
+                  const text = decoder.decode(value, { stream: true });
+                  outDiv.innerHTML += text;
+      
+                  // Auto scroll
+                  outDiv.scrollTop = outDiv.scrollHeight;
+              }
+      
+              outDiv.innerHTML += "\n[Streaming finished]";
+          }
+          catch (e) {
+              outDiv.innerHTML += "\n[Streaming error]\n" + e;
+          }
+          finally {
+              window.streamRunning = false;
+          }
+      })();
+      
+
+  layout: 
+    sequence: 30
+    parent-region: tab # 145718711625757215
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P9_IAM_TOKEN =============================
+  id: 144732995436653644
+  identification: 
+    name: P9_IAM_TOKEN
+    type: Textarea
+
+  label: 
+    label: Iam Token
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 10
+    region: IDCS access token # 145718883507757216
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    - t-Form-fieldContainer--stretchInputs
+    width: 30
+    height: 20
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Always
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P9_PAYLOAD ===============================
+  id: 145718987895757217
+  identification: 
+    name: P9_PAYLOAD
+    type: Display Only
+
+  label: 
+    label: Payload
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 30
+    region: STREAMING TEST # 144733177340653646
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P9_NEW ===================================
+  id: 145719105486757219
+  identification: 
+    name: P9_NEW
+    type: Textarea
+
+  label: 
+    label: New
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 10
+    region: New # 145719012961757218
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 5
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P9_USER_MESSAGE ==========================
+  id: 145719710238757225
+  identification: 
+    name: P9_USER_MESSAGE
+    type: Text Field
+
+  label: 
+    label: User Message
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 10
+    region: STREAMING TEST # 144733177340653646
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: What is the largest country in the world that have trees.
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P9_STREAM_OUTPUT =========================
+  id: 145719804450757226
+  identification: 
+    name: P9_STREAM_OUTPUT
+    type: Textarea
+
+  label: 
+    label: Stream Out
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 20
+    region: STREAMING TEST # 144733177340653646
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 5
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: Refresh_token ===============================
+  id: 144733028550653645
+  identification: 
+    button-name: Refresh_token
+    label: Refresh Token
+
+  layout: 
+    sequence: 10
+    region: IDCS access token # 145718883507757216
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    icon: fa-refresh
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: STREAM_TEST =================================
+  id: 145719200120757220
+  identification: 
+    button-name: STREAM_TEST
+    label: Stream Test
+
+  layout: 
+    sequence: 40
+    region: STREAMING TEST # 144733177340653646
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+dynamic-actions: 
+- # ====== Dynamic Action: Get_Token ===========================
+  id: 145718316394757211
+  identification: 
+    name: Get_Token
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: Refresh_token # 144733028550653645
+
+  actions: 
+  - # ====== Action: Execute Server-side Code ====================
+    id: 145718451869757212
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: |
+        DECLARE
+            l_response CLOB;
+            l_json     apex_json.t_values;
+        BEGIN
+            -- Reset headers
+            apex_web_service.g_request_headers.delete;
+        
+            -- Required for form POST
+            apex_web_service.g_request_headers(1).name  := 'Content-Type';
+            apex_web_service.g_request_headers(1).value := 'application/x-www-form-urlencoded';
+        
+            -- Call IDCS OAuth endpoint with DEFAULT SCOPE
+            l_response :=
+                apex_web_service.make_rest_request(
+                    p_url                  => 'https://idcs-3f641a8d3f8b438cad276c90021dc544.identity.oraclecloud.com/oauth2/v1/token',
+                    p_http_method          => 'POST',
+                    p_credential_static_id => 'OCI_IAM_CLIENT_CRED',
+                    p_body                 =>
+                          'grant_type=client_credentials'
+                        || '&scope=' || apex_util.url_encode('urn:opc:idm:__myscopes__')
+                );
+        
+            apex_debug.message('RAW RESPONSE = ' || l_response);
+        
+            -- Parse JSON
+            apex_json.parse(p_values => l_json, p_source => l_response);
+        
+            -- Extract token
+            :P9_IAM_TOKEN :=
+                apex_json.get_varchar2(
+                    p_path   => 'access_token',
+                    p_values => l_json
+                );
+        
+            apex_debug.message('TOKEN = ' || :P9_IAM_TOKEN);
+        END;
+        
+      items-to-return: 
+      - P9_IAM_TOKEN
+      suppress-change-event: false
+
+    execution: 
+      sequence: 10
+      event: Get_Token # 145718316394757211
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Execute Server-side Code ====================
+    id: 145718668757757214
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: |
+        DECLARE
+            l_jwt         VARCHAR2(32767);
+            l_token       CLOB;
+            CLIENT_ID     VARCHAR2(200) := '4e1a50c35c0c431c82a11924dc31dd4f';
+            CLIENT_SECRET VARCHAR2(4000) := 'idcscs-eb04041f-60c1-486f-b34e-aa1818d2c748';
+            l_json        apex_json.t_values;
+            l_assertion   VARCHAR2(32767);
+        BEGIN
+            -- 1. Create JWT (HS256)
+            l_jwt := apex_jwt.encode(
+                p_iss           => CLIENT_ID,
+                p_sub           => CLIENT_ID,
+                p_aud           => 'https://idcs-3f641a8d3f8b438cad276c90021dc544.identity.oraclecloud.com/oauth2/v1/token',
+                p_exp_sec       => 300,
+                p_jti           => sys_guid(),
+                p_signature_key => utl_i18n.string_to_raw(CLIENT_SECRET, 'AL32UTF8')
+            );
+        
+            apex_debug.message('JWT (raw)=' || l_jwt);
+        
+            -- URL-encode it
+            l_assertion := apex_util.url_encode(l_jwt);
+        
+            apex_debug.message('JWT (encoded)=' || l_assertion);
+        
+            -- Reset headers
+            apex_web_service.g_request_headers.delete;
+            apex_web_service.g_request_headers(1).name  := 'Content-Type';
+            apex_web_service.g_request_headers(1).value := 'application/x-www-form-urlencoded';
+        
+            -- 2. Request access token
+            l_token :=
+                apex_web_service.make_rest_request(
+                    p_url         => 'https://idcs-3f641a8d3f8b438cad276c90021dc544.identity.oraclecloud.com/oauth2/v1/token',
+                    p_http_method => 'POST',
+                    p_body        =>
+                           'grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer'
+                        || '&assertion=' || l_assertion
+                        || '&assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
+                        || '&scope=ai_chatpot'
+                );
+        
+            apex_debug.message('TOKEN RAW RESPONSE=' || l_token);
+        
+            apex_json.parse(l_json, l_token);
+        
+            :P9_IAM_TOKEN :=
+                apex_json.get_varchar2(
+                    p_path   => 'access_token',
+                    p_values => l_json
+                );
+        
+            apex_debug.message('ACCESS TOKEN = ' || :P9_IAM_TOKEN);
+        END;
+         
+      items-to-return: 
+      - P9_IAM_TOKEN
+      suppress-change-event: false
+
+    execution: 
+      sequence: 20
+      event: Get_Token # 145718316394757211
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+    configuration: 
+      build-option: Commented Out # 123954063565486069
+
+- # ====== Dynamic Action: ORDS SSE Stream =====================
+  id: 145719373692757221
+  identification: 
+    name: ORDS SSE Stream
+
+  execution: 
+    sequence: 30
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: STREAM_TEST # 145719200120757220
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 145719482657757222
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        let userMessage = $v("P9_USER_MESSAGE");
+        let out = apex.item("P9_STREAM_OUTPUT");
+        
+        console.log("=== STREAM START ===");
+        
+        if (!userMessage) {
+            out.setValue("❌ Please enter a message");
+            return;
+        }
+        
+        if (window.apexStreamRunning) return;
+        
+        window.apexStreamRunning = true;
+        out.setValue("🔄 Connecting...\n");
+        
+        let payload = JSON.stringify({
+            provider: "OPENAI",
+            model: "gpt-4o", // gpt-4o
+            prompt: userMessage,
+            user_id: 4,
+            user_name: $v("APP_USER"),
+            temperature: 0.7,
+            max_tokens: 2000,
+            top_p: 1.0,
+            top_k: 50,
+            app_session_id: $v("APP_SESSION") || null
+        });
+        
+         
+        (async () => {
+            try {
+                const res = await fetch(
+                    "https://g4b5adf6812b04d-mydb.adb.me-jeddah-1.oraclecloudapps.com/ords/ai/ai/stream/chat",  // ✅ Fixed URL
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "text/event-stream" 
+                        },
+                        body: payload
+                    }
+                );
+        
+                console.log("Response:", res.status);
+        
+                if (!res.ok) {
+                    const err = await res.text();
+                    out.setValue(`❌ HTTP ${res.status}: ${err}`);
+                    return;
+                }
+        
+                const reader = res.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = "", content = "";
+        
+                out.setValue("");
+        
+                while (true) {
+                    const {done, value} = await reader.read();
+                    if (done) break;
+        
+                    buffer += decoder.decode(value, {stream: true});
+                    let idx;
+                    
+                    while ((idx = buffer.indexOf("\n\n")) !== -1) {
+                        const msg = buffer.substring(0, idx);
+                        buffer = buffer.substring(idx + 2);
+        
+                        if (msg.startsWith("data: ")) {
+                            const data = msg.substring(6).trim();
+                            
+                            if (data === "[[END]]") {
+                                console.log("✅ Stream complete");
+                                break;
+                            }
+                            
+                            content += data;
+                            out.setValue(content);
+                        }
+                    }
+                }
+        
+                out.setValue(content + "\n\n✅ Done");
+                console.log("Final length:", content.length);
+                
+            } catch (err) {
+                console.error("Error:", err);
+                out.setValue(`❌ ${err.message}`);
+            } finally {
+                window.apexStreamRunning = false;
+            }
+        })();
+
+    execution: 
+      sequence: 10
+      event: ORDS SSE Stream # 145719373692757221
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: New =================================
+  id: 145719554700757223
+  identification: 
+    name: New
+
+  execution: 
+    sequence: 40
+    event-scope: Static
+
+  when: 
+    event: Page Load
+
+  actions: 
+  - # ====== Action: Execute Server-side Code ====================
+    id: 145719615426757224
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: ":P9_IAM_TOKEN:='';"
+      items-to-submit: 
+      - P9_IAM_TOKEN
+      items-to-return: 
+      - P9_IAM_TOKEN
+      suppress-change-event: false
+
+    execution: 
+      sequence: 10
+      event: New # 145719554700757223
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+

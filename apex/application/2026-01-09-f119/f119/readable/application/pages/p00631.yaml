@@ -1,0 +1,1448 @@
+---
+# ====== Page: Document Text Viewer ==========================
+id: 631
+identification: 
+  name: Document Text Viewer
+  alias: DOCUMENT-TEXT-VIEWER
+  title: '&P631_DOC_TITLE.'
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: btn =========================================
+  id: 128259882420285032
+  identification: 
+    name: btn
+    type: Static Content
+
+  layout: 
+    sequence: 90
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Doc =========================================
+  id: 132482492670108015
+  identification: 
+    name: Doc
+    title: '&P631_DOC_TITLE.'
+    type: Static Content
+
+  layout: 
+    sequence: 70
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: info ========================================
+  id: 132485698015108047
+  identification: 
+    name: info
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    - margin-top-none
+    - margin-bottom-none
+    - margin-left-none
+    - margin-right-none
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P631_DOC_ID ==============================
+  id: 128259061722285024
+  identification: 
+    name: P631_DOC_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: Doc # 132482492670108015
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P631_DOC_TITLE ===========================
+  id: 128259187582285025
+  identification: 
+    name: P631_DOC_TITLE
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: info # 132485698015108047
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: SQL Query (return single value)
+    sql-query: |
+      SELECT doc_title 
+      FROM docs 
+      WHERE doc_id = :P631_DOC_ID
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P631_CURRENT_PAGE ========================
+  id: 128259257867285026
+  identification: 
+    name: P631_CURRENT_PAGE
+    type: Number Field
+
+  label: 
+    label: Page
+    alignment: Left
+
+  settings: 
+    minimum-value: 1
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 10
+    region: info # 132485698015108047
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: 1
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: 1
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P631_PAGE_SIZE ===========================
+  id: 128259373859285027
+  identification: 
+    name: P631_PAGE_SIZE
+    type: Select List
+
+  label: 
+    label: ' **Characters per Page**'
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: info # 132485698015108047
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 3
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC(,):5,000 chars500010,000 chars1000020,000 chars20000200,000 chars200000Full Document999999999'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: 10000
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P631_TOTAL_PAGES =========================
+  id: 128259419626285028
+  identification: 
+    name: P631_TOTAL_PAGES
+    type: Display Only
+
+  label: 
+    label: Last Page
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: info # 132485698015108047
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 2
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Function Body
+    language: PL/SQL
+    pl/sql-function-body: |
+      DECLARE
+          v_size NUMBER := NVL(TO_NUMBER(:P631_PAGE_SIZE), 10000);
+          v_doc_id NUMBER := TO_NUMBER(:P631_DOC_ID);
+          v_total NUMBER;
+      BEGIN
+          SELECT CEIL(DBMS_LOB.GETLENGTH(text_extracted) / v_size)
+          INTO v_total
+          FROM docs
+          WHERE doc_id = v_doc_id;
+          
+          RETURN TO_CHAR(v_total);
+          
+      EXCEPTION
+          WHEN NO_DATA_FOUND THEN
+              RETURN '0';
+          WHEN VALUE_ERROR THEN
+              RETURN '1';
+          WHEN OTHERS THEN
+              RETURN '1';
+      END;
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P631_TOTAL_SIZE ==========================
+  id: 128259515205285029
+  identification: 
+    name: P631_TOTAL_SIZE
+    type: Display Only
+
+  label: 
+    label: Doc Size
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: info # 132485698015108047
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: SQL Query (return single value)
+    sql-query: |
+      SELECT ROUND(DBMS_LOB.GETLENGTH(text_extracted) / 1024, 2) || ' KB'
+      FROM docs
+      WHERE doc_id = :P631_DOC_ID
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P631_TEXT_CONTENT ========================
+  id: 128259750464285031
+  identification: 
+    name: P631_TEXT_CONTENT
+    type: Textarea
+
+  label: 
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: true
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 100
+    region: Doc # 132482492670108015
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: 12
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Above
+    template-options: 
+    - t-Form-fieldContainer--stretchInputs
+    height: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: SQL Query (return single value)
+    sql-query: |
+      SELECT get_doc_text_page(  p_doc_id => :P631_DOC_ID, 
+                                 p_page_num => NVL(TO_NUMBER(:P631_CURRENT_PAGE), 1), 
+                                 p_page_size => NVL(TO_NUMBER(:P631_PAGE_SIZE), 10000)  )d
+        FROM dual;
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Always
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: BTN_FIRST_PAGE ==============================
+  id: 128259944483285033
+  identification: 
+    button-name: BTN_FIRST_PAGE
+    label: ⏮️ First
+
+  layout: 
+    sequence: 10
+    region: btn # 128259882420285032
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-page-first
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: BTN_PREV_PAGE ===============================
+  id: 128260021365285034
+  identification: 
+    button-name: BTN_PREV_PAGE
+    label: ◀️ Previous
+
+  layout: 
+    sequence: 20
+    region: btn # 128259882420285032
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: BTN_NEXT_PAGE ===============================
+  id: 128260276846285036
+  identification: 
+    button-name: BTN_NEXT_PAGE
+    label: ▶️ Next
+
+  layout: 
+    sequence: 50
+    region: btn # 128259882420285032
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: BTN_LAST_PAGE ===============================
+  id: 128260368228285037
+  identification: 
+    button-name: BTN_LAST_PAGE
+    label: ⏭️ Last
+
+  layout: 
+    sequence: 60
+    region: btn # 128259882420285032
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: BTN_DOWNLOAD ================================
+  id: 128260472206285038
+  identification: 
+    button-name: BTN_DOWNLOAD
+    label: '⬇️Full  Download '
+
+  layout: 
+    sequence: 70
+    region: btn # 128259882420285032
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    icon: fa-arrow-down-alt
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+    database-action: SQL UPDATE action
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P631_DOC_ID
+
+- # ====== Button: BTN_CLOSE ===================================
+  id: 128260605849285040
+  identification: 
+    button-name: BTN_CLOSE
+    label: Close
+
+  layout: 
+    sequence: 80
+    region: btn # 128259882420285032
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+dynamic-actions: 
+- # ====== Dynamic Action: close ===============================
+  id: 128260739921285041
+  identification: 
+    name: close
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: BTN_CLOSE # 128260605849285040
+
+  actions: 
+  - # ====== Action: Close Dialog ================================
+    id: 128260847828285042
+    identification: 
+      action: Close Dialog
+
+    execution: 
+      sequence: 10
+      event: close # 128260739921285041
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Navigate to First Page ==============
+  id: 132482179614108012
+  identification: 
+    name: Navigate to First Page
+
+  execution: 
+    sequence: 40
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: BTN_FIRST_PAGE # 128259944483285033
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 132482378012108014
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Doc # 132482492670108015
+
+    execution: 
+      sequence: 40
+      event: Navigate to First Page # 132482179614108012
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh_btn =================================
+    id: 132484299306108033
+    identification: 
+      name: Refresh_btn
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: btn # 128259882420285032
+
+    execution: 
+      sequence: 50
+      event: Navigate to First Page # 132482179614108012
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Execute Server-side Code ====================
+    id: 132484866716108039
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: |
+        BEGIN
+            :P631_CURRENT_PAGE := 1;
+            
+            :P631_TEXT_CONTENT := get_doc_text_page(
+                p_doc_id => :P631_DOC_ID,
+                p_page_num => 1,
+                p_page_size => NVL(TO_NUMBER(:P631_PAGE_SIZE), 10000)
+            );
+        END;
+      items-to-submit: 
+      - P631_CURRENT_PAGE
+      - P631_PAGE_SIZE
+      - P631_DOC_ID
+      items-to-return: 
+      - P631_CURRENT_PAGE
+      - P631_TEXT_CONTENT
+      - P631_TEXT_CONTENT
+      suppress-change-event: false
+
+    execution: 
+      sequence: 30
+      event: Navigate to First Page # 132482179614108012
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+- # ====== Dynamic Action: Navigate to Previous Page ===========
+  id: 132482522379108016
+  identification: 
+    name: Navigate to Previous Page
+
+  execution: 
+    sequence: 50
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: BTN_PREV_PAGE # 128260021365285034
+
+  actions: 
+  - # ====== Action: Execute Server-side Code ====================
+    id: 132482611869108017
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: |
+        BEGIN
+            -- Decrement page number, don't go below 1
+            :P631_CURRENT_PAGE := GREATEST(
+                NVL(TO_NUMBER(:P631_CURRENT_PAGE), 1) - 1,
+                1
+            );
+            
+            -- Update text content
+            :P631_TEXT_CONTENT := get_doc_text_page(
+                p_doc_id => :P631_DOC_ID,
+                p_page_num => TO_NUMBER(:P631_CURRENT_PAGE),
+                p_page_size => NVL(TO_NUMBER(:P631_PAGE_SIZE), 10000)
+            );
+        END;
+      items-to-submit: 
+      - P631_CURRENT_PAGE
+      - P631_PAGE_SIZE
+      - P631_DOC_ID
+      - P631_PAGE_SIZE
+      - P631_DOC_ID
+      items-to-return: 
+      - P631_CURRENT_PAGE
+      - P631_TEXT_CONTENT
+      - P631_TEXT_CONTENT
+      suppress-change-event: false
+
+    execution: 
+      sequence: 20
+      event: Navigate to Previous Page # 132482522379108016
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Refresh =====================================
+    id: 132482720155108018
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Doc # 132482492670108015
+
+    execution: 
+      sequence: 40
+      event: Navigate to Previous Page # 132482522379108016
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh_btn =================================
+    id: 132484314088108034
+    identification: 
+      name: Refresh_btn
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: btn # 128259882420285032
+
+    execution: 
+      sequence: 50
+      event: Navigate to Previous Page # 132482522379108016
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Navigate to Next Page ===============
+  id: 132482876774108019
+  identification: 
+    name: Navigate to Next Page
+
+  execution: 
+    sequence: 60
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: BTN_NEXT_PAGE # 128260276846285036
+
+  actions: 
+  - # ====== Action: Execute Server-side Code ====================
+    id: 132482918428108020
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: |
+        DECLARE
+            v_current_page NUMBER;
+            v_total_pages NUMBER;
+        BEGIN
+            -- Get current values safely
+            v_current_page := NVL(TO_NUMBER(:P631_CURRENT_PAGE), 1);
+            
+            -- Calculate total pages
+            SELECT CEIL(DBMS_LOB.GETLENGTH(text_extracted) / NVL(TO_NUMBER(:P631_PAGE_SIZE), 10000))
+            INTO v_total_pages
+            FROM docs
+            WHERE doc_id = :P631_DOC_ID;
+            
+            -- Increment page number, don't exceed max
+            IF v_current_page < v_total_pages THEN
+                :P631_CURRENT_PAGE := v_current_page + 1;
+            ELSE
+                :P631_CURRENT_PAGE := v_total_pages;  -- Stay at max
+            END IF;
+            
+            -- Update text content
+            :P631_TEXT_CONTENT := get_doc_text_page(
+                p_doc_id => :P631_DOC_ID,
+                p_page_num => TO_NUMBER(:P631_CURRENT_PAGE),
+                p_page_size => NVL(TO_NUMBER(:P631_PAGE_SIZE), 10000)
+            );
+        END;
+      items-to-submit: 
+      - P631_CURRENT_PAGE
+      - P631_PAGE_SIZE
+      - P631_DOC_ID
+      items-to-return: 
+      - P631_CURRENT_PAGE
+      - P631_TEXT_CONTENT
+      suppress-change-event: false
+
+    execution: 
+      sequence: 40
+      event: Navigate to Next Page # 132482876774108019
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Refresh =====================================
+    id: 132483010147108021
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Doc # 132482492670108015
+
+    execution: 
+      sequence: 50
+      event: Navigate to Next Page # 132482876774108019
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh_btn =================================
+    id: 132484431236108035
+    identification: 
+      name: Refresh_btn
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: btn # 128259882420285032
+
+    execution: 
+      sequence: 70
+      event: Navigate to Next Page # 132482876774108019
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Navigate to Last Page ===============
+  id: 132483127559108022
+  identification: 
+    name: Navigate to Last Page
+
+  execution: 
+    sequence: 70
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: BTN_LAST_PAGE # 128260368228285037
+
+  actions: 
+  - # ====== Action: Execute Server-side Code ====================
+    id: 132483264289108023
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: |
+        DECLARE
+            v_total_pages NUMBER;
+        BEGIN
+            -- Calculate total pages
+            SELECT CEIL(DBMS_LOB.GETLENGTH(text_extracted) / NVL(TO_NUMBER(:P631_PAGE_SIZE), 10000))
+            INTO v_total_pages
+            FROM docs
+            WHERE doc_id = :P631_DOC_ID;
+            
+            -- Jump to last page
+            :P631_CURRENT_PAGE := v_total_pages;
+            
+            -- Update text content
+            :P631_TEXT_CONTENT := get_doc_text_page(
+                p_doc_id => :P631_DOC_ID,
+                p_page_num => v_total_pages,
+                p_page_size => NVL(TO_NUMBER(:P631_PAGE_SIZE), 10000)
+            );
+        END;
+      items-to-submit: 
+      - P631_CURRENT_PAGE
+      - P631_PAGE_SIZE
+      - P631_DOC_ID
+      - P631_PAGE_SIZE
+      - P631_DOC_ID
+      items-to-return: 
+      - P631_CURRENT_PAGE
+      - P631_TEXT_CONTENT
+      suppress-change-event: false
+
+    execution: 
+      sequence: 20
+      event: Navigate to Last Page # 132483127559108022
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Refresh =====================================
+    id: 132483340707108024
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Doc # 132482492670108015
+
+    execution: 
+      sequence: 30
+      event: Navigate to Last Page # 132483127559108022
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh_btn =================================
+    id: 132484595413108036
+    identification: 
+      name: Refresh_btn
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: btn # 128259882420285032
+
+    execution: 
+      sequence: 50
+      event: Navigate to Last Page # 132483127559108022
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Jump to Specific Page ===============
+  id: 132485263504108043
+  identification: 
+    name: Jump to Specific Page
+
+  execution: 
+    sequence: 80
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P631_CURRENT_PAGE
+
+  actions: 
+  - # ====== Action: Execute Server-side Code ====================
+    id: 132485371812108044
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: |
+        DECLARE
+            v_requested_page NUMBER;
+            v_total_pages NUMBER;
+            v_final_page NUMBER;
+        BEGIN
+            -- Get the requested page number (what user typed)
+            v_requested_page := NVL(TO_NUMBER(:P631_CURRENT_PAGE), 1);
+            
+            -- Calculate total pages from database
+            SELECT CEIL(DBMS_LOB.GETLENGTH(text_extracted) / NVL(TO_NUMBER(:P631_PAGE_SIZE), 10000))
+            INTO v_total_pages
+            FROM docs
+            WHERE doc_id = :P631_DOC_ID;
+            
+            -- Validate and constrain the page number
+            v_final_page := v_requested_page;
+            
+            -- Don't go below 1
+            IF v_final_page < 1 THEN
+                v_final_page := 1;
+            END IF;
+            
+            -- Don't exceed max pages
+            IF v_final_page > v_total_pages THEN
+                v_final_page := v_total_pages;
+            END IF;
+            
+         
+            
+            -- Update text content
+            :P631_TEXT_CONTENT := get_doc_text_page(
+                p_doc_id => :P631_DOC_ID,
+                p_page_num => v_final_page,
+                p_page_size => NVL(TO_NUMBER(:P631_PAGE_SIZE), 10000)
+            );
+            
+        EXCEPTION
+            WHEN VALUE_ERROR THEN
+                -- If user enters invalid input (like 'abc'), default to page 1
+                :P631_CURRENT_PAGE := 1;
+                :P631_TEXT_CONTENT := get_doc_text_page(
+                    p_doc_id => :P631_DOC_ID,
+                    p_page_num => 1,
+                    p_page_size => NVL(TO_NUMBER(:P631_PAGE_SIZE), 10000)
+                );
+            WHEN NO_DATA_FOUND THEN
+                -- Document not found
+                :P631_CURRENT_PAGE := 1;
+                :P631_TEXT_CONTENT := 'Error: Document not found';
+            WHEN OTHERS THEN
+                -- Any other error
+                :P631_CURRENT_PAGE := 1;
+                :P631_TEXT_CONTENT := 'Error: ' || SQLERRM;
+        END;
+      items-to-submit: 
+      - P631_CURRENT_PAGE
+      - P631_PAGE_SIZE
+      - P631_DOC_ID
+      items-to-return: 
+      - P631_TEXT_CONTENT
+      suppress-change-event: false
+
+    execution: 
+      sequence: 10
+      event: Jump to Specific Page # 132485263504108043
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Refresh =====================================
+    id: 132485431473108045
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Doc # 132482492670108015
+
+    execution: 
+      sequence: 20
+      event: Jump to Specific Page # 132485263504108043
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+    configuration: 
+      build-option: Commented Out # 123954063565486069
+
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 132485504232108046
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        apex.message.showPageSuccess('Jumped to page ' + apex.item('P631_CURRENT_PAGE').getValue());
+        setTimeout(function() {
+            apex.message.clearMessages();
+        }, 2000);
+
+    execution: 
+      sequence: 30
+      event: Jump to Specific Page # 132485263504108043
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+    configuration: 
+      build-option: Commented Out # 123954063565486069
+
+- # ====== Dynamic Action: Ajax_download_txt ===================
+  id: 132579717143302005
+  identification: 
+    name: Ajax_download_txt
+
+  execution: 
+    sequence: 90
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: BTN_DOWNLOAD # 128260472206285038
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 132579858893302006
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        apex.server.process('AJAX_DOWNLOAD', {
+            x01: apex.item('P631_DOC_ID').getValue()
+        }, {
+            dataType: 'json',
+            success: function(data) {
+                if (data.success) {
+                    var blob = new Blob([data.text], {type: 'text/plain'});
+                    var url = URL.createObjectURL(blob);
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.download = data.filename;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    apex.message.showPageSuccess('Downloaded!');
+                }
+            },
+            error: function() {
+                apex.message.showErrors([{type: 'error', message: 'Download failed'}]);
+            }
+        });
+
+    execution: 
+      sequence: 10
+      event: Ajax_download_txt # 132579717143302005
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: init =======================================
+  id: 128260136461285035
+  identification: 
+    name: init
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      
+      
+      BEGIN
+          -- Initialize P631_CURRENT_PAGE if null or invalid
+          IF :P631_CURRENT_PAGE IS NULL OR 
+             TO_NUMBER(:P631_CURRENT_PAGE) < 1 THEN
+              :P631_CURRENT_PAGE := '1';
+          END IF;
+          
+          -- Initialize P631_PAGE_SIZE if null or invalid
+          IF :P631_PAGE_SIZE IS NULL OR 
+             TO_NUMBER(:P631_PAGE_SIZE) < 1 THEN
+              :P631_PAGE_SIZE := '10000';
+          END IF;
+          
+          -- Validate P631_DOC_ID
+          IF :P631_DOC_ID IS NULL THEN
+              apex_error.add_error(
+                  p_message => 'Document ID is required',
+                  p_display_location => apex_error.c_inline_in_notification
+              );
+          END IF;
+          
+      EXCEPTION
+          WHEN VALUE_ERROR THEN
+              :P631_CURRENT_PAGE := '1';
+              :P631_PAGE_SIZE := '10000';
+          WHEN OTHERS THEN
+              apex_error.add_error(
+                  p_message => 'Error initializing page: ' || SQLERRM,
+                  p_display_location => apex_error.c_inline_in_notification
+              );
+      END;
+      
+      
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process:  Initialize Page on Entry ==================
+  id: 129603173679647808
+  identification: 
+    name: ' Initialize Page on Entry'
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      BEGIN
+          -- When opening page fresh (from Page 630), reset to page 1
+          IF :REQUEST = 'MODAL' THEN
+              :P631_CURRENT_PAGE := 1;
+              :P631_PAGE_SIZE := NVL(:P631_PAGE_SIZE, 10000);
+          END IF;
+          
+          -- Ensure values are never null
+          :P631_CURRENT_PAGE := NVL(TO_NUMBER(:P631_CURRENT_PAGE), 1);
+          :P631_PAGE_SIZE := NVL(TO_NUMBER(:P631_PAGE_SIZE), 10000);
+          
+          -- Calculate max pages
+          SELECT CEIL(DBMS_LOB.GETLENGTH(text_extracted) / TO_NUMBER(:P631_PAGE_SIZE))
+          INTO :P631_TOTAL_PAGES
+          FROM docs
+          WHERE doc_id = :P631_DOC_ID;
+          
+          -- Ensure current page doesn't exceed max
+          IF TO_NUMBER(:P631_CURRENT_PAGE) > TO_NUMBER(:P631_TOTAL_PAGES) THEN
+              :P631_CURRENT_PAGE := :P631_TOTAL_PAGES;
+          END IF;
+          
+      EXCEPTION
+          WHEN OTHERS THEN
+              :P631_CURRENT_PAGE := 1;
+              :P631_PAGE_SIZE := 10000;
+              :P631_TOTAL_PAGES := 1;
+      END;
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    type: Request is contained in Value
+    value: MODAL
+
+- # ====== Process: AJAX_DOWNLOAD ==============================
+  id: 132579639521302004
+  identification: 
+    name: AJAX_DOWNLOAD
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_text CLOB;
+          v_filename VARCHAR2(255);
+      BEGIN
+          SELECT text_extracted, NVL(file_name, 'document') || '_extracted.txt'
+          INTO v_text, v_filename
+          FROM docs
+          WHERE doc_id = TO_NUMBER(apex_application.g_x01);
+          
+          apex_json.open_object;
+          apex_json.write('text', v_text);
+          apex_json.write('filename', v_filename);
+          apex_json.write('success', true);
+          apex_json.close_object;
+      END;
+
+  execution: 
+    sequence: 10
+    point: Ajax Callback
+    run-process: Once Per Page Visit (default)
+

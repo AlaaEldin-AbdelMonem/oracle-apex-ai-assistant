@@ -1,0 +1,579 @@
+prompt --application/shared_components/navigation/lists/navigation_menu
+begin
+--   Manifest
+--     LIST: Navigation Menu
+--   Manifest End
+wwv_flow_imp.component_begin (
+ p_version_yyyy_mm_dd=>'2024.11.30'
+,p_release=>'24.2.11'
+,p_default_workspace_id=>110979332345909267
+,p_default_application_id=>119
+,p_default_id_offset=>0
+,p_default_owner=>'AI8P'
+);
+wwv_flow_imp_shared.create_list(
+ p_id=>wwv_flow_imp.id(123955114815486079)
+,p_name=>'Navigation Menu'
+,p_list_status=>'PUBLIC'
+,p_version_scn=>38951442099566
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(123966843514486187)
+,p_list_item_display_sequence=>10
+,p_list_item_link_text=>unistr('\D83C\DFE0Home')
+,p_list_item_link_target=>'f?p=&APP_ID.:1:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-home'
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(124964816089691055)
+,p_list_item_display_sequence=>100
+,p_list_item_link_text=>unistr('\2728 My Assistant ')
+,p_list_item_icon=>'fa-angle-double-right'
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(151658957147556136)
+,p_list_item_display_sequence=>101
+,p_list_item_link_text=>'Chat Assistant'
+,p_list_item_link_target=>'f?p=&APP_ID.:114:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-ai'
+,p_parent_list_item_id=>wwv_flow_imp.id(124964816089691055)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'114'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(123998210291353953)
+,p_list_item_display_sequence=>120
+,p_list_item_link_text=>'Chat History'
+,p_list_item_link_target=>'f?p=&APP_ID.:150:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-history'
+,p_parent_list_item_id=>wwv_flow_imp.id(124964816089691055)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'150,151'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(155715808891918303)
+,p_list_item_display_sequence=>2290
+,p_list_item_link_text=>unistr('My Issues\26A0\FE0F')
+,p_list_item_link_target=>'f?p=&APP_ID.:117:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-exclamation-circle'
+,p_parent_list_item_id=>wwv_flow_imp.id(124964816089691055)
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(162701158040194161)
+,p_list_item_display_sequence=>140
+,p_list_item_link_text=>unistr('\D83D\DCDAKnowledge Base')
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(125000658324780418)
+,p_list_item_display_sequence=>150
+,p_list_item_link_text=>unistr('\D83D\DCD1Documents ')
+,p_list_item_icon=>'fa-angle-double-right'
+,p_parent_list_item_id=>wwv_flow_imp.id(162701158040194161)
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(125438383038650194)
+,p_list_item_display_sequence=>2030
+,p_list_item_link_text=>unistr('Document Dashboard\D83D\DDBC\FE0F')
+,p_list_item_link_target=>'f?p=&APP_ID.:600:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-ai-sparkle-enhance-color'
+,p_parent_list_item_id=>wwv_flow_imp.id(125000658324780418)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'600'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(125512252250396626)
+,p_list_item_display_sequence=>2040
+,p_list_item_link_text=>unistr('Document Library\D83D\DCD6')
+,p_list_item_link_target=>'f?p=&APP_ID.:610:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-book'
+,p_parent_list_item_id=>wwv_flow_imp.id(125000658324780418)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'610,611'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(125723551001710320)
+,p_list_item_display_sequence=>2070
+,p_list_item_link_text=>unistr('Chunking Analytics\2699\FE0F')
+,p_list_item_link_target=>'f?p=&APP_ID.:655:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-dashboard'
+,p_parent_list_item_id=>wwv_flow_imp.id(125000658324780418)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'655'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(125780925992830156)
+,p_list_item_display_sequence=>2080
+,p_list_item_link_text=>unistr('Strategy Manager\D83D\DDFA\FE0F')
+,p_list_item_link_target=>'f?p=&APP_ID.:665:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-table-pointer'
+,p_parent_list_item_id=>wwv_flow_imp.id(125000658324780418)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'665,666'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(140963052215374240)
+,p_list_item_display_sequence=>400
+,p_list_item_link_text=>unistr('\D83E\DDE9Context & Intent')
+,p_list_item_link_target=>'f?p=&APP_ID.:420:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-angle-double-right'
+,p_parent_list_item_id=>wwv_flow_imp.id(162701158040194161)
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(140963421540388053)
+,p_list_item_display_sequence=>2130
+,p_list_item_link_text=>unistr('Context Dashboard\D83D\DDBC\FE0F')
+,p_list_item_link_target=>'f?p=&APP_ID.:420:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-file-o'
+,p_parent_list_item_id=>wwv_flow_imp.id(140963052215374240)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'420'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(140987639349402886)
+,p_list_item_display_sequence=>2140
+,p_list_item_link_text=>unistr('Intention Domains\D83C\DFAF')
+,p_list_item_link_target=>'f?p=&APP_ID.:422:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-table-pointer'
+,p_parent_list_item_id=>wwv_flow_imp.id(140963052215374240)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'422,423'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(141040144213429609)
+,p_list_item_display_sequence=>2150
+,p_list_item_link_text=>unistr('Data Sources Registry\D83D\DD17')
+,p_list_item_link_target=>'f?p=&APP_ID.:424:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-table-pointer'
+,p_parent_list_item_id=>wwv_flow_imp.id(140963052215374240)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'424,425'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(141075852694441658)
+,p_list_item_display_sequence=>2160
+,p_list_item_link_text=>'Intention & Data Sources'
+,p_list_item_link_target=>'f?p=&APP_ID.:426:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-range-chart-area'
+,p_parent_list_item_id=>wwv_flow_imp.id(140963052215374240)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'426,427'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(141099210941451060)
+,p_list_item_display_sequence=>2170
+,p_list_item_link_text=>'Data Sources & Roles'
+,p_list_item_link_target=>'f?p=&APP_ID.:428:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-table-pointer'
+,p_parent_list_item_id=>wwv_flow_imp.id(140963052215374240)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'428,429'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(155717374843975536)
+,p_list_item_display_sequence=>2310
+,p_list_item_link_text=>unistr('Domain Retriever\D83D\DD0D')
+,p_list_item_link_target=>'f?p=&APP_ID.:440:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-table'
+,p_parent_list_item_id=>wwv_flow_imp.id(140963052215374240)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'440'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(124058916656889575)
+,p_list_item_display_sequence=>450
+,p_list_item_link_text=>unistr('\D83D\DEE1\FE0FGovernance & Security')
+,p_list_item_icon=>'fa-angle-double-right'
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(124702848842091093)
+,p_list_item_display_sequence=>210
+,p_list_item_link_text=>unistr('Governance Dashboard\D83D\DDBC\FE0F')
+,p_list_item_link_target=>'f?p=&APP_ID.:500:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-chart-pie'
+,p_parent_list_item_id=>wwv_flow_imp.id(124058916656889575)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'500'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(124103115755184670)
+,p_list_item_display_sequence=>230
+,p_list_item_link_text=>unistr('Policy Manager\D83D\DCDC')
+,p_list_item_link_target=>'f?p=&APP_ID.:300:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-shield-alt'
+,p_parent_list_item_id=>wwv_flow_imp.id(124058916656889575)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'300,301'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(124679048906841592)
+,p_list_item_display_sequence=>250
+,p_list_item_link_text=>unistr('Redaction Rules\D83D\DD75\FE0F')
+,p_list_item_link_target=>'f?p=&APP_ID.:400:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-user-secret'
+,p_parent_list_item_id=>wwv_flow_imp.id(124058916656889575)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'400'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(141733037618812854)
+,p_list_item_display_sequence=>2180
+,p_list_item_link_text=>unistr('Manage Roles\D83D\DC65')
+,p_list_item_link_target=>'f?p=&APP_ID.:350:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-users-alt'
+,p_parent_list_item_id=>wwv_flow_imp.id(124058916656889575)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'350,351'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(164483012272510854)
+,p_list_item_display_sequence=>4100
+,p_list_item_link_text=>'Audit Intelligence Dashboard'
+,p_list_item_link_target=>'f?p=&APP_ID.:721:&APP_SESSION.::&DEBUG.:::'
+,p_list_item_icon=>'fa-file-o'
+,p_parent_list_item_id=>wwv_flow_imp.id(124058916656889575)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'721'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(124731010846446098)
+,p_list_item_display_sequence=>500
+,p_list_item_link_text=>unistr('\2699\FE0F Administration')
+,p_list_item_icon=>'fa-angle-double-right'
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(124738113748468355)
+,p_list_item_display_sequence=>310
+,p_list_item_link_text=>unistr('AI Parameters\D83D\DCD0')
+,p_list_item_link_target=>'f?p=&APP_ID.:1000:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-table-pointer'
+,p_parent_list_item_id=>wwv_flow_imp.id(124731010846446098)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'1000,1001'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(124755050624481551)
+,p_list_item_display_sequence=>320
+,p_list_item_link_text=>unistr('Alert Threshold\D83D\DEA8')
+,p_list_item_link_target=>'f?p=&APP_ID.:1010:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-table-pointer'
+,p_parent_list_item_id=>wwv_flow_imp.id(124731010846446098)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'1010,1011'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(124777039716490293)
+,p_list_item_display_sequence=>330
+,p_list_item_link_text=>unistr('Models Configuration \D83E\DD16')
+,p_list_item_link_target=>'f?p=&APP_ID.:1020:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-table-pointer'
+,p_parent_list_item_id=>wwv_flow_imp.id(124731010846446098)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'1020,1021'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(124846296447531050)
+,p_list_item_display_sequence=>1049
+,p_list_item_link_text=>unistr('User Roles\D83D\DC64')
+,p_list_item_link_target=>'f?p=&APP_ID.:1040:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-users'
+,p_parent_list_item_id=>wwv_flow_imp.id(124731010846446098)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'1040,1041'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(124887239133551257)
+,p_list_item_display_sequence=>1069
+,p_list_item_link_text=>unistr('RAG Embeddigns\D83D\DC8E')
+,p_list_item_link_target=>'f?p=&APP_ID.:1060:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-table-pointer'
+,p_parent_list_item_id=>wwv_flow_imp.id(124731010846446098)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'1060,1061'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(140871088653818189)
+,p_list_item_display_sequence=>2120
+,p_list_item_link_text=>unistr('Registry Assigned Roles\D83D\DC64')
+,p_list_item_link_target=>'f?p=&APP_ID.:410:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-layout-header-sidebar-left'
+,p_parent_list_item_id=>wwv_flow_imp.id(124731010846446098)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'410,411'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(162703354547283242)
+,p_list_item_display_sequence=>2000
+,p_list_item_link_text=>unistr('\D83D\DD2DOperations & Insights')
+,p_list_item_icon=>'fa-ai-innovation-lightbulb'
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(124919244028605713)
+,p_list_item_display_sequence=>2100
+,p_list_item_link_text=>unistr('\D83D\DCC8 Monitor ')
+,p_list_item_icon=>'fa-angle-double-right'
+,p_parent_list_item_id=>wwv_flow_imp.id(162703354547283242)
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(124928726292612959)
+,p_list_item_display_sequence=>2010
+,p_list_item_link_text=>'Model Usage'
+,p_list_item_link_target=>'f?p=&APP_ID.:1080:&APP_SESSION.::&DEBUG.:::'
+,p_list_item_icon=>'fa-table-pointer'
+,p_parent_list_item_id=>wwv_flow_imp.id(124919244028605713)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'1080,1081'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(155700091117219552)
+,p_list_item_display_sequence=>2280
+,p_list_item_link_text=>unistr('\270D\FE0FFeedback')
+,p_list_item_link_target=>'f?p=&APP_ID.:115:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-angle-double-right'
+,p_parent_list_item_id=>wwv_flow_imp.id(162703354547283242)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'115,119,120'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(150111866529664515)
+,p_list_item_display_sequence=>2270
+,p_list_item_link_text=>unistr('User Reported Issues\D83D\DCAC')
+,p_list_item_link_target=>'f?p=&APP_ID.:120:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-table'
+,p_parent_list_item_id=>wwv_flow_imp.id(155700091117219552)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'120,121'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(158152275066401340)
+,p_list_item_display_sequence=>2320
+,p_list_item_link_text=>unistr('\D83D\DE80Deployment')
+,p_list_item_link_target=>'f?p=&APP_ID.:702:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-angle-double-right'
+,p_parent_list_item_id=>wwv_flow_imp.id(162703354547283242)
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(158169569028665412)
+,p_list_item_display_sequence=>2330
+,p_list_item_link_text=>unistr('Versions\D83D\DCE6')
+,p_list_item_link_target=>'f?p=&APP_ID.:703:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-battery-4'
+,p_parent_list_item_id=>wwv_flow_imp.id(158152275066401340)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'703'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(158787474721773405)
+,p_list_item_display_sequence=>2350
+,p_list_item_link_text=>unistr('User Segments\D83D\DC65')
+,p_list_item_link_target=>'f?p=&APP_ID.:705:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-table-pointer'
+,p_parent_list_item_id=>wwv_flow_imp.id(158152275066401340)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'705'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(159357722014979809)
+,p_list_item_display_sequence=>2380
+,p_list_item_link_text=>unistr('Deployment Comparison\D83D\DD04')
+,p_list_item_link_target=>'f?p=&APP_ID.:708:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-asterisk'
+,p_parent_list_item_id=>wwv_flow_imp.id(158152275066401340)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'708'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(159317997938953503)
+,p_list_item_display_sequence=>2360
+,p_list_item_link_text=>unistr('Debug Configuration\D83E\DE7A')
+,p_list_item_link_target=>'f?p=&APP_ID.:716:&SESSION.::&DEBUG.::::'
+,p_parent_list_item_id=>wwv_flow_imp.id(162703354547283242)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'716'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(155716460990936368)
+,p_list_item_display_sequence=>3000
+,p_list_item_link_text=>'Dev'
+,p_list_item_icon=>'fa-long-arrow-right'
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(131978763307579921)
+,p_list_item_display_sequence=>2090
+,p_list_item_link_text=>'Smart Document Search'
+,p_list_item_link_target=>'f?p=&APP_ID.:650:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-flashlight'
+,p_parent_list_item_id=>wwv_flow_imp.id(155716460990936368)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'650'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(144721271438178644)
+,p_list_item_display_sequence=>2220
+,p_list_item_link_text=>'Enterprise AI Assistant'
+,p_list_item_link_target=>'f?p=&APP_ID.:110:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-file-o'
+,p_parent_list_item_id=>wwv_flow_imp.id(155716460990936368)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'110'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(145254532322705732)
+,p_list_item_display_sequence=>2240
+,p_list_item_link_text=>'test_token'
+,p_list_item_link_target=>'f?p=&APP_ID.:9:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-file-o'
+,p_parent_list_item_id=>wwv_flow_imp.id(155716460990936368)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'9'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(124789290589504515)
+,p_list_item_display_sequence=>4000
+,p_list_item_link_text=>unistr('\D83D\DD2CTesting (POC) ')
+,p_list_item_icon=>'fa-angle-double-right'
+,p_parent_list_item_id=>wwv_flow_imp.id(155716460990936368)
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(124789833530508005)
+,p_list_item_display_sequence=>1009
+,p_list_item_link_text=>'HCM_ASSIGNMENT'
+,p_list_item_link_target=>'f?p=&APP_ID.:1030:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-table-pointer'
+,p_parent_list_item_id=>wwv_flow_imp.id(124789290589504515)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'1030'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(124802102145513047)
+,p_list_item_display_sequence=>1019
+,p_list_item_link_text=>'HCM_EMPLOYEE'
+,p_list_item_link_target=>'f?p=&APP_ID.:1031:&APP_SESSION.::&DEBUG.:::'
+,p_list_item_icon=>'fa-table-pointer'
+,p_parent_list_item_id=>wwv_flow_imp.id(124789290589504515)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'1031'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(124816757304517411)
+,p_list_item_display_sequence=>1029
+,p_list_item_link_text=>'HCM_LEAVE_BALANCE'
+,p_list_item_link_target=>'f?p=&APP_ID.:1033:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-table-pointer'
+,p_parent_list_item_id=>wwv_flow_imp.id(124789290589504515)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'1033'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(124826739760521755)
+,p_list_item_display_sequence=>1039
+,p_list_item_link_text=>'HCM_SALARY'
+,p_list_item_link_target=>'f?p=&APP_ID.:1034:&APP_SESSION.::&DEBUG.:::'
+,p_list_item_icon=>'fa-table-pointer'
+,p_parent_list_item_id=>wwv_flow_imp.id(124789290589504515)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'1034'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(164973070025005841)
+,p_list_item_display_sequence=>4110
+,p_list_item_link_text=>'Chat Calls Viewer'
+,p_list_item_link_target=>'f?p=&APP_ID.:722:&APP_SESSION.::&DEBUG.:::'
+,p_list_item_icon=>'fa-table-search'
+,p_parent_list_item_id=>wwv_flow_imp.id(155716460990936368)
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'722'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(162713787935714823)
+,p_list_item_display_sequence=>4010
+,p_list_item_link_text=>unistr('\2753Help')
+,p_list_item_icon=>'fa-question-circle-o'
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(162715154300816392)
+,p_list_item_display_sequence=>4020
+,p_list_item_link_text=>unistr('\D83D\DE80 Quick Start Guide')
+,p_list_item_link_target=>'https://github.com/AlaaEldin-AbdelMonem/oracle-apex-ai-assistant'
+,p_parent_list_item_id=>wwv_flow_imp.id(162713787935714823)
+,p_list_text_06=>'target="_blank"'
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(162715413620830417)
+,p_list_item_display_sequence=>4030
+,p_list_item_link_text=>unistr('\D83D\DCD6 User Documentation')
+,p_list_item_link_target=>'https://github.com/AlaaEldin-AbdelMonem/oracle-apex-ai-assistant/tree/main/docs'
+,p_parent_list_item_id=>wwv_flow_imp.id(162713787935714823)
+,p_list_text_06=>'target="_blank"'
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(162715737565905157)
+,p_list_item_display_sequence=>4040
+,p_list_item_link_text=>unistr('\D83D\DC1E Report Bug')
+,p_list_item_link_target=>'https://github.com/AlaaEldin-AbdelMonem/oracle-apex-ai-assistant/blob/main/CHANGELOG.md'
+,p_parent_list_item_id=>wwv_flow_imp.id(162713787935714823)
+,p_list_text_06=>'target="_blank"'
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(162716065650914567)
+,p_list_item_display_sequence=>4050
+,p_list_item_link_text=>unistr('\D83D\DCA1 Feature Requests')
+,p_list_item_link_target=>'https://github.com/AlaaEldin-AbdelMonem/oracle-apex-ai-assistant/blob/main/docs/discussions/feature-requests.md'
+,p_parent_list_item_id=>wwv_flow_imp.id(162713787935714823)
+,p_list_text_06=>'target="_blank"'
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(162716314697916471)
+,p_list_item_display_sequence=>4060
+,p_list_item_link_text=>unistr('\D83D\DEE1\FE0F Security')
+,p_list_item_link_target=>'https://github.com/AlaaEldin-AbdelMonem/oracle-apex-ai-assistant/blob/main/Security.md'
+,p_parent_list_item_id=>wwv_flow_imp.id(162713787935714823)
+,p_list_text_06=>'target="_blank"'
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(162716690870920035)
+,p_list_item_display_sequence=>4070
+,p_list_item_link_text=>unistr('\D83E\DD1D Contributing ')
+,p_list_item_link_target=>'https://github.com/AlaaEldin-AbdelMonem/oracle-apex-ai-assistant/blob/main/Contributing.md'
+,p_parent_list_item_id=>wwv_flow_imp.id(162713787935714823)
+,p_list_text_06=>'target="_blank"'
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(162716961822922242)
+,p_list_item_display_sequence=>4080
+,p_list_item_link_text=>unistr(' \D83D\DCAC Community (Slack/Discord)')
+,p_parent_list_item_id=>wwv_flow_imp.id(162713787935714823)
+,p_list_text_06=>'target="_blank"'
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(162717268416923581)
+,p_list_item_display_sequence=>4090
+,p_list_item_link_text=>unistr('\2139\FE0F About')
+,p_list_item_link_target=>'https://github.com/AlaaEldin-AbdelMonem/oracle-apex-ai-assistant/blob/main/README.md'
+,p_parent_list_item_id=>wwv_flow_imp.id(162713787935714823)
+,p_list_text_06=>'target="_blank"'
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp.component_end;
+end;
+/

@@ -1,0 +1,616 @@
+---
+- # ====== Classic Report Template: Chat SESSION Header ========
+  id: 149338202911536075
+  identification: 
+    name: Chat SESSION Header
+    identifier: CHAT_SESSION_HEADER
+    class: Standard
+
+  advanced: 
+    translatable: false
+
+  attributes: 
+    type: Named Column (row template)
+
+  report-template: 
+    top: ' '
+    bottom: ' '
+
+  row-template-1: 
+    template: |
+      <style>
+      /* SESSION HEADER BAR - APEX THEME COLORS */
+      .session-header-bar {
+          background-color: var(--ut-component-background-color, #f8f9fa);
+          border-bottom: 1px solid var(--ut-component-border-color, #dee2e6);
+          padding: 12px 20px;
+          margin-bottom: 16px;
+          border-radius: 4px;
+      }
+      
+      .session-header-content {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 16px;
+      }
+      
+      .session-title-container {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex: 1;
+          min-width: 0;
+      }
+      
+      .session-title-display {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex: 1;
+          min-width: 0;
+      }
+      
+      .project-badge {
+          flex-shrink: 0;
+          max-width: 200px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+      }
+      
+      .separator {
+          color: var(--ut-body-text-color, #6c757d);
+          font-weight: 300;
+          flex-shrink: 0;
+      }
+      
+      .session-title-text {
+          font-size: 16px;
+          font-weight: 600;
+          color: var(--ut-body-title-text-color, #212529);
+          flex: 1;
+          min-width: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          padding: 4px 8px;
+      }
+      
+      .session-title-edit {
+          flex: 1;
+          min-width: 200px;
+          font-size: 16px;
+          font-weight: 600;
+      }
+      
+      .session-edit-btn {
+          opacity: 0.3;
+          transition: opacity 0.2s;
+      }
+      
+      .session-title-container:hover .session-edit-btn {
+          opacity: 1;
+      }
+      
+      /* APEX MENU STYLING */
+      .apex-menu {
+          position: absolute;
+          top: calc(100% + 8px);
+          right: 0;
+          min-width: 220px;
+          background: var(--ut-component-background-color, #ffffff);
+          border: 1px solid var(--ut-component-border-color, #dee2e6);
+          border-radius: 4px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          z-index: 1000;
+          list-style: none;
+          margin: 0;
+          padding: 8px 0;
+      }
+      
+      .apex-menu-item {
+          margin: 0;
+      }
+      
+      .apex-menu-link {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 10px 16px;
+          color: var(--ut-body-text-color, #212529);
+          text-decoration: none;
+          transition: background-color 0.15s;
+          cursor: pointer;
+      }
+      
+      .apex-menu-link:hover {
+          background-color: var(--ut-component-highlight-background-color, #f1f3f5);
+          text-decoration: none;
+      }
+      
+      .apex-menu-link .t-Icon {
+          width: 16px;
+          text-align: center;
+      }
+      
+      .apex-menu-item-danger .apex-menu-link {
+          color: var(--ut-palette-danger, #dc3545);
+      }
+      
+      .apex-menu-item-danger .apex-menu-link:hover {
+          background-color: var(--ut-palette-danger-bg, #f8d7da);
+      }
+      
+      .apex-menu-separator {
+          height: 1px;
+          background-color: var(--ut-component-border-color, #dee2e6);
+          margin: 8px 0;
+      }
+      
+      @media (max-width: 768px) {
+          .session-header-content {
+              flex-direction: column;
+              align-items: flex-start;
+              gap: 12px;
+          }
+          .project-badge {
+              max-width: 150px;
+          }
+      }
+      </style>
+      
+      
+      <!-- SESSION HEADER HTML -->
+      <div class="session-header-bar">
+          <div class="session-header-content">
+      
+              <div class="session-title-container">
+      
+                  <span class="session-title-display" 
+                        data-session-id="#CHAT_SESSION_ID#"
+                        data-project-id="#CHAT_PROJECT_ID#">
+      
+                      <span class="project-badge t-Badge t-Badge--info" 
+                            title="Project: #CHAT_PROJECT_TITLE#">
+                          <span class="t-Badge-label">📁 #CHAT_PROJECT_TITLE#</span>
+                      </span>
+      
+                      <span class="separator">&nbsp;›&nbsp;</span>
+      
+                      <span id="sessionTitle_#CHAT_SESSION_ID#" 
+                            class="session-title-text">
+                          #CHAT_SESSION_TITLE#
+                      </span>
+      
+                      <input type="text" 
+                             id="sessionTitleEdit_#CHAT_SESSION_ID#"
+                             class="session-title-edit apex-item-text"
+                             value="#CHAT_SESSION_TITLE#"
+                             style="display:none;"
+                             data-session-id="#CHAT_SESSION_ID#" />
+                  </span>
+      
+                  <button class="session-edit-btn t-Button t-Button--noLabel t-Button--icon t-Button--small"
+                          type="button"
+                          title="Edit session title"
+                          onclick="chatSession.toggleEditMode('#CHAT_SESSION_ID#');">
+                      <span class="t-Icon fa fa-pencil"></span>
+                  </button>
+      
+                  <button class="session-save-btn t-Button t-Button--noLabel t-Button--icon t-Button--small t-Button--success"
+                          id="saveBtn_#CHAT_SESSION_ID#"
+                          type="button"
+                          style="display:none;"
+                          onclick="chatSession.saveSessionTitle('#CHAT_SESSION_ID#');">
+                      <span class="t-Icon fa fa-check"></span>
+                  </button>
+      
+                  <button class="session-cancel-btn t-Button t-Button--noLabel t-Button--icon t-Button--small"
+                          id="cancelBtn_#CHAT_SESSION_ID#"
+                          type="button"
+                          style="display:none;"
+                          onclick="chatSession.cancelEdit('#CHAT_SESSION_ID#');">
+                      <span class="t-Icon fa fa-times"></span>
+                  </button>
+              </div>
+      
+              <div class="session-actions-menu">
+                  <button class="t-Button t-Button--noLabel t-Button--icon session-menu-btn"
+                          type="button"
+                          onclick="chatSession.toggleMenu('#CHAT_SESSION_ID#');">
+                      <span class="t-Icon fa fa-ellipsis-v"></span>
+                  </button>
+              </div>
+      
+              <ul class="apex-menu"
+                  id="sessionMenuList_#CHAT_SESSION_ID#"
+                  style="display:none;">
+      
+       
+                  <li class="apex-menu-item">
+                      <a href="#" class="apex-menu-link" data-action="copy-title">
+                          <span class="t-Icon fa fa-copy"></span>
+                          Copy Title
+                      </a>
+                  </li>
+      
+                  <li class="apex-menu-item">
+                      <a href="#" class="apex-menu-link" data-action="report-session-issue" data-session-id="#CHAT_SESSION_ID#">
+                          <span class="t-Icon fa fa-flag" aria-hidden="true"></span>
+                          Report Session Issue
+                      </a>
+                  </li>
+      
+                  <li class="apex-menu-item">
+                      <a href="#" class="apex-menu-link" data-action="export-session">
+                          <span class="t-Icon fa fa-download"></span>
+                          Export Conversation
+                      </a>
+                  </li>
+      
+                  <li class="apex-menu-item">
+                      <a href="#" class="apex-menu-link" data-action="reassign-project">
+                          <span class="t-Icon fa fa-folder-open"></span>
+                          Reassign to Project
+                      </a>
+                  </li>
+      
+                  <li class="apex-menu-separator"></li>
+      
+                  <li class="apex-menu-item apex-menu-item-danger">
+                      <a href="#" class="apex-menu-link" data-action="clear-session">
+                          <span class="t-Icon fa fa-trash"></span>
+                          Clear Session
+                      </a>
+                  </li>
+      
+              </ul>
+      
+          </div>
+      </div>
+      
+    condition: 0
+
+- # ====== Classic Report Template: ax =========================
+  id: 149347685954812285
+  identification: 
+    name: ax
+    identifier: AXA
+    class: Standard
+
+  advanced: 
+    translatable: false
+
+  attributes: 
+    type: Named Column (row template)
+
+  report-template: 
+    top: ' '
+    bottom: ' '
+
+  row-template-1: 
+    template: |
+      <style>
+      /* ================================
+         SESSION HEADER COMPONENT STYLES
+         ================================= */
+      .session-header-bar {
+          background: #fff;
+          border-bottom: 1px solid #d9d9d9;
+          padding: 8px 12px;
+          display: flex;
+          align-items: center;
+          width: 100%;
+      }
+      
+      .session-header-content {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+      }
+      
+      .session-title-container {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+      }
+      
+      .session-title-text {
+          font-size: 15px;
+          font-weight: 500;
+      }
+      
+      .session-title-edit {
+          padding: 2px 6px;
+          font-size: 14px !important;
+      }
+      
+      .separator {
+          color: #777;
+          font-weight: 600;
+      }
+      
+      .session-actions-menu {
+          position: relative;
+      }
+      
+      .apex-menu {
+          position: absolute;
+          right: 0;
+          top: 30px;
+          background: #fff;
+          border-radius: 4px;
+          border: 1px solid #ccc;
+          min-width: 200px;
+          padding: 4px 0;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+          z-index: 9999;
+      }
+      
+      .apex-menu-item {
+          list-style: none;
+      }
+      
+      .apex-menu-link {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 6px 12px;
+          color: #333;
+          text-decoration: none;
+      }
+      
+      .apex-menu-link:hover {
+          background: #f0f0f0;
+      }
+      
+      .apex-menu-item-danger .apex-menu-link {
+          color: #d10000;
+      }
+      
+      .apex-menu-item-danger .apex-menu-link:hover {
+          background: #ffe6e6;
+      }
+      
+      .apex-menu-separator {
+          border-top: 1px solid #ddd;
+          margin: 3px 0;
+      }
+      </style>
+      
+      <!-- ================================
+           SESSION HEADER COMPONENT HTML
+           ================================ -->
+      <div class="session-header-bar">
+          <div class="session-header-content">
+      
+              <!-- Left: Project >> Session Title -->
+              <div class="session-title-container">
+      
+                  <span class="session-title-display"
+                        data-session-id="#CHAT_SESSION_ID#"
+                        data-project-id="#CHAT_PROJECT_ID#">
+      
+                      <!-- PROJECT BADGE -->
+                      <span class="project-badge t-Badge t-Badge--info"
+                            title="Project: #CHAT_PROJECT_TITLE#">
+                          <span class="t-Badge-label">📁 #CHAT_PROJECT_TITLE#</span>
+                      </span>
+      
+                      <span class="separator">›</span>
+      
+                      <!-- SESSION TITLE DISPLAY -->
+                      <span id="sessionTitle_#CHAT_SESSION_ID#"
+                            class="session-title-text">
+                          #CHAT_SESSION_TITLE#
+                      </span>
+      
+                      <!-- HIDDEN EDIT FIELD -->
+                      <input type="text"
+                             id="sessionTitleEdit_#CHAT_SESSION_ID#"
+                             class="session-title-edit apex-item-text"
+                             value="#CHAT_SESSION_TITLE#"
+                             style="display:none;"
+                             data-session-id="#CHAT_SESSION_ID#">
+                  </span>
+      
+                  <!-- Edit Button -->
+                  <button class="session-edit-btn t-Button t-Button--noLabel t-Button--icon t-Button--small"
+                          type="button"
+                          title="Edit session title"
+                          data-session-id="#CHAT_SESSION_ID#"
+                          onclick="toggleEditMode('#CHAT_SESSION_ID#')">
+                      <span class="t-Icon fa fa-pencil"></span>
+                  </button>
+      
+                  <!-- Save Button -->
+                  <button class="session-save-btn t-Button t-Button--noLabel t-Button--icon t-Button--small t-Button--success"
+                          type="button"
+                          title="Save"
+                          id="saveBtn_#CHAT_SESSION_ID#"
+                          style="display:none;"
+                          data-session-id="#CHAT_SESSION_ID#">
+                      <span class="t-Icon fa fa-check"></span>
+                  </button>
+      
+                  <!-- Cancel Button -->
+                  <button class="session-cancel-btn t-Button t-Button--noLabel t-Button--icon t-Button--small"
+                          type="button"
+                          title="Cancel"
+                          id="cancelBtn_#CHAT_SESSION_ID#"
+                          style="display:none;"
+                          onclick="cancelEdit('#CHAT_SESSION_ID#')">
+                      <span class="t-Icon fa fa-times"></span>
+                  </button>
+              </div>
+      
+              <!-- Right: Actions Menu -->
+              <div class="session-actions-menu">
+                  <button class="t-Button t-Button--noLabel t-Button--icon"
+                          type="button"
+                          id="sessionMenu_#CHAT_SESSION_ID#"
+                          aria-label="Session options"
+                          onclick="toggleMenu('#CHAT_SESSION_ID#')">
+                      <span class="t-Icon fa fa-ellipsis-v"></span>
+                  </button>
+      
+                  <!-- Dropdown Menu -->
+                  <ul class="apex-menu" id="sessionMenuList_#CHAT_SESSION_ID#" style="display:none;">
+                      <li class="apex-menu-item">
+                          <a href="#" class="apex-menu-link" data-action="edit-title" data-session-id="#CHAT_SESSION_ID#">
+                              <span class="t-Icon fa fa-pencil"></span>
+                              Edit Session Title
+                          </a>
+                      </li>
+      
+                      <li class="apex-menu-item">
+                          <a href="#" class="apex-menu-link" data-action="copy-title" data-session-id="#CHAT_SESSION_ID#">
+                              <span class="t-Icon fa fa-copy"></span>
+                              Copy Title
+                          </a>
+                      </li>
+      
+                      <li class="apex-menu-item">
+                          <a href="#REPORT_ISSUE_URL#" class="apex-menu-link">
+                              <span class="t-Icon fa fa-flag"></span>
+                              Report Session Issue
+                          </a>
+                      </li>
+      
+                      <li class="apex-menu-item">
+                          <a href="#" class="apex-menu-link" data-action="export-session" data-session-id="#CHAT_SESSION_ID#">
+                              <span class="t-Icon fa fa-download"></span>
+                              Export Conversation
+                          </a>
+                      </li>
+      
+                      <li class="apex-menu-item">
+                          <a href="#" class="apex-menu-link" data-action="reassign-project" data-session-id="#CHAT_SESSION_ID#">
+                              <span class="t-Icon fa fa-folder-open"></span>
+                              Reassign to Project
+                          </a>
+                      </li>
+      
+                      <li class="apex-menu-separator"></li>
+      
+                      <li class="apex-menu-item apex-menu-item-danger">
+                          <a href="#" class="apex-menu-link" data-action="clear-session" data-session-id="#CHAT_SESSION_ID#">
+                              <span class="t-Icon fa fa-trash"></span>
+                              Clear Session
+                          </a>
+                      </li>
+                  </ul>
+              </div>
+      
+          </div>
+      </div>
+      
+    condition: 0
+
+- # ====== Classic Report Template: ChatCalls Region ===========
+  id: 151729740325745780
+  identification: 
+    name: ChatCalls Region
+    identifier: CHATCALLS_REGION
+    class: Standard
+
+  advanced: 
+    translatable: true
+
+  attributes: 
+    type: Named Column (row template)
+
+  report-template: 
+    top: ' <div class="chat-history-container" id="chatHistoryContainer">'
+    bottom: ' </div>'
+
+  row-template-1: 
+    template: |
+      <div class="chatCall-wrapper" data-chatcall-id="#CALL_ID#">
+          <div class="chatCall-card">
+      
+              <div class="chatCall-header">
+                  <span class="chatCall-domainBadge">#CONTEXT_DOMAIN_NAME#</span>
+                  <span class="chatCall-regen-flag">#REGEN_TEXT#</span>
+                  <span class="chatCall-rating">#RATING_ICON#</span>
+                  <span class="chatCall-time">#DISPLAY_DATE#</span>
+      
+                  <!-- ⋮ MENU -->
+                  <div class="chatCall-more">
+                      <span class="chatCall-moreBtn" role="button" aria-haspopup="true">⋮</span>
+      
+                      <div class="chatCall-moreDropdown">
+                          <button type="button" class="chatCall-menuItem chatCall-copyBtn"  >📋 Copy    </button>
+                          <button type="button" class="chatCall-menuItem chatCall-exportBtn">💾 Export  </button>
+                          <button type="button" class="chatCall-menuItem chatCall-reportBtn">🚨 Report </button>
+                          <button type="button" class="chatCall-menuItem chatCall-deleteBtn">🗑 Delete  </button>
+                      </div>
+                  </div>
+              </div>
+      
+              <div class="chatCall-content">
+                  <div class="chatCall-userText">🧑 #USER_PROMPT#</div>
+                  <div class="chatCall-assistantText">✨ #RESPONSE_TEXT#</div>
+              </div>
+      
+              <div class="chatCall-metadataToggle">Details ▼</div>
+      
+              <div class="chatCall-metadata">
+                  <div>Tokens: #TOKENS_TOTAL# (in #TOKENS_INPUT# / out #TOKENS_OUTPUT#)</div>
+                  <div>Latency: #PROCESSING_TIME_MS# ms</div>
+                  <div>RAG Docs: #RAG_DOC_COUNT#</div>
+              </div>
+      
+          </div>
+      </div>
+      
+    condition: 0
+
+- # ====== Classic Report Template: ChatHistory Region =========
+  id: 155681777593051477
+  identification: 
+    name: ChatHistory Region
+    identifier: CHATHISTORY_REGION
+    class: Standard
+
+  advanced: 
+    translatable: true
+
+  attributes: 
+    type: Named Column (row template)
+
+  report-template: 
+    top: ' <div class="chat-history-container" id="chatHistoryContainer">'
+    bottom: ' </div>'
+
+  row-template-1: 
+    template: |
+      <div class="chat-turn">
+      
+        <!-- USER -->
+        <div class="chat-line user-line">
+          <span class="chat-icon">👤</span>
+      
+          <div class="chat-bubble user-bubble">
+            #USER_PROMPT#
+          </div>
+      
+          <div class="chat-meta-right">
+            <span class="chat-time">#DB_CREATED_AT#</span>
+            <span class="chat-menu disabled">⋯</span>
+          </div>
+        </div>
+      
+        <!-- ASSISTANT -->
+        <div class="chat-line ai-line">
+          <span class="chat-icon">🤖</span>
+      
+          <div class="chat-bubble ai-bubble">
+            #RESPONSE_TEXT#
+          </div>
+        </div>
+      
+      </div>
+    condition: 0
+

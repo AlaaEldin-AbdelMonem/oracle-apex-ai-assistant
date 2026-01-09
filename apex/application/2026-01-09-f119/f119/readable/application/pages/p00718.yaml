@@ -1,0 +1,2168 @@
+---
+# ====== Page: Debug Log Viewer ==============================
+id: 718
+identification: 
+  name: Debug Log Viewer
+  alias: DEBUG-LOG-VIEWER1
+  title: Debug Log Viewer
+
+appearance: 
+  page-mode: Normal
+  page-template: Left Side Column
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+javascript: 
+  execute-when-page-loads: |
+    (function () {
+      const region = apex.jQuery("#logViewerStaticId");
+    
+      region.on("apexafterrefresh", function () {
+        region.find("tbody tr").each(function () {
+          const levelCell = apex.jQuery(this).find("td[headers='C302138586923051728']");
+          const txt = levelCell.text();
+    
+          if (txt.includes("(1)")) this.dataset.level = "1";
+          else if (txt.includes("(2)")) this.dataset.level = "2";
+          else if (txt.includes("(3)")) this.dataset.level = "3";
+          else if (txt.includes("(4)")) this.dataset.level = "4";
+        });
+      });
+    })();
+    
+
+css: 
+  inline: |
+    /* ===== Row Coloring ===== */
+    #logViewerStaticId tr[data-level="1"] {
+      background-color: #fff5f5;
+    }
+    
+    #logViewerStaticId tr[data-level="2"] {
+      background-color: #fff7ed;
+    }
+    
+    #logViewerStaticId tr[data-level="3"] {
+      background-color: #f0f9ff;
+    }
+    
+    #logViewerStaticId tr[data-level="4"] {
+      background-color: #f0fdf4;
+    }
+    
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: btn =========================================
+  id: 163909598364754820
+  identification: 
+    name: btn
+    type: Static Content
+
+  layout: 
+    sequence: 160
+    parent-region: filters # 300494908458382506
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-ButtonRegion--noPadding
+    - t-ButtonRegion--noUI
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: filters =====================================
+  id: 300494908458382506
+  identification: 
+    name: filters
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_02
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--removeHeader js-removeLandmark
+    - t-Region--accent15
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Debug Log Viewer ============================
+  id: 302137048978051684
+  identification: 
+    name: Debug Log Viewer
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select LOG_ID,
+             LOG_TS,
+             DEBUG_LEVEL,
+             APP_ID,
+             USER_ID,
+             SESSION_ID,
+             SCOPE_LEVEL,
+             MODULE_NAME,
+             PROCEDURE_NAME,
+             TRACE_ID,
+             MESSAGE,
+             EXTRA_DATA,
+             PAGE_ID,
+             -- Mapping levels to APEX Universal Theme status classes
+             CASE debug_level 
+                  WHEN 1 THEN 'log-error'
+                  WHEN 2 THEN 'log-warn'
+                  WHEN 3 THEN 'log-info'
+                  WHEN 4 THEN 'log-debug' 
+             END as ROW_CLASS  
+      
+      
+        from DEBUG_LOG
+        WHERE 1=1
+        AND ( trim(:P718_APP_ID)     IS NULL   OR app_id       = :P718_APP_ID )
+        AND ( trim(:P718_PAGE_ID)     IS NULL  OR PAGE_ID       = :P718_PAGE_ID )
+        AND  (:P718_USER_ID          IS NULL    OR user_id     =   TO_NUMBER( trim(:P718_USER_ID))    ) 
+        AND ( trim(:P718_SESSION_ID) IS NULL OR session_id  = :P718_SESSION_ID )
+        AND ( trim(:P718_MODULE )    IS NULL OR UPPER(module_name) LIKE '%' || UPPER(:P718_MODULE) || '%' )
+        AND ( trim(:P718_trace_ID)   IS NULL OR trace_id  =  :P718_TRACE_ID )
+        AND ( :P718_LEVEL      IS NULL OR debug_level <= TO_NUMBER( trim(:P718_LEVEL)) )
+        AND (
+        :P718_TIME_RANGE IS NULL
+        OR :P718_TIME_RANGE = 'ALL'
+      
+        OR ( :P718_TIME_RANGE = '5M'
+             AND log_ts >= SYSTIMESTAMP - INTERVAL '5' MINUTE )
+      
+        OR ( :P718_TIME_RANGE = '15M'
+             AND log_ts >= SYSTIMESTAMP - INTERVAL '15' MINUTE )
+      
+        OR ( :P718_TIME_RANGE = '1H'
+             AND log_ts >= SYSTIMESTAMP - INTERVAL '1' HOUR )
+      
+        OR ( :P718_TIME_RANGE = '24H'
+             AND log_ts >= SYSTIMESTAMP - INTERVAL '24' HOUR )
+      
+        OR ( :P718_TIME_RANGE = 'TODAY'
+             AND log_ts >= TRUNC(SYSDATE) )
+      
+        OR ( :P718_TIME_RANGE = 'YDAY'
+             AND log_ts >= TRUNC(SYSDATE) - 1
+             AND log_ts <  TRUNC(SYSDATE) )
+      
+        OR ( :P718_TIME_RANGE = '7D'
+             AND log_ts >= TRUNC(SYSDATE) - 7 )
+      )
+      
+      AND ( :P718_FROM_TS IS NULL    OR log_ts >= CAST(:P718_FROM_TS AS TIMESTAMP) )
+      AND ( :P718_TO_TS IS NULL  OR log_ts <  CAST(:P718_TO_TS AS TIMESTAMP)  + INTERVAL '1' DAY )
+      
+      AND (  :P718_MESSAGE_SEARCH IS NULL
+         OR INSTR(   UPPER(message),  UPPER(TRIM(:P718_MESSAGE_SEARCH))  ) > 0
+      )
+      
+       
+       ORDER BY
+        CASE WHEN :P718_SORT_DIR = 'ASC'  THEN log_id END ASC,
+        CASE WHEN :P718_SORT_DIR = 'DESC' THEN log_id END DESC 
+      
+       
+      
+    page-items-to-submit: 
+    - P718_APP_ID
+    - P718_SESSION_ID
+    - P718_MODULE
+    - P718_TRACE_ID
+    - P718_LEVEL
+    - P718_USER_ID
+    - P718_TIME_RANGE
+    - P718_FROM_TS
+    - P718_TO_TS
+    - P718_MESSAGE_SEARCH
+    - P718_SORT_DIR
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    row-css-classes: 
+    - '#ROW_CLASS#'
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: logViewerStaticId
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 302137106763051684
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+
+    messages: 
+      when-no-data-found: No data found.
+      when-more-data-found: 'The maximum row count for this report is #MAX_ROW_COUNT# rows.  Please apply a filter to reduce the number of records in your query.'
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+      csv-separator: ','
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 302143998573064613
+      identification: 
+        name: Primary Report
+        alias: 1427973
+
+    columns: 
+    - # ====== Column: ROW_CLASS ===================================
+      id: 162771908075500949
+      identification: 
+        column-name: ROW_CLASS
+        type: Hidden
+
+      heading: 
+        heading: Row Class
+
+      layout: 
+        sequence: 114
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PAGE_ID =====================================
+      id: 163910668693754831
+      identification: 
+        column-name: PAGE_ID
+        type: Plain Text (based on List of Values)
+
+      list-of-values: 
+        list-of-values: APP_PAGES_ALL # 163957443930745159
+
+      heading: 
+        heading: 'Page '
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 14
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Use Named List of Values to Filter Exact Match
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+    - # ====== Column: LOG_ID ======================================
+      id: 302137775036051723
+      identification: 
+        column-name: LOG_ID
+        type: Plain Text
+
+      heading: 
+        heading: Log ID
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 0
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: true
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: LOG_TS ======================================
+      id: 302138169914051726
+      identification: 
+        column-name: LOG_TS
+        type: Plain Text
+
+      heading: 
+        heading: Log Ts
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 104
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        format-mask: 'YYMMDD-HH24:MI:SS'
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DEBUG_LEVEL =================================
+      id: 302138586923051728
+      identification: 
+        column-name: DEBUG_LEVEL
+        type: Plain Text (based on List of Values)
+
+      list-of-values: 
+        list-of-values: DEBUG LEVEL (DEBUG_LEVEL) # 142783886284945216
+
+      heading: 
+        heading: Debug Level
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 3
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      column-formatting: 
+        html-expression: |
+          <span class="log-level log-level-#LEVEL_CODE#">
+            #DEBUG_LEVEL#
+          </span>
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Use Named List of Values to Filter Exact Match
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+    - # ====== Column: APP_ID ======================================
+      id: 302138977783051729
+      identification: 
+        column-name: APP_ID
+        type: Plain Text (based on List of Values)
+
+      list-of-values: 
+        list-of-values: APP LIST # 142784952100993911
+
+      heading: 
+        heading: Application
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 4
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Use Named List of Values to Filter Exact Match
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+    - # ====== Column: USER_ID =====================================
+      id: 302139364254051730
+      identification: 
+        column-name: USER_ID
+        type: Plain Text (based on List of Values)
+
+      list-of-values: 
+        list-of-values: USERS(USERID) # 142784559434972307
+
+      heading: 
+        heading: 'User '
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 24
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Use Named List of Values to Filter Exact Match
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+    - # ====== Column: SESSION_ID ==================================
+      id: 302139808777051731
+      identification: 
+        column-name: SESSION_ID
+        type: Plain Text
+
+      heading: 
+        heading: Session ID
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 44
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: SCOPE_LEVEL =================================
+      id: 302140186778051732
+      identification: 
+        column-name: SCOPE_LEVEL
+        type: Plain Text (based on List of Values)
+
+      list-of-values: 
+        list-of-values: DEBUG SCOPE (ID) # 163948941785212525
+
+      heading: 
+        heading: Scope Level
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 54
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Use Named List of Values to Filter Exact Match
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+    - # ====== Column: MODULE_NAME =================================
+      id: 302140584841051733
+      identification: 
+        column-name: MODULE_NAME
+        type: Plain Text (based on List of Values)
+
+      list-of-values: 
+        list-of-values: USER MODULES (DB PKGS) # 142785128474004023
+
+      heading: 
+        heading: Module Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 64
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Use Named List of Values to Filter Exact Match
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+    - # ====== Column: PROCEDURE_NAME ==============================
+      id: 302140967247051735
+      identification: 
+        column-name: PROCEDURE_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Procedure Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 74
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: MESSAGE =====================================
+      id: 302141845066051737
+      identification: 
+        column-name: MESSAGE
+        type: Plain Text
+
+      heading: 
+        heading: Message
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 84
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EXTRA_DATA ==================================
+      id: 302142227097051738
+      identification: 
+        column-name: EXTRA_DATA
+        type: Plain Text
+
+      heading: 
+        heading: Extra Data
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 94
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: None
+
+      enable-users-to: 
+        hide: true
+        sort: false
+        filter: true
+        highlight: true
+        control-break: false
+        aggregate: false
+        compute: false
+        chart: false
+        group-by: false
+        pivot: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: TRACE_ID ====================================
+      id: 302646867519208072
+      identification: 
+        column-name: TRACE_ID
+        type: Plain Text
+
+      heading: 
+        heading: Trace Id
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 34
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Debug Log Viewer
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+page-items: 
+- # ====== Page Item: P718_USER_ID =============================
+  id: 162771851133500948
+  identification: 
+    name: P718_USER_ID
+    type: Select List
+
+  label: 
+    label: User
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 60
+    region: filters # 300494908458382506
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: USERS(USERID) # 142784559434972307
+    display-extra-values: true
+    display-null-value: true
+    null-display-value: '--All Users---'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: v('G_USER_ID')
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P718_TIME_RANGE ==========================
+  id: 163907752590754802
+  identification: 
+    name: P718_TIME_RANGE
+    type: Select List
+
+  label: 
+    label: Time Range
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 120
+    region: filters # 300494908458382506
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Function Body returning SQL Query
+    language: PL/SQL
+    pl/sql-function-body-returning-sql-query: |
+      
+      select NAME, RETURNX from (
+      SELECT '5M' AS RETURNX, UNISTR('\23F2 ') || 'Last 5 minutes' AS NAME FROM DUAL
+      UNION ALL
+      SELECT '15M',   UNISTR('\23F2 ') || 'Last 15 minutes' FROM DUAL
+      UNION ALL
+      SELECT '1H',    UNISTR('\23F2 ') || 'Last hour' FROM DUAL
+      UNION ALL
+      SELECT '24H',   UNISTR('\23F2 ') || 'Last 24 hours' FROM DUAL
+      UNION ALL
+      SELECT 'TODAY', UNISTR('\23F2 ') || 'Today' FROM DUAL
+      UNION ALL
+      SELECT 'YDAY',  UNISTR('\23F2 ') || 'Yesterday' FROM DUAL
+      UNION ALL
+      SELECT '7D',    UNISTR('\23F2 ') || 'Last 7 days' FROM DUAL
+      UNION ALL
+      SELECT 'ALL',   UNISTR('\23F2 ') || 'All time' FROM DUAL
+      )
+    display-extra-values: true
+    display-null-value: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: ALL
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: |
+      Choose a quick time range.
+      Select All to enable custom From / To dates.
+
+- # ====== Page Item: P718_FROM_TS =============================
+  id: 163907886111754803
+  identification: 
+    name: P718_FROM_TS
+    type: Date Picker
+
+  label: 
+    label: From Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 100
+    region: filters # 300494908458382506
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    value-placeholder: '-- Any Date --'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P718_TO_TS ===============================
+  id: 163907962131754804
+  identification: 
+    name: P718_TO_TS
+    type: Date Picker
+
+  label: 
+    label: To Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 110
+    region: filters # 300494908458382506
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    value-placeholder: '-- Any Date --'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P718_MESSAGE_SEARCH ======================
+  id: 163908872579754813
+  identification: 
+    name: P718_MESSAGE_SEARCH
+    type: Text Field
+
+  label: 
+    label: Message Search
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 130
+    region: filters # 300494908458382506
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    value-placeholder: Searching for.......
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P718_SORT_DIR ============================
+  id: 163908933249754814
+  identification: 
+    name: P718_SORT_DIR
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 140
+    region: filters # 300494908458382506
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: DESC
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P718_PAGE_ID =============================
+  id: 163910537219754830
+  identification: 
+    name: P718_PAGE_ID
+    type: Select List
+
+  label: 
+    label: 'Page '
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 40
+    region: filters # 300494908458382506
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select page_title ||'('||page_name ||')' page_name,
+           page_id 
+      FROM apex_application_pages
+      WHERE application_id = :P718_APP_ID 
+       
+    display-extra-values: true
+    display-null-value: true
+    null-display-value: '-- All Pages --'
+
+  cascading-list-of-values: 
+    parent-item(s): 
+    - P718_APP_ID
+    items-to-submit: 
+    - P718_APP_ID
+    parent-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P718_APP_ID ==============================
+  id: 300500875799382539
+  identification: 
+    name: P718_APP_ID
+    type: Select List
+
+  label: 
+    label: Application
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 30
+    region: filters # 300494908458382506
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: APP LIST # 142784952100993911
+    display-extra-values: true
+    display-null-value: true
+    null-display-value: '--All Apps--'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Item
+    item: APP_ID
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P718_MODULE ==============================
+  id: 300500952740382540
+  identification: 
+    name: P718_MODULE
+    type: Select List
+
+  label: 
+    label: Module
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 70
+    region: filters # 300494908458382506
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: USER MODULES (DB PKGS) # 142785128474004023
+    display-extra-values: true
+    display-null-value: true
+    null-display-value: '-- All Modules --'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P718_SESSION_ID ==========================
+  id: 300501027971382541
+  identification: 
+    name: P718_SESSION_ID
+    type: Number Field
+
+  label: 
+    label: SESSION ID
+    alignment: Left
+
+  settings: 
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 50
+    region: filters # 300494908458382506
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    value-placeholder: '--All Sessions--'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P718_TRACE_ID ============================
+  id: 300501169296382542
+  identification: 
+    name: P718_TRACE_ID
+    type: Text Field
+
+  label: 
+    label: Trace Text
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 80
+    region: filters # 300494908458382506
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    value-placeholder: '--All Traces--'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P718_LEVEL ===============================
+  id: 300501390015382544
+  identification: 
+    name: P718_LEVEL
+    type: Select List
+
+  label: 
+    label: Level
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 90
+    region: filters # 300494908458382506
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: DEBUG LEVEL (DEBUG_LEVEL) # 142783886284945216
+    display-extra-values: true
+    display-null-value: true
+    null-display-value: '--All Levels--'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: Search ======================================
+  id: 159352206794971598
+  identification: 
+    button-name: Search
+    label: Search
+
+  layout: 
+    sequence: 10
+    region: btn # 163909598364754820
+    slot: PREVIOUS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    - t-Button--gapTop
+    icon: fa-search
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: clear =======================================
+  id: 160902948775492339
+  identification: 
+    button-name: clear
+    label: clear
+
+  layout: 
+    sequence: 10
+    region: btn # 163909598364754820
+    slot: PREVIOUS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    - t-Button--gapTop
+    icon: fa-eraser
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: sort ========================================
+  id: 163909086091754815
+  identification: 
+    button-name: sort
+    label: sort
+
+  layout: 
+    sequence: 10
+    region: btn # 163909598364754820
+    slot: PREVIOUS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--noUI
+    icon: fa-arrow-down
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+  advanced: 
+    static-id: BTN_TOGGLE_SORT
+
+  comments: 
+    comments: sort
+
+- # ====== Button: Purge_Log ===================================
+  id: 163943995759605796
+  identification: 
+    button-name: Purge_Log
+    label: Purge Log
+
+  layout: 
+    sequence: 10
+    region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--link
+    - t-Button--iconLeft
+    icon: fa-cut
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+dynamic-actions: 
+- # ====== Dynamic Action: Search ==============================
+  id: 159354954315971607
+  identification: 
+    name: Search
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: Search # 159352206794971598
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 159355492134971608
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Debug Log Viewer # 302137048978051684
+
+    execution: 
+      sequence: 10
+      event: Search # 159354954315971607
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: clear Search ========================
+  id: 160903137046492341
+  identification: 
+    name: clear Search
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: clear # 160902948775492339
+
+  actions: 
+  - # ====== Action: Clear =======================================
+    id: 160903298898492342
+    identification: 
+      action: Clear
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P718_APP_ID
+      - P718_SESSION_ID
+      - P718_MODULE
+      - P718_TRACE_ID
+      - P718_LEVEL
+      - P718_USER_ID
+      - P718_TIME_RANGE
+      - P718_FROM_TS
+      - P718_TO_TS
+      - P718_MESSAGE_SEARCH
+
+    execution: 
+      sequence: 10
+      event: clear Search # 160903137046492341
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Toggle Date Range-ALL ===============
+  id: 163908031815754805
+  identification: 
+    name: Toggle Date Range-ALL
+
+  execution: 
+    sequence: 30
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P718_TIME_RANGE
+
+  client-side-condition: 
+    type: Item != Value
+    item: P718_TIME_RANGE
+    value: ALL
+
+  actions: 
+  - # ====== Action: Disable =====================================
+    id: 163908163359754806
+    identification: 
+      action: Disable
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P718_FROM_TS
+      - ' P718_TO_TS'
+
+    execution: 
+      sequence: 20
+      event: Toggle Date Range-ALL # 163908031815754805
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+    client-side-condition: 
+      type: Item != Value
+      item: P718_TIME_RANGE
+      value: ALL
+
+  - # ====== Action: clear =======================================
+    id: 163908274249754807
+    identification: 
+      name: clear
+      action: Set Value
+
+    settings: 
+      set-type: Static Assignment
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P718_FROM_TS
+      - ' P718_TO_TS'
+
+    execution: 
+      sequence: 10
+      event: Toggle Date Range-ALL # 163908031815754805
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+    server-side-condition: 
+      type: Item != Value
+      item: P718_TIME_RANGE
+      value: ALL
+
+- # ====== Dynamic Action: Toggle Date Range-Not-ALL ===========
+  id: 163908556513754810
+  identification: 
+    name: Toggle Date Range-Not-ALL
+
+  execution: 
+    sequence: 40
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P718_TIME_RANGE
+
+  client-side-condition: 
+    type: Item = Value
+    item: P718_TIME_RANGE
+    value: ALL
+
+  actions: 
+  - # ====== Action: Enable ======================================
+    id: 163908761619754812
+    identification: 
+      action: Enable
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P718_FROM_TS
+      - ' P718_TO_TS'
+
+    execution: 
+      sequence: 20
+      event: Toggle Date Range-Not-ALL # 163908556513754810
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Toggle Sort Direction ===============
+  id: 163909116979754816
+  identification: 
+    name: Toggle Sort Direction
+
+  execution: 
+    sequence: 50
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: sort # 163909086091754815
+
+  actions: 
+  - # ====== Action: Set Value ===================================
+    id: 163909252231754817
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: JavaScript Expression
+      javascript-expression: "($v('P718_SORT_DIR') === 'DESC') ? 'ASC' : 'DESC'"
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P718_SORT_DIR
+
+    execution: 
+      sequence: 10
+      event: Toggle Sort Direction # 163909116979754816
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Refresh =====================================
+    id: 163909371768754818
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Debug Log Viewer # 302137048978051684
+
+    execution: 
+      sequence: 30
+      event: Toggle Sort Direction # 163909116979754816
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 163909410706754819
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        var dir = $v('P718_SORT_DIR');
+        var btn = $('#BTN_TOGGLE_SORT');
+        
+        btn.find('.fa')
+           .removeClass('fa-arrow-up fa-arrow-down')
+           .addClass(dir === 'ASC' ? 'fa-arrow-up' : 'fa-arrow-down');
+        
+        btn.attr(
+          'title',
+          dir === 'ASC' ? 'Oldest first' : 'Newest first'
+        );
+
+    execution: 
+      sequence: 20
+      event: Toggle Sort Direction # 163909116979754816
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: delete All log data =================
+  id: 163909749149754822
+  identification: 
+    name: delete All log data
+
+  execution: 
+    sequence: 60
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: Purge_Log # 163943995759605796
+
+  actions: 
+  - # ====== Action: Confirm =====================================
+    id: 163909810716754823
+    identification: 
+      action: Confirm
+
+    settings: 
+      title: Purge Log
+      message: |
+        All Log data will be lost? 
+        !!!!!!
+      style: Danger
+      icon: fa-warning
+      confirm-label: Confirm Purge
+      cancel-label: Cancel
+
+    execution: 
+      sequence: 10
+      event: delete All log data # 163909749149754822
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Execute Server-side Code ====================
+    id: 163909997990754824
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: |
+        delete DEBUG_LOG;
+        commit;
+
+    execution: 
+      sequence: 20
+      event: delete All log data # 163909749149754822
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Refresh =====================================
+    id: 163910125831754826
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Debug Log Viewer # 302137048978051684
+
+    execution: 
+      sequence: 30
+      event: delete All log data # 163909749149754822
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+

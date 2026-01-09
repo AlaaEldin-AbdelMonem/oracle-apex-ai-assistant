@@ -1,0 +1,1718 @@
+---
+- # ====== List: Navigation Menu ===============================
+  id: 123955114815486079
+  identification: 
+    name: Navigation Menu
+
+  subscription: 
+    version-number: 38951442099566
+
+  source: 
+    type: Static Values
+
+  entries: 
+  - # ====== Entry: 🏠Home =======================================
+    id: 123966843514486187
+    label: 
+      label: 🏠Home
+
+    icon: 
+      image/icon-css-classes: fa-home
+
+    layout: 
+      sequence: 10
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1:&SESSION.::&DEBUG.::::'
+        page: 1 # Home
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Chat History =================================
+    id: 123998210291353953
+    label: 
+      label: Chat History
+
+    icon: 
+      image/icon-css-classes: fa-history
+
+    layout: 
+      sequence: 120
+      parent-entry: '✨ My Assistant ' # 124964816089691055
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 150
+      - 151
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:150:&SESSION.::&DEBUG.::::'
+        page: 150 # Chat History
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: 🛡️Governance & Security ======================
+    id: 124058916656889575
+    label: 
+      label: 🛡️Governance & Security
+
+    icon: 
+      image/icon-css-classes: fa-angle-double-right
+
+    layout: 
+      sequence: 450
+
+    is-current: 
+      type: Target Page
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Policy Manager📜 =============================
+    id: 124103115755184670
+    label: 
+      label: Policy Manager📜
+
+    icon: 
+      image/icon-css-classes: fa-shield-alt
+
+    layout: 
+      sequence: 230
+      parent-entry: 🛡️Governance & Security # 124058916656889575
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 300
+      - 301
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:300:&SESSION.::&DEBUG.::::'
+        page: 300 # AI Governance - Policy Manager
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Redaction Rules🕵️ ============================
+    id: 124679048906841592
+    label: 
+      label: Redaction Rules🕵️
+
+    icon: 
+      image/icon-css-classes: fa-user-secret
+
+    layout: 
+      sequence: 250
+      parent-entry: 🛡️Governance & Security # 124058916656889575
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 400
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:400:&SESSION.::&DEBUG.::::'
+        page: 400 # Redaction Rules
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Governance Dashboard🖼️ =======================
+    id: 124702848842091093
+    label: 
+      label: Governance Dashboard🖼️
+
+    icon: 
+      image/icon-css-classes: fa-chart-pie
+
+    layout: 
+      sequence: 210
+      parent-entry: 🛡️Governance & Security # 124058916656889575
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 500
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:500:&SESSION.::&DEBUG.::::'
+        page: 500 # Governance Dashboard
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: ⚙️ Administration ============================
+    id: 124731010846446098
+    label: 
+      label: ⚙️ Administration
+
+    icon: 
+      image/icon-css-classes: fa-angle-double-right
+
+    layout: 
+      sequence: 500
+
+    is-current: 
+      type: Target Page
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: AI Parameters📐 ==============================
+    id: 124738113748468355
+    label: 
+      label: AI Parameters📐
+
+    icon: 
+      image/icon-css-classes: fa-table-pointer
+
+    layout: 
+      sequence: 310
+      parent-entry: ⚙️ Administration # 124731010846446098
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 1000
+      - 1001
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1000:&SESSION.::&DEBUG.::::'
+        page: 1000 # AI Parameters
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Alert Threshold🚨 ============================
+    id: 124755050624481551
+    label: 
+      label: Alert Threshold🚨
+
+    icon: 
+      image/icon-css-classes: fa-table-pointer
+
+    layout: 
+      sequence: 320
+      parent-entry: ⚙️ Administration # 124731010846446098
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 1010
+      - 1011
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1010:&SESSION.::&DEBUG.::::'
+        page: 1010 # Alert Threshold
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Models Configuration 🤖 ======================
+    id: 124777039716490293
+    label: 
+      label: Models Configuration 🤖
+
+    icon: 
+      image/icon-css-classes: fa-table-pointer
+
+    layout: 
+      sequence: 330
+      parent-entry: ⚙️ Administration # 124731010846446098
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 1020
+      - 1021
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1020:&SESSION.::&DEBUG.::::'
+        page: 1020 # Models
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: 🔬Testing (POC)  =============================
+    id: 124789290589504515
+    label: 
+      label: '🔬Testing (POC) '
+
+    icon: 
+      image/icon-css-classes: fa-angle-double-right
+
+    layout: 
+      sequence: 4000
+      parent-entry: Dev # 155716460990936368
+
+    is-current: 
+      type: Target Page
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: HCM_ASSIGNMENT ===============================
+    id: 124789833530508005
+    label: 
+      label: HCM_ASSIGNMENT
+
+    icon: 
+      image/icon-css-classes: fa-table-pointer
+
+    layout: 
+      sequence: 1009
+      parent-entry: '🔬Testing (POC) ' # 124789290589504515
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 1030
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1030:&SESSION.::&DEBUG.::::'
+        page: 1030 # HCM_ASSIGNMENT
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: HCM_EMPLOYEE =================================
+    id: 124802102145513047
+    label: 
+      label: HCM_EMPLOYEE
+
+    icon: 
+      image/icon-css-classes: fa-table-pointer
+
+    layout: 
+      sequence: 1019
+      parent-entry: '🔬Testing (POC) ' # 124789290589504515
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 1031
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1031:&APP_SESSION.::&DEBUG.:::'
+        page: 1031 # HCM_EMPLOYEE
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: HCM_LEAVE_BALANCE ============================
+    id: 124816757304517411
+    label: 
+      label: HCM_LEAVE_BALANCE
+
+    icon: 
+      image/icon-css-classes: fa-table-pointer
+
+    layout: 
+      sequence: 1029
+      parent-entry: '🔬Testing (POC) ' # 124789290589504515
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 1033
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1033:&SESSION.::&DEBUG.::::'
+        page: 1033 # HCM_LEAVE_BALANCE
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: HCM_SALARY ===================================
+    id: 124826739760521755
+    label: 
+      label: HCM_SALARY
+
+    icon: 
+      image/icon-css-classes: fa-table-pointer
+
+    layout: 
+      sequence: 1039
+      parent-entry: '🔬Testing (POC) ' # 124789290589504515
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 1034
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1034:&APP_SESSION.::&DEBUG.:::'
+        page: 1034 # HCM_SALARY
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: User Roles👤 =================================
+    id: 124846296447531050
+    label: 
+      label: User Roles👤
+
+    icon: 
+      image/icon-css-classes: fa-users
+
+    layout: 
+      sequence: 1049
+      parent-entry: ⚙️ Administration # 124731010846446098
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 1040
+      - 1041
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1040:&SESSION.::&DEBUG.::::'
+        page: 1040 # User Roles
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: RAG Embeddigns💎 =============================
+    id: 124887239133551257
+    label: 
+      label: RAG Embeddigns💎
+
+    icon: 
+      image/icon-css-classes: fa-table-pointer
+
+    layout: 
+      sequence: 1069
+      parent-entry: ⚙️ Administration # 124731010846446098
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 1060
+      - 1061
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1060:&SESSION.::&DEBUG.::::'
+        page: 1060 # RAG Embeddigns
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: 📈 Monitor  ==================================
+    id: 124919244028605713
+    label: 
+      label: '📈 Monitor '
+
+    icon: 
+      image/icon-css-classes: fa-angle-double-right
+
+    layout: 
+      sequence: 2100
+      parent-entry: 🔭Operations & Insights # 162703354547283242
+
+    is-current: 
+      type: Target Page
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Model Usage ==================================
+    id: 124928726292612959
+    label: 
+      label: Model Usage
+
+    icon: 
+      image/icon-css-classes: fa-table-pointer
+
+    layout: 
+      sequence: 2010
+      parent-entry: '📈 Monitor ' # 124919244028605713
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 1080
+      - 1081
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1080:&APP_SESSION.::&DEBUG.:::'
+        page: 1080 # Model Usage
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: ✨ My Assistant  =============================
+    id: 124964816089691055
+    label: 
+      label: '✨ My Assistant '
+
+    icon: 
+      image/icon-css-classes: fa-angle-double-right
+
+    layout: 
+      sequence: 100
+
+    is-current: 
+      type: Target Page
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: 📑Documents  =================================
+    id: 125000658324780418
+    label: 
+      label: '📑Documents '
+
+    icon: 
+      image/icon-css-classes: fa-angle-double-right
+
+    layout: 
+      sequence: 150
+      parent-entry: 📚Knowledge Base # 162701158040194161
+
+    is-current: 
+      type: Target Page
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Document Dashboard🖼️ =========================
+    id: 125438383038650194
+    label: 
+      label: Document Dashboard🖼️
+
+    icon: 
+      image/icon-css-classes: fa-ai-sparkle-enhance-color
+
+    layout: 
+      sequence: 2030
+      parent-entry: '📑Documents ' # 125000658324780418
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 600
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:600:&SESSION.::&DEBUG.::::'
+        page: 600 # Document Dashboard
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Document Library📖 ===========================
+    id: 125512252250396626
+    label: 
+      label: Document Library📖
+
+    icon: 
+      image/icon-css-classes: fa-book
+
+    layout: 
+      sequence: 2040
+      parent-entry: '📑Documents ' # 125000658324780418
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 610
+      - 611
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:610:&SESSION.::&DEBUG.::::'
+        page: 610 # Document Library
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Chunking Analytics⚙️ =========================
+    id: 125723551001710320
+    label: 
+      label: Chunking Analytics⚙️
+
+    icon: 
+      image/icon-css-classes: fa-dashboard
+
+    layout: 
+      sequence: 2070
+      parent-entry: '📑Documents ' # 125000658324780418
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 655
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:655:&SESSION.::&DEBUG.::::'
+        page: 655 # Chunking Analytics
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Strategy Manager🗺️ ===========================
+    id: 125780925992830156
+    label: 
+      label: Strategy Manager🗺️
+
+    icon: 
+      image/icon-css-classes: fa-table-pointer
+
+    layout: 
+      sequence: 2080
+      parent-entry: '📑Documents ' # 125000658324780418
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 665
+      - 666
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:665:&SESSION.::&DEBUG.::::'
+        page: 665 # Strategy Manager
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Smart Document Search ========================
+    id: 131978763307579921
+    label: 
+      label: Smart Document Search
+
+    icon: 
+      image/icon-css-classes: fa-flashlight
+
+    layout: 
+      sequence: 2090
+      parent-entry: Dev # 155716460990936368
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 650
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:650:&SESSION.::&DEBUG.::::'
+        page: 650 # Smart Document Search
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Registry Assigned Roles👤 ====================
+    id: 140871088653818189
+    label: 
+      label: Registry Assigned Roles👤
+
+    icon: 
+      image/icon-css-classes: fa-layout-header-sidebar-left
+
+    layout: 
+      sequence: 2120
+      parent-entry: ⚙️ Administration # 124731010846446098
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 410
+      - 411
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:410:&SESSION.::&DEBUG.::::'
+        page: 410 # Registry Assigned Roles
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: 🧩Context & Intent ===========================
+    id: 140963052215374240
+    label: 
+      label: 🧩Context & Intent
+
+    icon: 
+      image/icon-css-classes: fa-angle-double-right
+
+    layout: 
+      sequence: 400
+      parent-entry: 📚Knowledge Base # 162701158040194161
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:420:&SESSION.::&DEBUG.::::'
+        page: 420 # Context Dashboard
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Context Dashboard🖼️ ==========================
+    id: 140963421540388053
+    label: 
+      label: Context Dashboard🖼️
+
+    icon: 
+      image/icon-css-classes: fa-file-o
+
+    layout: 
+      sequence: 2130
+      parent-entry: 🧩Context & Intent # 140963052215374240
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 420
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:420:&SESSION.::&DEBUG.::::'
+        page: 420 # Context Dashboard
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Intention Domains🎯 ==========================
+    id: 140987639349402886
+    label: 
+      label: Intention Domains🎯
+
+    icon: 
+      image/icon-css-classes: fa-table-pointer
+
+    layout: 
+      sequence: 2140
+      parent-entry: 🧩Context & Intent # 140963052215374240
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 422
+      - 423
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:422:&SESSION.::&DEBUG.::::'
+        page: 422 # Intentions(Domains) List
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Data Sources Registry🔗 ======================
+    id: 141040144213429609
+    label: 
+      label: Data Sources Registry🔗
+
+    icon: 
+      image/icon-css-classes: fa-table-pointer
+
+    layout: 
+      sequence: 2150
+      parent-entry: 🧩Context & Intent # 140963052215374240
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 424
+      - 425
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:424:&SESSION.::&DEBUG.::::'
+        page: 424 # Data Source Registration
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Intention & Data Sources =====================
+    id: 141075852694441658
+    label: 
+      label: Intention & Data Sources
+
+    icon: 
+      image/icon-css-classes: fa-range-chart-area
+
+    layout: 
+      sequence: 2160
+      parent-entry: 🧩Context & Intent # 140963052215374240
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 426
+      - 427
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:426:&SESSION.::&DEBUG.::::'
+        page: 426 # Domains & Data Sources
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Data Sources & Roles =========================
+    id: 141099210941451060
+    label: 
+      label: Data Sources & Roles
+
+    icon: 
+      image/icon-css-classes: fa-table-pointer
+
+    layout: 
+      sequence: 2170
+      parent-entry: 🧩Context & Intent # 140963052215374240
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 428
+      - 429
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:428:&SESSION.::&DEBUG.::::'
+        page: 428 # Data Sources/Roles
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Manage Roles👥 ===============================
+    id: 141733037618812854
+    label: 
+      label: Manage Roles👥
+
+    icon: 
+      image/icon-css-classes: fa-users-alt
+
+    layout: 
+      sequence: 2180
+      parent-entry: 🛡️Governance & Security # 124058916656889575
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 350
+      - 351
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:350:&SESSION.::&DEBUG.::::'
+        page: 350 # Roles
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Enterprise AI Assistant ======================
+    id: 144721271438178644
+    label: 
+      label: Enterprise AI Assistant
+
+    icon: 
+      image/icon-css-classes: fa-file-o
+
+    layout: 
+      sequence: 2220
+      parent-entry: Dev # 155716460990936368
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 110
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:110:&SESSION.::&DEBUG.::::'
+        page: 110 # Enterprise AI Assistant
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: test_token ===================================
+    id: 145254532322705732
+    label: 
+      label: test_token
+
+    icon: 
+      image/icon-css-classes: fa-file-o
+
+    layout: 
+      sequence: 2240
+      parent-entry: Dev # 155716460990936368
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 9
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:9:&SESSION.::&DEBUG.::::'
+        page: 9 # test_token
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: User Reported Issues💬 =======================
+    id: 150111866529664515
+    label: 
+      label: User Reported Issues💬
+
+    icon: 
+      image/icon-css-classes: fa-table
+
+    layout: 
+      sequence: 2270
+      parent-entry: ✍️Feedback # 155700091117219552
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 120
+      - 121
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:120:&SESSION.::&DEBUG.::::'
+        page: 120 # User Issues
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Chat Assistant ===============================
+    id: 151658957147556136
+    label: 
+      label: Chat Assistant
+
+    icon: 
+      image/icon-css-classes: fa-ai
+
+    layout: 
+      sequence: 101
+      parent-entry: '✨ My Assistant ' # 124964816089691055
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 114
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:114:&SESSION.::&DEBUG.::::'
+        page: 114 # Enterprise AI Assistant
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: ✍️Feedback ===================================
+    id: 155700091117219552
+    label: 
+      label: ✍️Feedback
+
+    icon: 
+      image/icon-css-classes: fa-angle-double-right
+
+    layout: 
+      sequence: 2280
+      parent-entry: 🔭Operations & Insights # 162703354547283242
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 115
+      - 119
+      - 120
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:115:&SESSION.::&DEBUG.::::'
+        page: 115 # Feedback Dashboard
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: My Issues⚠️ ==================================
+    id: 155715808891918303
+    label: 
+      label: My Issues⚠️
+
+    icon: 
+      image/icon-css-classes: fa-exclamation-circle
+
+    layout: 
+      sequence: 2290
+      parent-entry: '✨ My Assistant ' # 124964816089691055
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:117:&SESSION.::&DEBUG.::::'
+        page: 117 # My Issues
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Dev ==========================================
+    id: 155716460990936368
+    label: 
+      label: Dev
+
+    icon: 
+      image/icon-css-classes: fa-long-arrow-right
+
+    layout: 
+      sequence: 3000
+
+    is-current: 
+      type: Target Page
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Domain Retriever🔍 ===========================
+    id: 155717374843975536
+    label: 
+      label: Domain Retriever🔍
+
+    icon: 
+      image/icon-css-classes: fa-table
+
+    layout: 
+      sequence: 2310
+      parent-entry: 🧩Context & Intent # 140963052215374240
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 440
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:440:&SESSION.::&DEBUG.::::'
+        page: 440 # Domain Retriever
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: 🚀Deployment =================================
+    id: 158152275066401340
+    label: 
+      label: 🚀Deployment
+
+    icon: 
+      image/icon-css-classes: fa-angle-double-right
+
+    layout: 
+      sequence: 2320
+      parent-entry: 🔭Operations & Insights # 162703354547283242
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:702:&SESSION.::&DEBUG.::::'
+        page: 702 # Deployment Dashboard
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Versions📦 ===================================
+    id: 158169569028665412
+    label: 
+      label: Versions📦
+
+    icon: 
+      image/icon-css-classes: fa-battery-4
+
+    layout: 
+      sequence: 2330
+      parent-entry: 🚀Deployment # 158152275066401340
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 703
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:703:&SESSION.::&DEBUG.::::'
+        page: 703 # Deployment Versions
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: User Segments👥 ==============================
+    id: 158787474721773405
+    label: 
+      label: User Segments👥
+
+    icon: 
+      image/icon-css-classes: fa-table-pointer
+
+    layout: 
+      sequence: 2350
+      parent-entry: 🚀Deployment # 158152275066401340
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 705
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:705:&SESSION.::&DEBUG.::::'
+        page: 705 # User Segments Management
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Debug Configuration🩺 ========================
+    id: 159317997938953503
+    label: 
+      label: Debug Configuration🩺
+
+    layout: 
+      sequence: 2360
+      parent-entry: 🔭Operations & Insights # 162703354547283242
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 716
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:716:&SESSION.::&DEBUG.::::'
+        page: 716 # Debug Configuration 🛠️
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Deployment Comparison🔄 ======================
+    id: 159357722014979809
+    label: 
+      label: Deployment Comparison🔄
+
+    icon: 
+      image/icon-css-classes: fa-asterisk
+
+    layout: 
+      sequence: 2380
+      parent-entry: 🚀Deployment # 158152275066401340
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 708
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:708:&SESSION.::&DEBUG.::::'
+        page: 708 # Deployment Comparison
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: 📚Knowledge Base =============================
+    id: 162701158040194161
+    label: 
+      label: 📚Knowledge Base
+
+    layout: 
+      sequence: 140
+
+    is-current: 
+      type: Target Page
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: 🔭Operations & Insights ======================
+    id: 162703354547283242
+    label: 
+      label: 🔭Operations & Insights
+
+    icon: 
+      image/icon-css-classes: fa-ai-innovation-lightbulb
+
+    layout: 
+      sequence: 2000
+
+    is-current: 
+      type: Target Page
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: ❓Help =======================================
+    id: 162713787935714823
+    label: 
+      label: ❓Help
+
+    icon: 
+      image/icon-css-classes: fa-question-circle-o
+
+    layout: 
+      sequence: 4010
+
+    is-current: 
+      type: Target Page
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: 🚀 Quick Start Guide =========================
+    id: 162715154300816392
+    label: 
+      label: 🚀 Quick Start Guide
+
+    layout: 
+      sequence: 4020
+      parent-entry: ❓Help # 162713787935714823
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 'https://github.com/AlaaEldin-AbdelMonem/oracle-apex-ai-assistant'
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      6.: target="_blank"
+
+  - # ====== Entry: 📖 User Documentation ========================
+    id: 162715413620830417
+    label: 
+      label: 📖 User Documentation
+
+    layout: 
+      sequence: 4030
+      parent-entry: ❓Help # 162713787935714823
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 'https://github.com/AlaaEldin-AbdelMonem/oracle-apex-ai-assistant/tree/main/docs'
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      6.: target="_blank"
+
+  - # ====== Entry: 🐞 Report Bug ================================
+    id: 162715737565905157
+    label: 
+      label: 🐞 Report Bug
+
+    layout: 
+      sequence: 4040
+      parent-entry: ❓Help # 162713787935714823
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 'https://github.com/AlaaEldin-AbdelMonem/oracle-apex-ai-assistant/blob/main/CHANGELOG.md'
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      6.: target="_blank"
+
+  - # ====== Entry: 💡 Feature Requests ==========================
+    id: 162716065650914567
+    label: 
+      label: 💡 Feature Requests
+
+    layout: 
+      sequence: 4050
+      parent-entry: ❓Help # 162713787935714823
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 'https://github.com/AlaaEldin-AbdelMonem/oracle-apex-ai-assistant/blob/main/docs/discussions/feature-requests.md'
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      6.: target="_blank"
+
+  - # ====== Entry: 🛡️ Security ==================================
+    id: 162716314697916471
+    label: 
+      label: 🛡️ Security
+
+    layout: 
+      sequence: 4060
+      parent-entry: ❓Help # 162713787935714823
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 'https://github.com/AlaaEldin-AbdelMonem/oracle-apex-ai-assistant/blob/main/Security.md'
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      6.: target="_blank"
+
+  - # ====== Entry: 🤝 Contributing  =============================
+    id: 162716690870920035
+    label: 
+      label: '🤝 Contributing '
+
+    layout: 
+      sequence: 4070
+      parent-entry: ❓Help # 162713787935714823
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 'https://github.com/AlaaEldin-AbdelMonem/oracle-apex-ai-assistant/blob/main/Contributing.md'
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      6.: target="_blank"
+
+  - # ====== Entry:  💬 Community (Slack/Discord) ================
+    id: 162716961822922242
+    label: 
+      label: ' 💬 Community (Slack/Discord)'
+
+    layout: 
+      sequence: 4080
+      parent-entry: ❓Help # 162713787935714823
+
+    is-current: 
+      type: Target Page
+
+    user-defined-attributes: 
+      translatable: false
+      6.: target="_blank"
+
+  - # ====== Entry: ℹ️ About =====================================
+    id: 162717268416923581
+    label: 
+      label: ℹ️ About
+
+    layout: 
+      sequence: 4090
+      parent-entry: ❓Help # 162713787935714823
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 'https://github.com/AlaaEldin-AbdelMonem/oracle-apex-ai-assistant/blob/main/README.md'
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      6.: target="_blank"
+
+  - # ====== Entry: Audit Intelligence Dashboard =================
+    id: 164483012272510854
+    label: 
+      label: Audit Intelligence Dashboard
+
+    icon: 
+      image/icon-css-classes: fa-file-o
+
+    layout: 
+      sequence: 4100
+      parent-entry: 🛡️Governance & Security # 124058916656889575
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 721
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:721:&APP_SESSION.::&DEBUG.:::'
+        page: 721 # Audit Intelligence Dashboard
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Chat Calls Viewer ============================
+    id: 164973070025005841
+    label: 
+      label: Chat Calls Viewer
+
+    icon: 
+      image/icon-css-classes: fa-table-search
+
+    layout: 
+      sequence: 4110
+      parent-entry: Dev # 155716460990936368
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 722
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:722:&APP_SESSION.::&DEBUG.:::'
+        page: 722 # Chat Calls Viewer
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+- # ====== List: Navigation Bar ================================
+  id: 123956269288486112
+  identification: 
+    name: Navigation Bar
+
+  subscription: 
+    version-number: 38948142046865
+
+  source: 
+    type: Static Values
+
+  entries: 
+  - # ====== Entry: &APP_USER. ===================================
+    id: 123968222107486210
+    label: 
+      label: '&APP_USER.'
+
+    icon: 
+      image/icon-css-classes: fa-user
+
+    layout: 
+      sequence: 10
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: '#'
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      2.: has-username
+
+  - # ====== Entry: --- ==========================================
+    id: 123968790119486213
+    label: 
+      label: '---'
+
+    layout: 
+      sequence: 20
+      parent-entry: '&APP_USER.' # 123968222107486210
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: separator
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+    server-side-condition: 
+      type: User is Authenticated (not public)
+
+  - # ====== Entry: Sign Out =====================================
+    id: 123969117756486214
+    label: 
+      label: Sign Out
+
+    icon: 
+      image/icon-css-classes: fa-sign-out
+
+    layout: 
+      sequence: 30
+      parent-entry: '&APP_USER.' # 123968222107486210
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: '&LOGOUT_URL.'
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+    server-side-condition: 
+      type: User is Authenticated (not public)
+
+  - # ====== Entry: &G_USER_ROLE_NAME. ===========================
+    id: 124990179986922039
+    label: 
+      label: '&G_USER_ROLE_NAME.'
+
+    icon: 
+      image/icon-css-classes: fa-user-secret
+
+    layout: 
+      sequence: 2
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:10:&SESSION.::&DEBUG.:10:::'
+        page: 10 # Select Role
+        clear-cache: 10
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Switch Theme =================================
+    id: 157654974097443855
+    label: 
+      label: Switch Theme
+
+    icon: 
+      image/icon-css-classes: fa-paint-brush
+
+    layout: 
+      sequence: 40
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:3:&SESSION.::&DEBUG.::P3_RETURN_PAGE:&APP_PAGE_ID.:'
+        page: 3 # Theme Style Selection
+        values: 
+          p3_return_page: '&APP_PAGE_ID.'
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+- # ====== List: User Interface ================================
+  id: 157647296195345873
+  identification: 
+    name: User Interface
+
+  subscription: 
+    version-number: 38948141441500
+
+  source: 
+    type: Static Values
+
+  configuration: 
+    build-option: 'Feature: Theme Style Selection' # 157640184699345808
+
+  entries: 
+  - # ====== Entry: Theme Style Selection ========================
+    id: 157647622071345875
+    label: 
+      label: Theme Style Selection
+
+    icon: 
+      image/icon-css-classes: fa-paint-brush
+
+    layout: 
+      sequence: 10
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:10010:&APP_SESSION.::&DEBUG.:10010::'
+        page: 10010 # Theme Style Selection
+        clear-cache: 10010
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      1.: Set the default application look and feel
+

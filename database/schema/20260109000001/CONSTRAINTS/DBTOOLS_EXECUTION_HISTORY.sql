@@ -1,0 +1,7 @@
+--------------------------------------------------------
+--  Constraints for Table DBTOOLS$EXECUTION_HISTORY
+--------------------------------------------------------
+
+  ALTER TABLE "AI8P"."DBTOOLS$EXECUTION_HISTORY" MODIFY ("ID" NOT NULL ENABLE);
+  ALTER TABLE "AI8P"."DBTOOLS$EXECUTION_HISTORY" ADD CONSTRAINT "DBTOOLS$EXECUTION_HISTORY_PK" PRIMARY KEY ("ID")
+  USING INDEX PCTFREE 10 INITRANS 20 MAXTRANS 255  ENABLE;

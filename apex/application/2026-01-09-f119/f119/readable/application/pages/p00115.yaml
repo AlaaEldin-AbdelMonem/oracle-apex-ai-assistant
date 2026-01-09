@@ -1,0 +1,890 @@
+---
+# ====== Page: Feedback Dashboard ============================
+id: 115
+identification: 
+  name: Feedback Dashboard
+  alias: FEEDBACK-DASHBOARD
+  title: Feedback Dashboard
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    /* KPI Cards Styling */
+    .kpi-cards-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .kpi-card {
+        display: flex;
+        align-items: center;
+        padding: 1.5rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .kpi-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    
+    .kpi-card.alert-warning {
+        border-left: 4px solid #ff9800;
+    }
+    
+    .kpi-card.alert-danger {
+        border-left: 4px solid #f44336;
+    }
+    
+    .kpi-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        color: white;
+    }
+    
+    .kpi-content {
+        flex: 1;
+    }
+    
+    .kpi-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #333;
+        line-height: 1;
+        margin-bottom: 0.5rem;
+    }
+    
+    .kpi-unit {
+        font-size: 1.2rem;
+        color: #666;
+        font-weight: 400;
+    }
+    
+    .kpi-label {
+        font-size: 0.9rem;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    /* Status Badges */
+    .status-badge {
+        display: inline-block;
+        padding: 0.35rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+    
+    .status-new {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+    
+    .status-progress {
+        background: #fff3e0;
+        color: #f57c00;
+    }
+    
+    .status-resolved {
+        background: #e8f5e9;
+        color: #388e3c;
+    }
+    
+    .status-closed {
+        background: #f5f5f5;
+        color: #757575;
+    }
+    
+    /* Priority Badges */
+    .badge {
+        display: inline-block;
+        padding: 0.25rem 0.6rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border-radius: 4px;
+    }
+    
+    .badge-danger {
+        background: #f44336;
+        color: white;
+    }
+    
+    .badge-warning {
+        background: #ff9800;
+        color: white;
+    }
+    
+    .badge-info {
+        background: #2196f3;
+        color: white;
+    }
+    
+    .badge-success {
+        background: #4caf50;
+        color: white;
+    }
+    
+    .badge-secondary {
+        background: #9e9e9e;
+        color: white;
+    }
+    
+    
+    
+    .quick-actions-bar {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        flex-wrap: wrap;
+    }
+    
+    .quick-actions-bar .t-Button {
+        flex: 0 1 auto;
+    }
+    
+    @media (max-width: 768px) {
+        .quick-actions-bar {
+            flex-direction: column;
+        }
+        .quick-actions-bar .t-Button {
+            width: 100%;
+        }
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Breadcrumb ==================================
+  id: 155700403222219558
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 123954626239486075
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--compactTitle
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region: badges ======================================
+  id: 161676364123437903
+  identification: 
+    name: badges
+    type: Badge
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |2
+       SELECT 
+          label AS list_title, 
+          TO_CHAR(value) ||' '||label  AS list_badge,  -- Convert to VARCHAR2 for badge display
+          -- Mapping Icons to #ICON_CLASS#
+          CASE label 
+              WHEN 'Total Issues'          THEN 'fa fa-list'
+              WHEN 'Open Issues'           THEN 'fa fa-exclamation-circle'
+              WHEN 'Resolved Today'        THEN 'fa fa-check-circle'
+              WHEN 'Critical Open'         THEN 'fa fa-fire'
+              WHEN 'My Issues'             THEN 'fa fa-user'
+              WHEN 'With Attachments'      THEN 'fa fa-paperclip'
+              WHEN 'Avg Resolution (Days)' THEN 'fa fa-clock-o'
+              WHEN 'New Today'             THEN 'fa fa-calendar-plus-o'
+          END AS icon_class,
+          -- Mapping Colors to #ICON_COLOR_CLASS#
+          CASE label 
+              WHEN 'Critical Open'         THEN 'u-color-9' -- Red
+              WHEN 'Resolved Today'        THEN 'u-color-5' -- Green
+              WHEN 'Open Issues'           THEN 'u-color-7' -- Orange
+              ELSE 'u-color-1'                              -- Blue
+          END AS icon_color_class,
+          -- Optional text for #LIST_TEXT#
+          'Updated just now' AS list_text,
+          -- Add display order for consistent badge arrangement
+          CASE label
+              WHEN 'Total Issues'          THEN 1
+              WHEN 'Open Issues'           THEN 2
+              WHEN 'Critical Open'         THEN 3
+              WHEN 'My Issues'             THEN 4
+              WHEN 'New Today'             THEN 5
+              WHEN 'Resolved Today'        THEN 6
+              WHEN 'With Attachments'      THEN 7
+              WHEN 'Avg Resolution (Days)' THEN 8
+          END AS display_order 
+      FROM (
+          SELECT 
+              COUNT(*) AS total,
+              COUNT(CASE 
+                  WHEN chat_issue_status_code NOT IN (
+                      SELECT chat_issue_status_code 
+                      FROM lkp_chat_issue_status 
+                      WHERE UPPER(issue_status) LIKE '%RESOLV%' 
+                         OR UPPER(issue_status) LIKE '%CLOS%'
+                  ) THEN 1 
+              END) AS open_iss,
+              COUNT(CASE 
+                  WHEN TRUNC(resolved_at) = TRUNC(SYSDATE) THEN 1 
+              END) AS res_today,
+              COUNT(CASE 
+                  WHEN chat_issue_priority_code IN ('CR', 'HI') 
+                   AND chat_issue_status_code = 'NW' THEN 1 
+              END) AS crit,
+              COUNT(CASE 
+                  WHEN user_id = :APP_USER_ID THEN 1 
+              END) AS mine,
+              COUNT(CASE 
+                  WHEN attachment_count > 0 
+                    OR has_screenshot = 'Y' THEN 1 
+              END) AS attach,
+              NVL(
+                  ROUND(
+                      AVG(CASE 
+                          WHEN resolved_at IS NOT NULL 
+                           AND resolved_at > SYSDATE - 30 
+                          THEN CAST(resolved_at AS DATE) - CAST(reported_at AS DATE) 
+                      END), 
+                      1
+                  ), 
+                  0
+              ) AS avg_d,
+              COUNT(CASE 
+                  WHEN TRUNC(reported_at) = TRUNC(SYSDATE) THEN 1 
+              END) AS today
+          FROM chat_issues
+      )
+      UNPIVOT (
+          value FOR label IN (
+              total     AS 'Total Issues',
+              open_iss  AS 'Open Issues',
+              res_today AS 'Resolved Today',
+              crit      AS 'Critical Open',
+              mine      AS 'My Issues',
+              attach    AS 'With Attachments',
+              avg_d     AS 'Avg Resolution (Days)',
+              today     AS 'New Today'
+          )
+      )
+       
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Cards Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      display: Multiple (Report)
+
+    settings: 
+      label: '&LIST_TEXT.'
+      value: LIST_BADGE
+      state: LIST_TEXT
+      icon: '&ICON_CLASS.'
+      display-label: false
+      style: Subtle
+      shape: Circular
+      size: Large
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Page
+      entities-per-page: 15
+      show-total-count: false
+
+  columns: 
+  - # ====== Column: LIST_TITLE ==================================
+    id: 161678608031437926
+    identification: 
+      name: LIST_TITLE
+
+    layout: 
+      sequence: 10
+
+    source: 
+      type: Database Column
+      database-column: LIST_TITLE
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: LIST_BADGE ==================================
+    id: 161678700875437927
+    identification: 
+      name: LIST_BADGE
+
+    layout: 
+      sequence: 20
+
+    source: 
+      type: Database Column
+      database-column: LIST_BADGE
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: ICON_CLASS ==================================
+    id: 161678870612437928
+    identification: 
+      name: ICON_CLASS
+
+    layout: 
+      sequence: 30
+
+    source: 
+      type: Database Column
+      database-column: ICON_CLASS
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: ICON_COLOR_CLASS ============================
+    id: 161678914764437929
+    identification: 
+      name: ICON_COLOR_CLASS
+
+    layout: 
+      sequence: 40
+
+    source: 
+      type: Database Column
+      database-column: ICON_COLOR_CLASS
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: LIST_TEXT ===================================
+    id: 161679090906437930
+    identification: 
+      name: LIST_TEXT
+
+    layout: 
+      sequence: 50
+
+    source: 
+      type: Database Column
+      database-column: LIST_TEXT
+      data-type: VARCHAR2
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+  - # ====== Column: DISPLAY_ORDER ===============================
+    id: 161679177797437931
+    identification: 
+      name: DISPLAY_ORDER
+
+    layout: 
+      sequence: 60
+
+    source: 
+      type: Database Column
+      database-column: DISPLAY_ORDER
+      data-type: NUMBER
+      primary-key: false
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      group: false
+
+- # ====== Region: Issues Trend (Last 30 days) =================
+  id: 161676425896437904
+  identification: 
+    name: Issues Trend (Last 30 days)
+    type: Chart
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      WITH date_series AS (
+          SELECT TRUNC(SYSDATE) - LEVEL + 1 AS report_date
+          FROM dual
+          CONNECT BY LEVEL <= 30
+      )
+      SELECT 
+          TO_CHAR(ds.report_date, 'MM-DD') AS label,
+          ds.report_date,
+          NVL(reported.issue_count, 0) AS "Issues Reported",
+          NVL(resolved.issue_count, 0) AS "Issues Resolved"
+      FROM date_series ds,
+           (SELECT TRUNC(reported_at) AS report_date, 
+                   COUNT(*) AS issue_count
+            FROM chat_issues
+            WHERE reported_at >= TRUNC(SYSDATE) - 30
+            GROUP BY TRUNC(reported_at)) reported,
+           (SELECT TRUNC(resolved_at) AS report_date, 
+                   COUNT(*) AS issue_count
+            FROM chat_issues
+            WHERE resolved_at >= TRUNC(SYSDATE) - 30
+            GROUP BY TRUNC(resolved_at)) resolved
+      WHERE ds.report_date = reported.report_date(+)
+        AND ds.report_date = resolved.report_date(+)
+      ORDER BY ds.report_date
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  security: 
+    escape-special-characters: true
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 161678082990437920
+    chart: 
+      type: Bar
+
+    appearance: 
+      orientation: Vertical
+      stack: false
+
+    layout: 
+      height: 400
+
+    data-cursor: 
+      cursor: Automatic
+      behavior: Automatic
+      dim-on-hover: true
+
+    multi-series-chart-data: 
+      fill-gaps-in-chart-data: true
+      sort-order: Label - Ascending
+      render-gap-as-zero: true
+
+    settings: 
+      zoom-and-scroll: No
+
+    animation: 
+      on-display: Automatic
+      on-data-change: Automatic
+
+    tooltip: 
+      show: true
+      show-series-name: true
+      show-group-name: true
+      show-value: true
+
+    legend: 
+      show: false
+
+    series: 
+    - # ====== Series: Issues reported  ============================
+      id: 161678122389437921
+      identification: 
+        name: 'Issues reported '
+
+      execution: 
+        sequence: 10
+
+      source: 
+        location: Region Source
+
+      column-mapping: 
+        label: LABEL
+        value-aggregation: No Aggregation
+        value: Issues Reported
+
+      appearance: 
+        assigned-to-y2-axis: false
+
+      label: 
+        show: false
+
+    - # ====== Series: Issues resolved =============================
+      id: 161678475086437924
+      identification: 
+        name: Issues resolved
+
+      execution: 
+        sequence: 20
+
+      source: 
+        location: Region Source
+
+      column-mapping: 
+        label: LABEL
+        value-aggregation: No Aggregation
+        value: Issues Resolved
+
+      appearance: 
+        color: '#eb1919'
+        assigned-to-y2-axis: false
+
+      label: 
+        show: false
+
+    axes: 
+    - # ====== Axis: x =============================================
+      id: 161678276170437922
+      identification: 
+        name: x
+        show-axis: true
+        title: Date
+
+      value: 
+        format-scaling: Automatic
+        baseline-scaling: Zero
+        scale: Linear
+
+      major-ticks: 
+        show: Yes
+
+      minor-ticks: 
+        show: false
+
+      tick-label: 
+        show: true
+        rotation: true
+        position: Outside
+
+    - # ====== Axis: y =============================================
+      id: 161678353434437923
+      identification: 
+        name: y
+        show-axis: true
+        title: No.Of Issues
+
+      value: 
+        format: Decimal
+        decimal-places: 0
+        format-scaling: None
+        baseline-scaling: Zero
+        scale: Linear
+
+      appearance: 
+        position: Automatic
+
+      major-ticks: 
+        show: Yes
+
+      minor-ticks: 
+        show: false
+
+      tick-label: 
+        show: true
+
+- # ====== Region: Open Issues =================================
+  id: 161676512361437905
+  identification: 
+    name: Open Issues
+    type: Cards
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          ci.chat_issue_id,
+          ci.issue_title,
+          SUBSTR(ci.issue_description, 1, 150) || 
+              CASE WHEN LENGTH(ci.issue_description) > 150 THEN '...' ELSE '' END AS description_preview,
+          lit.issue_type_name,
+          lit.icon_class,
+          lp.priority_name,
+          CASE ci.chat_issue_priority_code
+              WHEN 'CR' THEN '#f44336'
+              WHEN 'HI' THEN '#ff9800'
+              WHEN 'ME' THEN '#ffc107'
+              WHEN 'LO' THEN '#4caf50'
+              ELSE '#9e9e9e'
+          END AS priority_color,
+          TO_CHAR(ci.reported_at, 'YYYY-MM-DD HH24:MI') AS reported_at_fmt,
+          -- FIX: Cast TIMESTAMP to DATE before subtraction
+          ROUND(SYSDATE - CAST(ci.reported_at AS DATE), 1) AS days_open,
+          'f?p=&APP_ID.:121:&SESSION.::&DEBUG.:RP:P121_CHAT_ISSUE_ID:' || ci.chat_issue_id AS edit_url
+      FROM chat_issues ci,
+           lkp_issue_types lit,
+           lkp_chat_issue_priority lp
+      WHERE ci.chat_issue_type_code = lit.issue_type_code(+)
+        AND ci.chat_issue_priority_code = lp.chat_issue_priority_code(+)
+        --AND ci.chat_issue_status_code NOT IN (
+         --  SELECT chat_issue_status_code 
+           -- FROM lkp_chat_issue_status 
+           -- WHERE UPPER(issue_status) LIKE '%RESOLV%' 
+            --   OR UPPER(issue_status) LIKE '%CLOS%'
+      --  )
+      ORDER BY 
+          CASE ci.chat_issue_priority_code
+              WHEN 'CR' THEN 1
+              WHEN 'HI' THEN 2
+              WHEN 'ME' THEN 3
+              WHEN 'LO' THEN 4
+              ELSE 5
+          END,
+          ci.reported_at DESC
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 40
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Cards Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 161678593546437925
+    appearance: 
+      layout: Grid
+      grid-columns: Auto
+
+    card: 
+      primary-key-column-1: CHAT_ISSUE_ID
+
+    title: 
+      advanced-formatting: false
+      column: ISSUE_TITLE
+
+    subtitle: 
+      advanced-formatting: false
+      column: ISSUE_TYPE_NAME
+
+    body: 
+      advanced-formatting: false
+      column: DESCRIPTION_PREVIEW
+
+    secondary-body: 
+      advanced-formatting: false
+      column: REPORTED_AT_FMT
+
+    icon-and-badge: 
+      icon-source: Icon Class Column
+      icon-column: ICON_CLASS
+      icon-position: Start
+
+    media: 
+      advanced-formatting: false
+      source: No Media
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Scroll
+      show-total-count: false
+
+- # ====== Region: Quick Actions ===============================
+  id: 161679393770437933
+  identification: 
+    name: Quick Actions
+    type: Static Content
+
+  source: 
+    html-code: |
+      <div class="quick-actions-bar">
+          <a href="f?p=&APP_ID.:120:&SESSION.::&DEBUG.:::" class="t-Button t-Button--primary t-Button--iconLeft">
+              <span class="t-Icon t-Icon--left fa fa-bug" aria-hidden="true"></span>
+              View All User Issues
+          </a> 
+          
+          <a href="f?p=&APP_ID.:115:&SESSION.::&DEBUG.:::" class="t-Button t-Button--simple t-Button--iconLeft">
+              <span class="t-Icon t-Icon--left fa fa-refresh" aria-hidden="true"></span>
+              Refresh Dashboard
+          </a>
+      </div>
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+

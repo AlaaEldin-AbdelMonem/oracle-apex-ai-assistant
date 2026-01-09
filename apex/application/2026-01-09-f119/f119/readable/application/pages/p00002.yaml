@@ -1,0 +1,4255 @@
+---
+# ====== Page: ChatPot - AI Assistant ========================
+id: 2
+identification: 
+  name: ChatPot - AI Assistant
+  alias: CHATPOT-AI-ASSISTANT1
+  title: ChatPot - AI Assistant
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+javascript: 
+  function-and-global-variable-declaration: |2
+     
+    // ============================================================================
+    // CHAT SESSION MANAGER
+    // Manages current conversation context (like ChatGPT/Claude)
+    // ============================================================================
+    
+    var chatApp = {
+        currentSessionId: null,
+        isInitialized: false,
+        
+        // ========================================================================
+        // INITIALIZATION
+        // ========================================================================
+        
+        /**
+         * Initialize chat application on page load
+         */
+        init: function() {
+            console.log('ChatApp: Initializing...');
+            
+            // Check if session_id passed via page item (from navigation)
+            const sessionIdFromItem = apex.item('P100_SESSION_ID').getValue();
+            
+            if (sessionIdFromItem && sessionIdFromItem !== '') {
+                console.log('ChatApp: Loading existing session:', sessionIdFromItem);
+                this.loadSession(sessionIdFromItem);
+            } else {
+                console.log('ChatApp: No session found, getting or creating...');
+                this.getOrCreateSession();
+            }
+    
+            //this.updateSendButtonState();
+        },
+        
+        // ========================================================================
+        // SESSION OPERATIONS
+        // ========================================================================
+        
+        /**
+         * Get existing session or create new one
+         */
+        getOrCreateSession: function(modelProvider = 'OPENAI') {
+            console.log('ChatApp: Getting or creating session...');
+            
+            apex.server.process(
+                'GET_OR_CREATE_SESSION',
+                {
+                    x01: modelProvider  // Pass model provider
+                },
+                {
+                    dataType: 'json',
+                    loadingIndicator: '#chat-container',
+                    success: function(data) {
+                        if (data.status === 'success') {
+                            console.log('ChatApp: Session ready:', data.session_id);
+                            
+                            chatApp.currentSessionId = data.session_id;
+                            apex.item('P100_SESSION_ID').setValue(data.session_id);
+                            
+                            // Load messages for this session
+                            chatApp.loadMessages();
+                            
+                            // Update UI
+                            chatApp.updateSessionInfo(data);
+                            
+                            chatApp.isInitialized = true;
+                            
+                            // Show success if new session
+                            if (data.is_new === 'true') {
+                                apex.message.showPageSuccess('New conversation started');
+                            }
+                        } else {
+                            console.error('ChatApp: Session initialization failed:', data.error_message);
+                            apex.message.showErrors([{
+                                type: 'error',
+                                location: 'page',
+                                message: 'Failed to initialize chat session: ' + data.error_message
+                            }]);
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('ChatApp: AJAX error:', textStatus, errorThrown);
+                        apex.message.showErrors([{
+                            type: 'error',
+                            location: 'page',
+                            message: 'Unable to connect to chat service. Please refresh the page.'
+                        }]);
+                    }
+                }
+            );
+        },
+        
+        /**
+         * Create new chat session (like clicking "New Chat" button)
+         */
+        createNewSession: function(modelProvider = 'OPENAI') {
+            console.log('ChatApp: Creating new session...');
+            
+            apex.server.process(
+                'CREATE_NEW_SESSION',
+                {
+                    x01: modelProvider
+                },
+                {
+                    dataType: 'json',
+                    loadingIndicator: '#chat-container',
+                    success: function(data) {
+                        if (data.status === 'success') {
+                            console.log('ChatApp: New session created:', data.session_id);
+                            
+                            chatApp.currentSessionId = data.session_id;
+                            apex.item('P100_SESSION_ID').setValue(data.session_id);
+                            
+                            // Clear message display
+                            chatApp.clearMessages();
+                            
+                            // Refresh session history sidebar
+                            chatApp.refreshSessionList();
+                            
+                            apex.message.showPageSuccess(data.message);
+                        } else {
+                            apex.message.showErrors([{
+                                type: 'error',
+                                location: 'page',
+                                message: 'Failed to create new session: ' + data.error_message
+                            }]);
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('ChatApp: New session creation failed:', textStatus, errorThrown);
+                        apex.message.showErrors([{
+                            type: 'error',
+                            location: 'page',
+                            message: 'Unable to create new session.'
+                        }]);
+                    }
+                }
+            );
+        },
+        
+        /**
+         * Load specific session (when user clicks from history)
+         */
+        loadSession: function(sessionId) {
+            console.log('ChatApp: Loading session:', sessionId);
+            
+            // Update current session
+            this.currentSessionId = sessionId;
+            apex.item('P100_SESSION_ID').setValue(sessionId);
+            
+            // Load messages
+            this.loadMessages();
+            
+            // Update UI (optional: load session metadata)
+            apex.server.process(
+                'LOAD_SESSION_MESSAGES',
+                {
+                    x01: sessionId
+                },
+                {
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.status === 'success') {
+                            chatApp.updateSessionInfo(data);
+                        }
+                    }
+                }
+            );
+        },
+        
+        // ========================================================================
+        // MESSAGE OPERATIONS
+        // ========================================================================
+        
+        /**
+         * Load messages for current session
+         */
+        loadMessages: function() {
+            console.log('ChatApp: Loading messages for session:', this.currentSessionId);
+            
+            // Refresh messages region (assumes region static ID = 'messages')
+            if (apex.region('messages')) {
+                apex.region('messages').refresh();
+            }
+        },
+        
+        /**
+         * Clear message display (for new session)
+         */
+        clearMessages: function() {
+            console.log('ChatApp: Clearing messages');
+            
+            // Clear message display area
+            $('#messages-container').empty();
+            
+            // Or refresh region if empty
+            if (apex.region('messages')) {
+                apex.region('messages').refresh();
+            }
+        },
+        
+        /**
+         * Send user message
+         */
+        sendMessage: function(messageContent) {
+            if (!this.currentSessionId) {
+                apex.message.showErrors([{
+                    type: 'error',
+                    location: 'page',
+                    message: 'No active session. Please refresh the page.'
+                }]);
+                return;
+            }
+            
+            console.log('ChatApp: Sending message to session:', this.currentSessionId);
+            
+            // Your existing message send logic here
+            // This would call your RAG processing
+        },
+        
+        // ========================================================================
+        // UI UPDATES
+        // ========================================================================
+        
+        /**
+         * Update session info display
+         */
+        updateSessionInfo: function(sessionData) {
+            // Update session title if element exists
+            if ($('#current-session-title').length) {
+                $('#current-session-title').text(sessionData.session_title || 'Conversation');
+            }
+            
+            // Update message count if element exists
+            if ($('#message-count').length) {
+                $('#message-count').text(sessionData.message_count || 0);
+            }
+        },
+        
+        /**
+         * Refresh session history list
+         */
+        refreshSessionList: function() {
+            if (apex.region('session-history')) {
+                apex.region('session-history').refresh();
+            }
+        },
+    
+    
+    
+        /**
+     * Enable/disable send button based on prompt content
+     */
+    updateSendButtonState: function() {
+        const promptValue = apex.item('P100_PROMPT').getValue();
+        const sendButton = $('#SEND_BTN');
+        
+        if (promptValue && promptValue.trim().length > 0) {
+            // Enable button
+            sendButton.prop('disabled', false)
+                     .removeClass('is-disabled')
+                     .attr('aria-disabled', 'false');
+        } else {
+            // Disable button
+            sendButton.prop('disabled', true)
+                     .addClass('is-disabled')
+                     .attr('aria-disabled', 'true');
+        }
+    },
+        
+        // ========================================================================
+        // UTILITY FUNCTIONS
+        // ========================================================================
+        
+        /**
+         * Get current session ID
+         */
+        getCurrentSessionId: function() {
+            return this.currentSessionId;
+        },
+        
+        /**
+         * Check if app is initialized
+         */
+        isReady: function() {
+            return this.isInitialized && this.currentSessionId !== null;
+        }
+    };
+    
+    // ============================================================================
+    // AUTO-INITIALIZE ON PAGE LOAD
+    // ============================================================================
+    apex.jQuery(document).ready(function() {
+        chatApp.init();
+    });
+  execute-when-page-loads: |2
+     document.addEventListener("DOMContentLoaded", function() {
+      const settings = document.getElementById("advanced-settings");
+      const toggleBtn = document.getElementById("toggle-settings");
+      const chatArea = document.getElementById("chat-area");
+      const sendBtn = document.getElementById("send-btn");
+      const input = document.getElementById("chat-input");
+    
+      // Toggle advanced settings visibility
+      toggleBtn.addEventListener("click", () => {
+        settings.classList.toggle("hidden");
+      });
+    
+      // Send chat message (simple mockup)
+      sendBtn.addEventListener("click", () => {
+        const msg = input.value.trim();
+        if (!msg) return;
+    
+        // Add user message
+        const userMsg = document.createElement("div");
+        userMsg.className = "chat-message user";
+        userMsg.textContent = msg;
+        chatArea.appendChild(userMsg);
+    
+        // Scroll down
+        chatArea.scrollTop = chatArea.scrollHeight;
+    
+        input.value = "";
+    
+        // Simulate bot reply
+        setTimeout(() => {
+          const botMsg = document.createElement("div");
+          botMsg.className = "chat-message bot";
+          botMsg.textContent = "Processing your query...";
+          chatArea.appendChild(botMsg);
+          chatArea.scrollTop = chatArea.scrollHeight;
+        }, 500);
+      });
+    });
+
+css: 
+  inline: |2
+     /* Disabled send button styling */
+    .send-message-btn.is-disabled,
+    .send-message-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+    
+    .send-message-btn.is-disabled .t-Icon,
+    .send-message-btn:disabled .t-Icon {
+        opacity: 0.5;
+    }
+    
+    /*//////////////////////////////*/
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 90vh;
+      background: #f9fafb;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .chat-area {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+      background-color: #ffffff;
+    }
+    
+    .chat-message {
+      margin: 0.5rem 0;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      max-width: 80%;
+      line-height: 1.4;
+    }
+    
+    .chat-message.user {
+      background: #dbeafe;
+      align-self: flex-end;
+      margin-left: auto;
+    }
+    
+    .chat-message.bot {
+      background: #e5e7eb;
+      align-self: flex-start;
+    }
+    
+    .chat-message-thread {
+      display: flex;
+      align-items: center;
+      padding: 0.8rem;
+      border-top: 1px solid #e5e7eb;
+      background: #fff;
+    }
+    
+    .chat-input-bar textarea {
+      flex: 1;
+      resize: none;
+      padding: 0.5rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 0.9rem;
+    }
+    
+    .send-message-btn, .btn-settings {
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      margin-left: 0.5rem;
+      padding: 0.6rem 0.9rem;
+      cursor: pointer;
+    }
+    
+    .btn-settings {
+      background: #6b7280;
+    }
+    
+    .btn-send:hover, .btn-settings:hover {
+      opacity: 0.9;
+    }
+    
+    .advanced-settings {
+      background: #f3f4f6;
+      padding: 1rem;
+      border-top: 1px solid #e5e7eb;
+    }
+    
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+    
+    .hidden {
+      display: none;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: session =====================================
+  id: 272584488097685848
+  identification: 
+    name: session
+    type: Static Content
+
+  source: 
+    html-code: |2
+           <div style="font-family: monospace; padding: 20px; background: #f5f5f5;">
+               <h2>Session Variables</h2>
+               <table border="1" cellpadding="10">
+                   <tr>
+                       <td><strong>APP_USER</strong></td>
+                       <td>&APP_USER.</td>
+                   </tr>
+                   <tr>
+                       <td><strong>G_USER_ROLE_ID</strong></td>
+                       <td>&G_USER_ROLE_ID.</td>
+                   </tr>
+                   <tr>
+                       <td><strong>G_USER_ROLE_NAME</strong></td>
+                       <td>&G_USER_ROLE_NAME.</td>
+                   </tr>
+                   <tr>
+                       <td><strong>G_CLASSIFICATION_LEVEL</strong></td>
+                       <td>&G_CLASSIFICATION_LEVEL.</td>
+                   </tr>
+                   <tr>
+                       <td><strong>G_SESSION_START</strong></td>
+                       <td>&G_SESSION_START.</td>
+                   </tr>
+                   <tr>
+                       <td><strong>G_TENANT_ID</strong></td>
+                       <td>&G_TENENT_ID.</td>
+                   </tr>
+                   <tr>
+                       <td><strong>G_TENANT_CODE</strong></td>
+                       <td>&G_TENANT_CODE.</td>
+                   </tr>
+                   <tr>
+                       <td><strong>G_TENANT_NAME</strong></td>
+                       <td>&G_TENANT_NAME.</td>
+                   </tr>
+               </table>
+           </div>
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Collapsible
+    template-options: 
+    - '#DEFAULT#'
+    - js-useLocalStorage
+    - is-collapsed
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  configuration: 
+    build-option: Commented Out # 123954063565486069
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: CONTAINER ===================================
+  id: 272584736414685851
+  identification: 
+    name: CONTAINER
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    css-classes: 
+    - chat-container
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: CHAT_HISTORY ================================
+  id: 272584844309685852
+  identification: 
+    name: CHAT_HISTORY
+    title: History
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          session_id,
+          session_title,
+          TO_CHAR(last_activity_date, 'MM/DD HH24:MI') as last_activity,
+          message_count,
+          CASE 
+              WHEN :P2_SESSION_ID IS NOT NULL 
+                   AND session_id = TO_NUMBER(:P2_SESSION_ID) THEN 'active-session'
+              ELSE ''
+          END as css_class
+      FROM ai_chat_sessions
+      WHERE user_id =  (select user_id from users u where user_name =:APP_USER )
+        AND is_active = 'Y'
+      ORDER BY 
+          is_pinned DESC,
+          last_activity_date DESC
+      FETCH FIRST 20 ROWS ONLY
+    page-items-to-submit: 
+    - P2_SESSION_ID
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 10
+    parent-region: LEFT_PANEL # 273606527564279377
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--showIcon
+    - t-Region--accent14
+    - t-Region--scrollBody
+    - t-Form--leftLabels
+    css-classes: 
+    - chat-sidebar
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: session-history
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Value Attribute Pairs - Row
+      template-options: 
+      - '#DEFAULT#'
+      - t-AVPList--leftAligned
+
+    pagination: 
+      type: Row Ranges X to Y (with next and previous links)
+      display-position: Bottom - Right
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: First Column
+      style: Default Break Formatting
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: SESSION_ID ==================================
+    id: 137154946298491135
+    identification: 
+      column-name: SESSION_ID
+      type: Hidden
+
+    layout: 
+      sequence: 10
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: SESSION_TITLE ===============================
+    id: 137155332838491136
+    identification: 
+      column-name: SESSION_TITLE
+      type: Link
+
+    heading: 
+      heading: Session Title
+      alignment: start
+
+    layout: 
+      sequence: 30
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:100:&SESSION.::&DEBUG.:RP:P100_SESSION_ID:#SESSION_ID#'
+        page: 100
+        clear-cache: RP
+        values: 
+          p100_session_id: '#SESSION_ID#'
+
+      link-text: '#SESSION_TITLE#'
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: false
+
+  - # ====== Column: MESSAGE_COUNT ===============================
+    id: 137155729667491137
+    identification: 
+      column-name: MESSAGE_COUNT
+      type: Hidden
+
+    layout: 
+      sequence: 50
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LAST_ACTIVITY ===============================
+    id: 137156179079491139
+    identification: 
+      column-name: LAST_ACTIVITY
+      type: Plain Text
+
+    heading: 
+      heading: Last Activity
+      alignment: start
+
+    layout: 
+      sequence: 60
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CSS_CLASS ===================================
+    id: 137156521663491140
+    identification: 
+      column-name: CSS_CLASS
+      type: Hidden
+
+    layout: 
+      sequence: 70
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+- # ====== Region: CONTROLS ====================================
+  id: 272584987722685853
+  identification: 
+    name: CONTROLS
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 
+            message_id,
+            session_id,
+            message_seq,
+            message_role,
+            message_content,
+            TO_CHAR(message_timestamp, 'HH24:MI:SS') AS time_display,
+            token_count_total,
+            processing_time_ms,
+            CASE 
+                WHEN message_role = 'USER' THEN 'user-message'
+                WHEN message_role = 'ASSISTANT' THEN 'assistant-message'
+                WHEN message_role = 'SYSTEM' THEN 'system-message'
+            END AS message_css_class,
+            CASE 
+                WHEN message_role = 'USER' THEN '💬'
+                WHEN message_role = 'ASSISTANT' THEN '🤖'
+                ELSE 'ℹ️'
+            END AS role_icon,
+            user_feedback,
+            CASE 
+                WHEN user_feedback = 'POSITIVE' THEN '👍'
+                WHEN user_feedback = 'NEGATIVE' THEN '👎'
+                ELSE ''
+            END AS feedback_icon
+        FROM ai_chat_messages
+        WHERE session_id = :P2_SESSION_ID
+        ORDER BY message_seq
+    page-items-to-submit: 
+    - P2_SESSION_ID
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    css-classes: 
+    - chat-header-bar
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+
+    pagination: 
+      type: Row Ranges X to Y (with next and previous links)
+      display-position: Bottom - Right
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: MESSAGE_ID ==================================
+    id: 137132153465491063
+    identification: 
+      column-name: MESSAGE_ID
+      type: Hidden
+
+    layout: 
+      sequence: 10
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: SESSION_ID ==================================
+    id: 137132520503491064
+    identification: 
+      column-name: SESSION_ID
+      type: Hidden
+
+    layout: 
+      sequence: 20
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: MESSAGE_SEQ =================================
+    id: 137132954661491065
+    identification: 
+      column-name: MESSAGE_SEQ
+      type: Hidden
+
+    layout: 
+      sequence: 30
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: MESSAGE_ROLE ================================
+    id: 137133363482491066
+    identification: 
+      column-name: MESSAGE_ROLE
+      type: Hidden
+
+    layout: 
+      sequence: 40
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: MESSAGE_CONTENT =============================
+    id: 137133774809491067
+    identification: 
+      column-name: MESSAGE_CONTENT
+      type: Plain Text
+
+    heading: 
+      heading: Message Content
+      alignment: start
+
+    layout: 
+      sequence: 50
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    column-formatting: 
+      html-expression: |2
+         <div class="message-bubble #MESSAGE_CSS_CLASS#" data-message-id="#MESSAGE_ID#">
+                  <div class="message-header">
+                      <span class="role-label">#ROLE_ICON# #MESSAGE_ROLE#</span>
+                      <span class="message-time">#TIME_DISPLAY#</span>
+                  </div>
+                  <div class="message-body">
+                      #MESSAGE_CONTENT#
+                  </div>
+                  <div class="message-footer">
+                      <button class="copy-btn" data-message-id="#MESSAGE_ID#">📋 Copy</button>
+                      <button class="feedback-btn" data-message-id="#MESSAGE_ID#">#FEEDBACK_ICON#</button>
+                      <span class="token-badge">#TOKEN_COUNT_TOTAL# tokens</span>
+                  </div>
+              </div>
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: false
+
+  - # ====== Column: TIME_DISPLAY ================================
+    id: 137134174858491068
+    identification: 
+      column-name: TIME_DISPLAY
+      type: Hidden
+
+    layout: 
+      sequence: 60
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: TOKEN_COUNT_TOTAL ===========================
+    id: 137134569565491069
+    identification: 
+      column-name: TOKEN_COUNT_TOTAL
+      type: Hidden
+
+    layout: 
+      sequence: 70
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: PROCESSING_TIME_MS ==========================
+    id: 137134905034491070
+    identification: 
+      column-name: PROCESSING_TIME_MS
+      type: Hidden
+
+    layout: 
+      sequence: 80
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: MESSAGE_CSS_CLASS ===========================
+    id: 137135310808491071
+    identification: 
+      column-name: MESSAGE_CSS_CLASS
+      type: Hidden
+
+    layout: 
+      sequence: 90
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: ROLE_ICON ===================================
+    id: 137135741388491072
+    identification: 
+      column-name: ROLE_ICON
+      type: Hidden
+
+    layout: 
+      sequence: 100
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: USER_FEEDBACK ===============================
+    id: 137136168480491073
+    identification: 
+      column-name: USER_FEEDBACK
+      type: Hidden
+
+    layout: 
+      sequence: 110
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: FEEDBACK_ICON ===============================
+    id: 137136548959491074
+    identification: 
+      column-name: FEEDBACK_ICON
+      type: Hidden
+
+    layout: 
+      sequence: 120
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+- # ====== Region: RIGHT_PANEL =================================
+  id: 272585192264685855
+  identification: 
+    name: RIGHT_PANEL
+    type: Static Content
+
+  layout: 
+    sequence: 30
+    parent-region: CONTAINER # 272584736414685851
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    - margin-top-none
+    - margin-bottom-none
+    - margin-left-none
+    - margin-right-none
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Prompt ======================================
+  id: 272585277049685856
+  identification: 
+    name: Prompt
+    type: Static Content
+
+  layout: 
+    sequence: 40
+    parent-region: RIGHT_PANEL # 272585192264685855
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    css-classes: 
+    - chat-message-thread
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: CHAT_INPUT_AREA =============================
+  id: 272585377853685857
+  identification: 
+    name: CHAT_INPUT_AREA
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: RIGHT_PANEL # 272585192264685855
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    css-classes: 
+    - chat-input-container
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  configuration: 
+    build-option: Commented Out # 123954063565486069
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: ADVANCED_CONTROLS ===========================
+  id: 272585491834685858
+  identification: 
+    name: ADVANCED_CONTROLS
+    title: Advanced Settings
+    type: Static Content
+
+  layout: 
+    sequence: 60
+    parent-region: RIGHT_PANEL # 272585192264685855
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Collapsible
+    template-options: 
+    - '#DEFAULT#'
+    - js-useLocalStorage
+    - t-Region--hideShowIconsMath
+    - t-Region--controlsPosEnd
+    - is-collapsed
+    - t-Region--accent12
+    - t-Region--noUI
+    - t-Region--scrollBody
+    - t-Form--labelsAbove
+    css-classes: 
+    - advanced-settings
+    icon: fa-sliders-h
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: ADVANCED_SETTINGS
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: CHAT_SESSION ================================
+  id: 273603827332279350
+  identification: 
+    name: CHAT_SESSION
+    title: Current Chat session
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          message_id,
+          message_seq,
+          message_role,
+          message_content,
+          TO_CHAR(message_timestamp, 'HH24:MI:SS') as time_display,
+          token_count_total,
+          processing_time_ms,
+          CASE 
+              WHEN message_role = 'USER' THEN 'user-message'
+              WHEN message_role = 'ASSISTANT' THEN 'assistant-message'
+              ELSE 'system-message'
+          END as css_class
+      FROM ai_chat_messages
+      WHERE  session_id = TO_NUMBER(:P2_SESSION_ID) 
+             AND :P2_SESSION_ID IS NOT NULL   
+      ORDER BY message_seq
+      
+      
+              
+    page-items-to-submit: 
+    - P2_SESSION_ID
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 10
+    parent-region: RIGHT_PANEL # 272585192264685855
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: messages
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+
+    pagination: 
+      type: Row Ranges X to Y (with next and previous links)
+      display-position: Bottom - Right
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: MESSAGE_ID ==================================
+    id: 137150919605491124
+    identification: 
+      column-name: MESSAGE_ID
+      type: Plain Text
+
+    heading: 
+      heading: Message Id
+      alignment: end
+
+    layout: 
+      sequence: 10
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: MESSAGE_SEQ =================================
+    id: 137151387195491125
+    identification: 
+      column-name: MESSAGE_SEQ
+      type: Plain Text
+
+    heading: 
+      heading: Message Seq
+      alignment: end
+
+    layout: 
+      sequence: 20
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: MESSAGE_ROLE ================================
+    id: 137151728691491126
+    identification: 
+      column-name: MESSAGE_ROLE
+      type: Plain Text
+
+    heading: 
+      heading: Message Role
+      alignment: start
+
+    layout: 
+      sequence: 30
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: MESSAGE_CONTENT =============================
+    id: 137152176298491127
+    identification: 
+      column-name: MESSAGE_CONTENT
+      type: Plain Text
+
+    heading: 
+      heading: Message Content
+      alignment: start
+
+    layout: 
+      sequence: 40
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: TIME_DISPLAY ================================
+    id: 137152592551491128
+    identification: 
+      column-name: TIME_DISPLAY
+      type: Plain Text
+
+    heading: 
+      heading: Time Display
+      alignment: start
+
+    layout: 
+      sequence: 50
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: TOKEN_COUNT_TOTAL ===========================
+    id: 137152909199491129
+    identification: 
+      column-name: TOKEN_COUNT_TOTAL
+      type: Plain Text
+
+    heading: 
+      heading: Token Count Total
+      alignment: end
+
+    layout: 
+      sequence: 60
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: PROCESSING_TIME_MS ==========================
+    id: 137153350013491130
+    identification: 
+      column-name: PROCESSING_TIME_MS
+      type: Plain Text
+
+    heading: 
+      heading: Processing Time Ms
+      alignment: end
+
+    layout: 
+      sequence: 70
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CSS_CLASS ===================================
+    id: 137153700422491131
+    identification: 
+      column-name: CSS_CLASS
+      type: Plain Text
+
+    heading: 
+      heading: Css Class
+      alignment: start
+
+    layout: 
+      sequence: 80
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+- # ====== Region: container ===================================
+  id: 273606355960279375
+  identification: 
+    name: container
+    type: Static Content
+
+  layout: 
+    sequence: 100
+    parent-region: CONTROLS # 272584987722685853
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-ButtonRegion--noUI
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: LEFT_PANEL ==================================
+  id: 273606527564279377
+  identification: 
+    name: LEFT_PANEL
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: CONTAINER # 272584736414685851
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 2
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P2_MODEL_NAME ============================
+  id: 259632340989836499
+  identification: 
+    name: P2_MODEL_NAME
+    type: Select List
+
+  label: 
+    label: Model
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 30
+    region: container # 273606355960279375
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |2
+        SELECT 
+            provider_code || ' - ' || model_name AS display_value,
+            model_code AS return_value
+        FROM LLM_PROVIDER_MODELS
+        WHERE is_active = 'Y'
+          AND provider_code = :P2_MODEL_PROVIDER
+        ORDER BY 
+            CASE WHEN is_default = 'Y' THEN 0 ELSE 1 END,
+            model_name NULLS LAST,
+            model_name
+       
+       
+    display-extra-values: true
+    display-null-value: false
+
+  cascading-list-of-values: 
+    parent-item(s): 
+    - P2_MODEL_PROVIDER
+    parent-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: SQL Query (return single value)
+    sql-query-(return-single-value): |
+      SELECT model_code 
+      FROM LLM_PROVIDER_MODELS 
+      WHERE is_active = 'Y' 
+        AND provider_code = NVL(:P2_MODEL_PROVIDER, 'OPENAI')  
+        AND is_default = 'Y' 
+        AND ROWNUM = 1
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P2_TOKEN_COUNT ===========================
+  id: 259632761538836503
+  identification: 
+    name: P2_TOKEN_COUNT
+    type: Display Only
+
+  label: 
+    label: Tokens Used
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 40
+    region: container # 273606355960279375
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    format-mask: 999,999
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P2_PROCESSING_STATUS
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P2_PROCESSING_STATUS =====================
+  id: 259635834209836517
+  identification: 
+    name: P2_PROCESSING_STATUS
+    type: Display Only
+
+  label: 
+    label: Status
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 90
+    region: ADVANCED_CONTROLS # 272585491834685858
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Hidden
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P2_PROCESSING_STATUS
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P2_PROMPT ================================
+  id: 259643274974836536
+  identification: 
+    name: P2_PROMPT
+    type: Textarea
+
+  label: 
+    label: Your Question
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: true
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 30
+    region: Prompt # 272585277049685856
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 4
+    value-placeholder: How can I help today!
+
+  validation: 
+    value-required: false
+    maximum-length: 4000
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P2_CONTEXT_JSON ==========================
+  id: 259651353197836568
+  identification: 
+    name: P2_CONTEXT_JSON
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P2_MODEL_PROVIDER ========================
+  id: 272593759853685915
+  identification: 
+    name: P2_MODEL_PROVIDER
+    type: Select List
+
+  label: 
+    label: Provider
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 20
+    region: container # 273606355960279375
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:OpenAI;OPENAI,Claude;CLAUDE,Gemini;GEMINI'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: OPENAI
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P2_CURRENT_SESSION_TITLE =================
+  id: 272594751726685925
+  identification: 
+    name: P2_CURRENT_SESSION_TITLE
+    type: Display Only
+
+  label: 
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: container # 273606355960279375
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    - t-Form-fieldContainer--stretchInputs
+    css-classes: 
+    - session-title-display
+    icon: fa-map-pin-circle
+
+  advanced: 
+    pre-text: Chat Title
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: SQL Query (return single value)
+    sql-query-(return-single-value): |2
+       SELECT NVL(session_title, 'New Conversation')
+          FROM ai_chat_sessions
+          WHERE session_id = :P2_SESSION_ID
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P2_LIVE_TOKEN_COUNT ======================
+  id: 272594811109685926
+  identification: 
+    name: P2_LIVE_TOKEN_COUNT
+    type: Display Only
+
+  label: 
+    label: Tokens
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: false
+
+  layout: 
+    sequence: 60
+    region: container # 273606355960279375
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    icon: fa-calculator
+    format-mask: 999,999
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: SQL Query (return single value)
+    sql-query-(return-single-value): |
+      SELECT TO_CHAR(NVL(total_tokens, 0), '999,999')
+          FROM ai_chat_sessions
+          WHERE session_id = :P2_SESSION_ID
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P2_SESSION_ID ============================
+  id: 272595466079685922
+  identification: 
+    name: P2_SESSION_ID
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 10
+    region: CONTAINER # 272584736414685851
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P2_SESSION_UUID ==========================
+  id: 272595630257685923
+  identification: 
+    name: P2_SESSION_UUID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 20
+    region: CONTAINER # 272584736414685851
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: SQL Query (return single value)
+    sql-query-(return-single-value): |
+      SELECT session_uuid
+          FROM ai_chat_sessions
+          WHERE session_id = :P2_SESSION_ID
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P2_TEMPERATURE ===========================
+  id: 272597212901685932
+  identification: 
+    name: P2_TEMPERATURE
+    type: Number Field
+
+  label: 
+    label: Temperature
+    alignment: Left
+
+  settings: 
+    minimum-value: 0
+    maximum-value: 1
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 10
+    region: ADVANCED_CONTROLS # 272585491834685858
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: 0.7
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: true
+    label-1: 0.1
+    value-1: 0.1
+    label-2: 0.2
+    value-2: 0.2
+    label-3: 0.3
+    value-3: 0.3
+    label-4: 0.4
+    value-4: 0.4
+    label-5: 0.5
+    value-5: 0.5
+    label-6: 0.6
+    value-6: 0.6
+    label-7: 0.7
+    value-7: 0.7
+    label-8: 0.8
+    value-8: 0.8
+    label-9: 0.9
+    value-9: 0.9
+    label-10: 1
+    value-10: 1
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: |
+      |
+        Controls randomness. Lower = more focused, higher = more creative.
+        Range: 0.0 - 1.0
+
+- # ====== Page Item: P2_TOP_P =================================
+  id: 272597221505685933
+  identification: 
+    name: P2_TOP_P
+    type: Number Field
+
+  label: 
+    label: Top P (Nucleus Sampling)
+    alignment: Left
+
+  settings: 
+    minimum-value: 0
+    maximum-value: 1
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 20
+    region: ADVANCED_CONTROLS # 272585491834685858
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: 1.0
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: true
+    label-1: 0.05
+    value-1: 0.05
+    label-2: 0.10
+    value-2: 0.10
+    label-3: 0.20
+    value-3: 0.20
+    label-4: 0.30
+    value-4: 0.30
+    label-5: 0.40
+    value-5: 0.40
+    label-6: 0.50
+    value-6: 0.50
+    label-7: 0.60
+    value-7: 0.60
+    label-8: 0.70
+    value-8: 0.70
+    label-9: 0.80
+    value-9: 0.80
+    label-10: 0.90
+    value-10: 0.90
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: |2
+       |
+        Controls diversity via nucleus sampling. Recommended to alter this OR temperature, not both.
+        Range: 0.0 - 1.0
+
+- # ====== Page Item: P2_MAX_TOKENS ============================
+  id: 272597385566685934
+  identification: 
+    name: P2_MAX_TOKENS
+    type: Number Field
+
+  label: 
+    label: Max Tokens
+    alignment: Left
+
+  settings: 
+    minimum-value: 1
+    maximum-value: 4096
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 30
+    region: ADVANCED_CONTROLS # 272585491834685858
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: 2048
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: |
+      |
+        Maximum tokens in the response. Typical: 500-2000 for chat, 4000 for detailed responses.
+
+- # ====== Page Item: P2_FREQUENCY_PENALTY =====================
+  id: 272597507381685935
+  identification: 
+    name: P2_FREQUENCY_PENALTY
+    type: Number Field
+
+  label: 
+    label: Frequency Penalty
+    alignment: Left
+
+  settings: 
+    minimum-value: -2
+    maximum-value: 2
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 40
+    region: ADVANCED_CONTROLS # 272585491834685858
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: 0
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: |
+      |
+        Penalizes repetition of tokens. Positive = less repetition, Negative = more repetition.
+        Range: -2.0 - 2.0
+
+- # ====== Page Item: P2_PRESENCE_PENALTY ======================
+  id: 272597581308685936
+  identification: 
+    name: P2_PRESENCE_PENALTY
+    type: Number Field
+
+  label: 
+    label: Presence Penalty
+    alignment: Left
+
+  settings: 
+    minimum-value: -2
+    maximum-value: 2
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 50
+    region: ADVANCED_CONTROLS # 272585491834685858
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: 0
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: |
+      |
+        Penalizes new topics. Positive = more diverse topics, Negative = stays on topic.
+        Range: -2.0 - 2.0
+
+- # ====== Page Item: P2_SEED ==================================
+  id: 272597643718685937
+  identification: 
+    name: P2_SEED
+    type: Number Field
+
+  label: 
+    label: Seed (Optional)
+    alignment: Left
+
+  settings: 
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 60
+    region: ADVANCED_CONTROLS # 272585491834685858
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: |
+      |
+        For deterministic responses. Same seed + inputs = same output.
+        Leave blank for random responses.
+
+- # ====== Page Item: P2_RESPONSE_FORMAT =======================
+  id: 272597745203685938
+  identification: 
+    name: P2_RESPONSE_FORMAT
+    type: Select List
+
+  label: 
+    label: Response Format
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 70
+    region: ADVANCED_CONTROLS # 272585491834685858
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:Text (Default) ;text,JSON Object;json_object'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: text
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P2_STOP_SEQUENCES ========================
+  id: 272597828182685939
+  identification: 
+    name: P2_STOP_SEQUENCES
+    type: Text Field
+
+  label: 
+    label: Stop Sequences (comma-separated)
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 80
+    region: ADVANCED_CONTROLS # 272585491834685858
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: |
+      |
+        Stop generation when these sequences are encountered.
+        Example: "\n\n", "END", "---"
+
+- # ====== Page Item: P2_HIDE_SHOW_ADV =========================
+  id: 273569811714902979
+  identification: 
+    name: P2_HIDE_SHOW_ADV
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 80
+    region: CONTROLS # 272584987722685853
+    slot: NEXT
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: Y
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: EXPORT_BTN ==================================
+  id: 137137673360491079
+  identification: 
+    button-name: EXPORT_BTN
+    label: Export
+
+  layout: 
+    sequence: 80
+    region: container # 273606355960279375
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--padRight
+    - t-Button--gapTop
+    icon: fa-download
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: NEW_CHAT_BTN ================================
+  id: 137138058374491080
+  identification: 
+    button-name: NEW_CHAT_BTN
+    label: New Chat
+
+  layout: 
+    sequence: 90
+    region: container # 273606355960279375
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--noUI
+    - t-Button--iconLeft
+    - t-Button--gapTop
+    icon: fa-plus-circle
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: SETTINGS_BTN ================================
+  id: 137138458070491081
+  identification: 
+    button-name: SETTINGS_BTN
+    label: Settings Btn
+
+  layout: 
+    sequence: 70
+    region: container # 273606355960279375
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--padRight
+    - t-Button--gapTop
+    icon: fa-cog
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: CLEAR_BTN ===================================
+  id: 137148610392491117
+  identification: 
+    button-name: CLEAR_BTN
+    label: Clear chat Prompt
+
+  layout: 
+    sequence: 50
+    region: Prompt # 272585277049685856
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    icon: fa-eraser
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: SEND_BTN ====================================
+  id: 137149028688491118
+  identification: 
+    button-name: SEND_BTN
+    label: '🚀 Ask ChatPot '
+
+  layout: 
+    sequence: 40
+    region: Prompt # 272585277049685856
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    css-classes: 
+    - send-message-btn
+    icon: fa-paper-plane
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: REFRESH_BTN =================================
+  id: 137149426380491118
+  identification: 
+    button-name: REFRESH_BTN
+    label: Refresh
+
+  layout: 
+    sequence: 60
+    region: Prompt # 272585277049685856
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    icon: fa-refresh
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+dynamic-actions: 
+- # ====== Dynamic Action: Session History Item Click ==========
+  id: 137159606785491159
+  identification: 
+    name: Session History Item Click
+
+  execution: 
+    sequence: 170
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: jQuery Selector
+    jquery-selector: .session-history-item
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 137160144235491162
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        // Get session_id from clicked element's data attribute
+        var sessionId = $(this.triggeringElement).data('session-id');
+        chatApp.loadSession(sessionId);
+        
+         
+
+    execution: 
+      sequence: 10
+      event: Session History Item Click # 137159606785491159
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: DA_VALIDATE_SEND_BUTTON =============
+  id: 137160555698491163
+  identification: 
+    name: DA_VALIDATE_SEND_BUTTON
+
+  execution: 
+    sequence: 1029
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Key Release
+    selection-type: Item(s)
+    item(s): 
+    - P2_PROMPT
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 137161080570491164
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        // Get prompt value
+        var promptValue = apex.item('P2_PROMPT').getValue();
+        var sendButton = $('#SEND_BTN');
+        
+        // Check if prompt has content
+        if (promptValue && promptValue.trim().length > 0) {
+            // Enable button
+            sendButton.prop('disabled', false)
+                     .removeClass('is-disabled')
+                     .removeClass('apex_disabled')
+                     .attr('aria-disabled', 'false');
+            
+            console.log('Send button enabled');
+        } else {
+            // Disable button
+            sendButton.prop('disabled', true)
+                     .addClass('is-disabled')
+                     .addClass('apex_disabled')
+                     .attr('aria-disabled', 'true');
+            
+            console.log('Send button disabled');
+        }
+
+    execution: 
+      sequence: 10
+      event: DA_VALIDATE_SEND_BUTTON # 137160555698491163
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: DA_AUTO_SCROLL_CHAT =================
+  id: 137161486075491165
+  identification: 
+    name: DA_AUTO_SCROLL_CHAT
+
+  execution: 
+    sequence: 90
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: After Refresh
+    selection-type: Region
+    region: Prompt # 272585277049685856
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 137161970021491166
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        // Scroll chat thread to bottom
+               var chatThread = document.querySelector('.chat-message-thread');
+               if (chatThread) {
+                   chatThread.scrollTop = chatThread.scrollHeight;
+               }
+
+    execution: 
+      sequence: 10
+      event: DA_AUTO_SCROLL_CHAT # 137161486075491165
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: DA_UPDATE_TOKEN_COUNTER =============
+  id: 137162316094491167
+  identification: 
+    name: DA_UPDATE_TOKEN_COUNTER
+
+  execution: 
+    sequence: 100
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Key Release
+    selection-type: Item(s)
+    item(s): 
+    - P2_PROMPT
+
+  client-side-condition: 
+    type: Item is not null
+    item: P2_PROMPT
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 137162817571491168
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        // Estimate tokens (rough: 1 token ≈ 4 characters)
+               var text = apex.item('P2_PROMPT').getValue();
+               var estimatedTokens = Math.ceil(text.length / 4);
+               
+               apex.item('P2_LIVE_TOKEN_COUNT').setValue(
+                   estimatedTokens.toLocaleString()
+               );
+
+    execution: 
+      sequence: 10
+      event: DA_UPDATE_TOKEN_COUNTER # 137162316094491167
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: LogApplicationItems =================
+  id: 137163296773491169
+  identification: 
+    name: LogApplicationItems
+
+  execution: 
+    sequence: 1009
+    event-scope: Static
+
+  when: 
+    event: Page Load
+
+  actions: 
+  - # ====== Action: Log Global Items ============================
+    id: 137163723676491170
+    identification: 
+      name: Log Global Items
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        console.log('Role ID:', '&G_USER_ROLE_ID.');
+        console.log('Role Name:', '&G_USER_ROLE_NAME.');
+        console.log('Classification:', '&G_CLASSIFICATION_LEVEL.');
+        console.log('Tenant ID:', '&G_TENANT_ID.');
+        console.log('Tenant Name:', '&G_TENANT_NAME.');
+        console.log('Tenant Code:', '&G_TENANT_CODE.');
+        console.log('Session Start:', '&G_SESSION_START.');
+
+    execution: 
+      sequence: 10
+      event: LogApplicationItems # 137163296773491169
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: download ============================
+  id: 137164181508491171
+  identification: 
+    name: download
+
+  execution: 
+    sequence: 70
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Double Tap
+    selection-type: Button
+    button: EXPORT_BTN # 137137673360491079
+
+  actions: 
+  - # ====== Action: chat_export_&P2_SESSION_UUID..json ==========
+    id: 137164695594491173
+    identification: 
+      name: chat_export_&P2_SESSION_UUID..json
+      action: Download
+
+    settings: 
+      multiple-files: false
+      view-file-as: Attachment
+
+    source: 
+      sql-query: 'select chat_manager_pkg.export_session_json(  p_session_id => :P2_SESSION_ID ) x from dual;'
+      items-to-submit: 
+      - P2_SESSION_ID
+
+    execution: 
+      sequence: 10
+      event: download # 137164181508491171
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: New =================================
+  id: 137165056004491173
+  identification: 
+    name: New
+
+  execution: 
+    sequence: 1019
+    event-scope: Static
+
+  when: 
+    event: Page Load
+
+  configuration: 
+    build-option: Commented Out # 123954063565486069
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 137165557283491175
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |2
+          // Initialize send button state
+            this.updateSendButtonState();
+
+    execution: 
+      sequence: 10
+      event: New # 137165056004491173
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: New Chat Button click ===============
+  id: 137165987274491175
+  identification: 
+    name: New Chat Button click
+
+  execution: 
+    sequence: 160
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: NEW_CHAT_BTN # 137138058374491080
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 137166402903491177
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: CHAT_SESSION # 273603827332279350
+
+    execution: 
+      sequence: 10
+      event: New Chat Button click # 137165987274491175
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 137166995709491179
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        chatApp.createNewSession();
+        
+
+    execution: 
+      sequence: 20
+      event: New Chat Button click # 137165987274491175
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: refresh page ========================
+  id: 137167352545491179
+  identification: 
+    name: refresh page
+
+  execution: 
+    sequence: 1039
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: REFRESH_BTN # 137149426380491118
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 137167864816491181
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: CONTROLS # 272584987722685853
+
+    execution: 
+      sequence: 20
+      event: refresh page # 137167352545491179
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 137168367200491182
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: RIGHT_PANEL # 272585192264685855
+
+    execution: 
+      sequence: 10
+      event: refresh page # 137167352545491179
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 137168864344491184
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: CHAT_SESSION # 273603827332279350
+
+    execution: 
+      sequence: 30
+      event: refresh page # 137167352545491179
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 137169309692491185
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: CHAT_INPUT_AREA # 272585377853685857
+
+    execution: 
+      sequence: 40
+      event: refresh page # 137167352545491179
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Clear Session State (P2_PROMPT) =====
+  id: 137169873755491186
+  identification: 
+    name: Clear Session State (P2_PROMPT)
+
+  execution: 
+    sequence: 80
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: CLEAR_BTN # 137148610392491117
+
+  actions: 
+  - # ====== Action: Clear =======================================
+    id: 137170350238491187
+    identification: 
+      action: Clear
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P2_PROMPT
+
+    execution: 
+      sequence: 10
+      event: Clear Session State (P2_PROMPT) # 137169873755491186
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: DA_TOGGLE_ADVANCED_SETTINGS =========
+  id: 137170719892491188
+  identification: 
+    name: DA_TOGGLE_ADVANCED_SETTINGS
+
+  execution: 
+    sequence: 110
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: SETTINGS_BTN # 137138458070491081
+
+  actions: 
+  - # ====== Action: Show ========================================
+    id: 137171281194491189
+    identification: 
+      action: Show
+
+    affected-elements: 
+      selection-type: JavaScript Expression
+      javascript-expression: |
+        var region = apex.region("ADVANCED_SETTINGS");
+        if (region && region.widget) {
+            region.widget().toggleClass("is-expanded");
+        } else {
+            $("#ADVANCED_SETTINGS").toggleClass("is-expanded");
+        }
+
+    execution: 
+      sequence: 10
+      event: DA_TOGGLE_ADVANCED_SETTINGS # 137170719892491188
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+    configuration: 
+      build-option: Commented Out # 123954063565486069
+
+- # ====== Dynamic Action: DA_COPY_MESSAGE =====================
+  id: 137171688537491190
+  identification: 
+    name: DA_COPY_MESSAGE
+
+  execution: 
+    sequence: 120
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: jQuery Selector
+    jquery-selector: .copy-btn
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 137172179500491191
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |2
+         var messageId = $(this.triggeringElement).data('message-id');
+               var messageText = $(this.triggeringElement)
+                   .closest('.message-bubble')
+                   .find('.message-body')
+                   .text();
+               
+               navigator.clipboard.writeText(messageText).then(function() {
+                   apex.message.showPageSuccess('Message copied to clipboard! 📋');
+               });
+
+    execution: 
+      sequence: 10
+      event: DA_COPY_MESSAGE # 137171688537491190
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: DA_MESSAGE_FEEDBACK =================
+  id: 137172587375491192
+  identification: 
+    name: DA_MESSAGE_FEEDBACK
+
+  execution: 
+    sequence: 130
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: jQuery Selector
+    jquery-selector: .feedback-btn
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 137173072435491193
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |2
+         var messageId = $(this.triggeringElement).data('message-id');
+               
+               // Show feedback dialog
+               apex.item('P2_FEEDBACK_MESSAGE_ID').setValue(messageId);
+               apex.theme.openRegion('FEEDBACK_DIALOG');
+
+    execution: 
+      sequence: 10
+      event: DA_MESSAGE_FEEDBACK # 137172587375491192
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: New Chat ============================
+  id: 137173408388491194
+  identification: 
+    name: New Chat
+
+  execution: 
+    sequence: 150
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: NEW_CHAT_BTN # 137138058374491080
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 137173908550491195
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        
+        // Action: Execute JavaScript Code
+        
+        apex.server.process(
+            'CREATE_NEW_SESSION',
+            {},
+            {
+                success: function(data) {
+                    currentSessionId = data.session_id;
+                    apex.item('P2_SESSION_ID').setValue(currentSessionId);
+                    
+                    // Clear message display
+                    clearMessages();
+                    
+                    // Update UI
+                    apex.message.showPageSuccess('New conversation started');
+                }
+            }
+        );
+
+    execution: 
+      sequence: 10
+      event: New Chat # 137173408388491194
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Key Press ===========================
+  id: 137174398128491196
+  identification: 
+    name: Key Press
+
+  execution: 
+    sequence: 30
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Key Press
+    selection-type: Item(s)
+    item(s): 
+    - P2_PROMPT
+
+  client-side-condition: 
+    type: JavaScript expression
+    javascript-expression: this.browserEvent.key === 'Enter' && this.browserEvent.ctrlKey
+
+  actions: 
+  - # ====== Action: Submit Page =================================
+    id: 137174770761491197
+    identification: 
+      action: Submit Page
+
+    settings: 
+      request-/-button-name: SEND_BTN
+      show-processing: true
+
+    execution: 
+      sequence: 10
+      event: Key Press # 137174398128491196
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: SEND_MESSAGE_TO_AI =========================
+  id: 137158005375491153
+  identification: 
+    name: SEND_MESSAGE_TO_AI
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_session_id       NUMBER;
+          v_user_message_id  NUMBER;
+          v_assistant_msg_id NUMBER;
+          v_prompt           CLOB;
+          v_response         CLOB;
+          v_model_name       VARCHAR2(100);
+          v_model_params     JSON;
+          v_rag_context      CLOB;
+          v_rag_doc_count    NUMBER := 0;
+          v_token_input      NUMBER := 0;
+          v_token_output     NUMBER := 0;
+          v_token_total      NUMBER := 0;
+          v_processing_time  NUMBER;
+          v_start_time       TIMESTAMP;
+          v_error_occurred   BOOLEAN := FALSE;
+          v_error_message    VARCHAR2(4000);
+      BEGIN
+          apex_debug.info('=== SEND MESSAGE TO AI - START ===');
+          v_start_time := SYSTIMESTAMP;
+           -- ==================================================================
+      -- STEP 0: VALIDATE PROMPT (ADD THIS!)
+      -- ==================================================================
+              v_prompt := TRIM(:P2_PROMPT);
+      
+              IF v_prompt IS NULL OR LENGTH(v_prompt) = 0 THEN
+                  apex_error.add_error(
+                      p_message          => 'Please enter a message before sending.',
+                      p_display_location => apex_error.c_inline_in_notification
+                  );
+                  apex_debug.error('Validation failed: Empty prompt');
+                  RETURN; -- Exit process immediately
+              END IF;
+      
+              -- Minimum length validation (optional)
+              IF LENGTH(v_prompt) < 3 THEN
+                  apex_error.add_error(
+                      p_message          => 'Message is too short. Please enter at least 3 characters.',
+                      p_display_location => apex_error.c_inline_in_notification
+                  );
+                  apex_debug.error('Validation failed: Prompt too short');
+                  RETURN;
+              END IF;
+      
+              apex_debug.info('<<SEND_MESSAGE_TO_AI>>Prompt validation passed: %s characters', LENGTH(v_prompt));
+      
+          -- ==================================================================
+          -- STEP 1: GET OR CREATE SESSION
+          -- ==================================================================
+          v_session_id := :P2_SESSION_ID;
+          
+          IF v_session_id IS NULL THEN
+              v_session_id := chat_manager_pkg.get_or_create_session(
+                  p_user_id        => :APP_USER,
+                  p_model_provider => :P2_MODEL_PROVIDER
+              );
+              :P2_SESSION_ID := v_session_id;
+              apex_debug.info('Created new session: %s', v_session_id);
+          END IF;
+      
+          -- ==================================================================
+          -- STEP 2: SAVE USER MESSAGE
+          -- ==================================================================
+          v_prompt := :P2_PROMPT;
+          
+          v_user_message_id := chat_manager_pkg.add_message(
+              p_session_id      => v_session_id,
+              p_message_role    => 'USER',
+              p_message_content => v_prompt
+          );
+          
+          apex_debug.info('User message saved: %s', v_user_message_id);
+      
+          -- ==================================================================
+          -- STEP 3: BUILD MODEL NAME
+          -- ==================================================================
+          v_model_name := :P2_MODEL_NAME;
+          apex_debug.info('Model: %s', v_model_name);
+      
+          -- ==================================================================
+          -- STEP 4: RETRIEVE RAG CONTEXT (if applicable)
+          -- ==================================================================
+          BEGIN
+             /* v_rag_context := rag_context_util.get_context_for_prompt(
+                  p_prompt  => v_prompt,
+                  p_user_id => :APP_USER,
+                  p_top_k   => 5
+              );*/
+              
+              IF v_rag_context IS NOT NULL THEN
+                  SELECT COUNT(*) 
+                  INTO v_rag_doc_count
+                  FROM JSON_TABLE(v_rag_context, '$[*]' 
+                      COLUMNS (doc_id NUMBER PATH '$.doc_id')
+                  );
+                  
+                  -- 🔥 INJECT RAG CONTEXT INTO PROMPT
+                  v_prompt := 'Context:' || CHR(10) || v_rag_context || CHR(10) || CHR(10) ||
+                              'User Question:' || CHR(10) || :P2_PROMPT;
+                  
+                  apex_debug.info('RAG context retrieved: %s docs', v_rag_doc_count);
+              END IF;
+          EXCEPTION
+              WHEN OTHERS THEN
+                  apex_debug.warn('RAG context retrieval failed: %s', SQLERRM);
+                  v_rag_context   := NULL;
+                  v_rag_doc_count := 0;
+          END;
+      
+          -- ==================================================================
+          -- STEP 5: BUILD MODEL PARAMETERS JSON
+          -- ==================================================================
+         -- ==================================================================
+      DECLARE
+          v_stop_sequences JSON_ARRAY_T;
+      BEGIN
+          -- Parse stop sequences if provided
+          IF :P2_STOP_SEQUENCES IS NOT NULL THEN
+              BEGIN
+                  -- If stored as JSON array string: ["\\n", "User:"]
+                  v_stop_sequences := JSON_ARRAY_T(:P2_STOP_SEQUENCES);
+              EXCEPTION
+                  WHEN OTHERS THEN
+                      apex_debug.warn('Invalid stop sequences format, ignoring: %s', SQLERRM);
+                      v_stop_sequences := NULL;
+              END;
+          END IF;
+      
+          -- Build parameters with explicit type conversions
+         /* v_model_params := JSON_OBJECT(
+              'model'               VALUE v_model_name,
+              'temperature'         VALUE CASE 
+                                              WHEN :P2_TEMPERATURE IS NOT NULL 
+                                              THEN TO_NUMBER(:P2_TEMPERATURE) 
+                                          END,
+              'top_p'               VALUE CASE 
+                                              WHEN :P2_TOP_P IS NOT NULL 
+                                              THEN TO_NUMBER(:P2_TOP_P) 
+                                          END,
+              'max_tokens'          VALUE CASE 
+                                              WHEN :P2_MAX_TOKENS IS NOT NULL 
+                                              THEN TO_NUMBER(:P2_MAX_TOKENS) 
+                                          END,
+              'frequency_penalty'   VALUE CASE 
+                                              WHEN :P2_FREQUENCY_PENALTY IS NOT NULL 
+                                              THEN TO_NUMBER(:P2_FREQUENCY_PENALTY) 
+                                          END,
+              'presence_penalty'    VALUE CASE 
+                                              WHEN :P2_PRESENCE_PENALTY IS NOT NULL 
+                                              THEN TO_NUMBER(:P2_PRESENCE_PENALTY) 
+                                          END,
+              'seed'                VALUE CASE 
+                                              WHEN :P2_SEED IS NOT NULL 
+                                              THEN TO_NUMBER(:P2_SEED) 
+                                          END,
+              'response_format'     VALUE :P2_RESPONSE_FORMAT,
+              'stop'                VALUE v_stop_sequences
+              ABSENT ON NULL -- Critical: removes null values from JSON
+          );
+          */
+        --  apex_debug.info('Model Parameters: %s', v_model_params.to_string());
+          
+      EXCEPTION
+          WHEN OTHERS THEN
+              apex_debug.error('Failed to build model parameters: %s', SQLERRM);
+              -- Build minimal parameters as fallback
+             /* v_model_params := JSON_OBJECT(
+                  'model'      VALUE v_model_name,
+                  'max_tokens' VALUE 4000
+              );*/
+      END;
+          --apex_debug.info('Parameters: %s', v_model_params.to_string());
+      
+          -- ==================================================================
+          -- STEP 6: CALL LLM API
+          -- ==================================================================
+          BEGIN
+              -- Option A: If OPENAI_PKG expects (p_prompt, p_params)
+            /*  v_response := openai_pkg.call_openai(
+                  p_prompt => v_prompt,
+                  p_params => v_model_params
+              );*/
+              
+              -- Option B: If OPENAI_PKG expects JSON request object, use this instead:
+              /*
+              v_response := openai_pkg.call_openai(
+                  p_request => JSON_OBJECT(
+                      'prompt' VALUE v_prompt,
+                      'model'  VALUE v_model_name,
+                      'params' VALUE v_model_params
+                  )
+              );
+              */
+      
+              -- Extract token usage from response metadata
+              BEGIN
+                  SELECT 
+                      NVL(JSON_VALUE(v_response, '$.usage.prompt_tokens'), 0),
+                      NVL(JSON_VALUE(v_response, '$.usage.completion_tokens'), 0),
+                      NVL(JSON_VALUE(v_response, '$.usage.total_tokens'), 0)
+                  INTO 
+                      v_token_input,
+                      v_token_output,
+                      v_token_total
+                  FROM DUAL;
+              EXCEPTION
+                  WHEN OTHERS THEN
+                      v_token_input  := 0;
+                      v_token_output := 0;
+                      v_token_total  := 0;
+                      apex_debug.warn('Token extraction failed: %s', SQLERRM);
+              END;
+      
+              apex_debug.info('OpenAI response received: %s tokens', v_token_total);
+      
+          EXCEPTION
+              WHEN OTHERS THEN
+                  v_error_occurred := TRUE;
+                  v_error_message  := SQLERRM;
+                  v_response       := '❌ Error: ' || v_error_message;
+                  apex_debug.error('OpenAI call failed: %s', v_error_message);
+          END;
+      
+          -- ==================================================================
+          -- STEP 7: CALCULATE PROCESSING TIME
+          -- ==================================================================
+          v_processing_time := EXTRACT(SECOND FROM (SYSTIMESTAMP - v_start_time)) * 1000;
+      
+          -- ==================================================================
+          -- STEP 8: SAVE ASSISTANT RESPONSE
+          -- ==================================================================
+          v_assistant_msg_id := chat_manager_pkg.add_message(
+              p_session_id      => v_session_id,
+              p_message_role    => 'ASSISTANT',
+              p_message_content => v_response,
+              p_model_params    => v_model_params,
+              p_rag_context     => v_rag_context,
+              p_rag_doc_count   => v_rag_doc_count,
+              p_token_input     => v_token_input,
+              p_token_output    => v_token_output,
+              p_token_total     => v_token_total,
+              p_processing_time => v_processing_time
+          );
+          
+          apex_debug.info('Assistant message saved: %s', v_assistant_msg_id);
+      
+          -- ==================================================================
+          -- STEP 9: UPDATE SESSION TOTALS
+          -- ==================================================================
+          chat_manager_pkg.update_session_totals(
+              p_session_id => v_session_id
+          );
+      
+          -- ==================================================================
+          -- STEP 10: COMPREHENSIVE AUDIT LOGGING
+          -- ==================================================================
+          BEGIN
+              ai_log_util.log_llm_call(
+                  p_user_id            => :APP_USER,
+                  p_model_provider     => :P2_MODEL_PROVIDER,
+                  p_model_name         => v_model_name,
+                  p_call_purpose       => 'CHAT_RESPONSE',
+                  p_query_text         => :P2_PROMPT, -- Original user prompt
+                  p_response_text      => v_response,
+                  p_token_count_input  => v_token_input,
+                  p_token_count_output => v_token_output,
+                  p_token_count_total  => v_token_total,
+                  p_processing_time_ms => v_processing_time,
+                  p_temperature        => :P2_TEMPERATURE,
+                  p_top_p              => :P2_TOP_P,
+                  p_max_tokens         => :P2_MAX_TOKENS,
+                  p_apex_session_id    => :APP_SESSION,
+                  p_is_error           => CASE WHEN v_error_occurred THEN 'Y' ELSE 'N' END,
+                  p_error_message      => v_error_message
+              );
+      
+              IF v_rag_context IS NOT NULL THEN
+                  ai_log_util.log_rag_search(
+                      p_user_id            => :APP_USER,
+                      p_query_text         => :P2_PROMPT,
+                      p_search_type        => 'HYBRID',
+                      p_chunks_retrieved   => v_rag_doc_count,
+                      p_chunks_selected    => v_rag_doc_count,
+                      p_context_size_bytes => LENGTH(v_rag_context),
+                      p_apex_session_id    => :APP_SESSION,
+                      p_is_error           => 'N'
+                  );
+              END IF;
+      
+              COMMIT;
+              
+          EXCEPTION
+              WHEN OTHERS THEN
+                  apex_debug.error('Audit logging failed: %s', SQLERRM);
+                  -- Continue execution even if logging fails
+          END;
+      
+          -- ==================================================================
+          -- STEP 11: CLEAR INPUT & SET STATUS
+          -- ==================================================================
+          :P2_PROMPT := NULL; -- Clear input after successful send
+          :P2_PROCESSING_STATUS := CASE 
+              WHEN v_error_occurred THEN '❌ Error' 
+              ELSE '✅ Success' 
+          END;
+      
+          apex_debug.info('=== SEND MESSAGE TO AI - COMPLETE ===');
+      
+      EXCEPTION
+          WHEN OTHERS THEN
+              apex_debug.error('=== CRITICAL ERROR ===');
+              apex_debug.error('Error: %s', SQLERRM);
+              apex_debug.error('Backtrace: %s', DBMS_UTILITY.FORMAT_ERROR_BACKTRACE);
+              
+              apex_error.add_error(
+                  p_message          => 'Failed to send message: ' || SQLERRM,
+                  p_display_location => apex_error.c_inline_in_notification
+              );
+              
+              :P2_PROCESSING_STATUS := '❌ Critical Error';
+              
+              ROLLBACK;
+      END;
+
+  execution: 
+    sequence: 40
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  success-message: 
+    success-message: Message sent successfully! ✅
+
+  error: 
+    error-message: Failed to send message. Please try again.
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: SEND_BTN # 137149028688491118
+
+- # ====== Process: GET_OR_CREATE_SESSION ======================
+  id: 137158487327491155
+  identification: 
+    name: GET_OR_CREATE_SESSION
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_session_id     NUMBER;
+          v_session_title  VARCHAR2(200);
+          v_message_count  NUMBER;
+          v_model_provider VARCHAR2(50);
+          v_user_id number;
+      BEGIN
+           select user_id into v_user_id from users u where user_name =:APP_USER ;
+          -- Get model provider from request or default
+          v_model_provider := NVL(apex_application.g_x01, 'OPENAI');
+          
+          -- Get or create session (this does the DML)
+          v_session_id := chat_manager_pkg.get_or_create_session(
+              p_user_id        => v_user_id,
+              p_model_provider => v_model_provider
+          );
+          
+          -- Get session details for UI
+          BEGIN
+              SELECT 
+                  session_title,
+                  message_count
+              INTO 
+                  v_session_title,
+                  v_message_count
+              FROM ai_chat_sessions
+              WHERE session_id = v_session_id;
+          EXCEPTION
+              WHEN NO_DATA_FOUND THEN
+                  v_session_title := 'New Conversation';
+                  v_message_count := 0;
+          END;
+          
+          -- Return JSON response
+          apex_json.open_object;
+          apex_json.write('status', 'success');
+          apex_json.write('session_id', v_session_id);
+          apex_json.write('session_title', v_session_title);
+          apex_json.write('message_count', v_message_count);
+          apex_json.write('is_new', CASE WHEN v_message_count = 0 THEN 'true' ELSE 'false' END);
+          apex_json.close_object;
+          
+          -- Log for debugging
+          apex_debug.info('Session initialized: %s for user: %s', v_session_id, :APP_USER);
+          
+      EXCEPTION
+          WHEN OTHERS THEN
+              apex_json.open_object;
+              apex_json.write('status', 'error');
+              apex_json.write('error_code', SQLCODE);
+              apex_json.write('error_message', SQLERRM);
+              apex_json.close_object;
+              
+              apex_debug.error('Session initialization failed: %s', SQLERRM);
+      END;
+
+  execution: 
+    sequence: 10
+    point: Ajax Callback
+    run-process: Once Per Session or When Reset
+
+- # ====== Process: CREATE_NEW_SESSION =========================
+  id: 137158843038491156
+  identification: 
+    name: CREATE_NEW_SESSION
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_session_id     NUMBER;
+          v_model_provider VARCHAR2(50);
+          v_user_id number;
+      BEGIN
+           select user_id into v_user_id from users u where user_name =:APP_USER ;
+          -- Get model provider from request or default
+          v_model_provider := NVL(apex_application.g_x01, 'OPENAI');
+          
+          -- Force creation of new session
+          v_session_id := chat_manager_pkg.create_session(
+              p_user_id        => v_user_id,
+              p_model_provider => v_model_provider,
+              p_session_title  => 'New Conversation',
+              p_apex_session_id => V('APP_SESSION')
+          );
+          
+          -- Return JSON response
+          apex_json.open_object;
+          apex_json.write('status', 'success');
+          apex_json.write('session_id', v_session_id);
+          apex_json.write('message', 'New conversation created');
+          apex_json.close_object;
+          
+          apex_debug.info('New session created: %s for user: %s', v_session_id, :APP_USER);
+          
+      EXCEPTION
+          WHEN OTHERS THEN
+              apex_json.open_object;
+              apex_json.write('status', 'error');
+              apex_json.write('error_message', SQLERRM);
+              apex_json.close_object;
+              
+              apex_debug.error('New session creation failed: %s', SQLERRM);
+      END;
+
+  execution: 
+    sequence: 20
+    point: Ajax Callback
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: LOAD_SESSION_MESSAGES ======================
+  id: 137159218830491157
+  identification: 
+    name: LOAD_SESSION_MESSAGES
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_session_id     NUMBER;
+          v_session_title  VARCHAR2(200);
+          v_message_count  NUMBER;
+          v_user_id        NUMBER;
+          v_session_userid NUMBER;
+      BEGIN
+      
+       
+           select user_id into v_session_userid from users u where user_name =:APP_USER ;
+          -- Get session_id from request
+          v_session_id := TO_NUMBER(apex_application.g_x01);
+          
+          -- Validate session belongs to user
+          BEGIN
+              SELECT 
+                  user_id,
+                  session_title,
+                  message_count
+              INTO 
+                  v_user_id,
+                  v_session_title,
+                  v_message_count
+              FROM ai_chat_sessions
+              WHERE session_id = v_session_id;
+              
+              -- Security check
+              IF v_user_id != v_session_userid THEN
+                  RAISE_APPLICATION_ERROR(-20001, 'Access denied: Session belongs to different user');
+              END IF;
+              
+          EXCEPTION
+              WHEN NO_DATA_FOUND THEN
+                  RAISE_APPLICATION_ERROR(-20002, 'Session not found: ' || v_session_id);
+          END;
+          
+          -- Return session info
+          apex_json.open_object;
+          apex_json.write('status', 'success');
+          apex_json.write('session_id', v_session_id);
+          apex_json.write('session_title', v_session_title);
+          apex_json.write('message_count', v_message_count);
+          apex_json.close_object;
+          
+      EXCEPTION
+          WHEN OTHERS THEN
+              apex_json.open_object;
+              apex_json.write('status', 'error');
+              apex_json.write('error_message', SQLERRM);
+              apex_json.close_object;
+      END;
+
+  execution: 
+    sequence: 30
+    point: Ajax Callback
+    run-process: Once Per Page Visit (default)
+

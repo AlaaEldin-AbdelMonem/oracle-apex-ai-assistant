@@ -1,0 +1,1187 @@
+---
+# ====== Page: Context Dashboard =============================
+id: 420
+identification: 
+  name: Context Dashboard
+  alias: CONTEXT-DASHBOARD
+  title: Context Dashboard
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    /* Quick Links Container */
+    .quick-links-container {
+        margin-bottom: 2rem;
+    }
+    
+    .quick-links-header {
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+    
+    .quick-links-header h3 {
+        font-size: 1.5rem;
+        margin: 0 0 0.5rem 0;
+        color: #333;
+    }
+    
+    .quick-links-header .help-text {
+        color: #666;
+        font-size: 0.95rem;
+        margin: 0;
+    }
+    
+    /* Grid Layout */
+    .quick-links-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    
+    /* Card Styling */
+    .quick-link-card {
+        display: flex;
+        align-items: center;
+        padding: 1.25rem;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .quick-link-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-color: #3f51b5;
+    }
+    
+    .quick-link-card.current-page {
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        border-color: #2196f3;
+    }
+    
+    /* Card Components */
+    .card-icon {
+        font-size: 2rem;
+        margin-right: 1rem;
+        flex-shrink: 0;
+    }
+    
+    .card-content {
+        flex: 1;
+    }
+    
+    .card-content h4 {
+        margin: 0 0 0.25rem 0;
+        font-size: 1.1rem;
+        color: #333;
+    }
+    
+    .card-content p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #666;
+    }
+    
+    .card-arrow {
+        font-size: 1.5rem;
+        color: #3f51b5;
+        margin-left: 1rem;
+        flex-shrink: 0;
+        opacity: 0;
+        transform: translateX(-10px);
+        transition: all 0.3s ease;
+    }
+    
+    .quick-link-card:hover .card-arrow {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    
+    /* Badges */
+    .badge-page,
+    .badge-current {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+    }
+    
+    .badge-page {
+        background: #e0e0e0;
+        color: #555;
+    }
+    
+    .badge-current {
+        background: #2196f3;
+        color: white;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .quick-links-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    
+    /* Domain Health Chart Styling */
+    .domain-health-chart {
+        padding: 1rem;
+        background: #ffffff;
+        border-radius: 8px;
+    }
+    
+    /* Chart container */
+    .apex-charts-theme-default .apexcharts-canvas {
+        margin: 0 auto;
+    }
+    
+    /* Customize tooltip */
+    .apexcharts-tooltip {
+        background: rgba(255, 255, 255, 0.95) !important;
+        border: 1px solid #e0e0e0 !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    }
+    
+    /* Legend styling */
+    .apexcharts-legend {
+        padding: 0.5rem !important;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: KPI 1 — Context Domains =====================
+  id: 161541842688169201
+  identification: 
+    name: KPI 1 — Context Domains
+    type: Cards
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT
+          'Context Domains'      AS card_title,
+          COUNT(*)               AS card_value,
+          'Active: ' || SUM(CASE WHEN is_active = 'Y' THEN 1 ELSE 0 END)
+          || ' | Default: ' || SUM(CASE WHEN is_default = 'Y' THEN 1 ELSE 0 END)
+                                  AS card_subtext,
+          'fa fa-layers'       AS card_icon,
+          'is-info'              AS card_color
+      FROM context_domains;
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 10
+    parent-region: KPI # 161545498830169237
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Cards Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
+    css-classes: 
+    - '&CARD_ICON.'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 161541906268169202
+    appearance: 
+      layout: Grid
+      grid-columns: Auto
+      css-classes: 
+      - '&CARD_COLOR.'
+
+    title: 
+      advanced-formatting: false
+      column: CARD_TITLE
+
+    subtitle: 
+      advanced-formatting: false
+
+    body: 
+      advanced-formatting: true
+      html-expression: '&CARD_SUBTEXT.'
+
+    secondary-body: 
+      advanced-formatting: false
+
+    icon-and-badge: 
+      icon-source: Icon Class Column
+      icon-column: CARD_ICON
+      icon-css-classes: '&CARD_COLOR.'
+      icon-position: Start
+
+    media: 
+      advanced-formatting: false
+      source: No Media
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Scroll
+      show-total-count: false
+
+- # ====== Region: KPI 2 — Intents =============================
+  id: 161542013312169203
+  identification: 
+    name: KPI 2 — Intents
+    type: Cards
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT
+          'Intents'                              AS card_title,
+          COUNT(*)                               AS card_value,
+          'Active: ' || SUM(CASE WHEN is_active = 'Y' THEN 1 ELSE 0 END)
+          || ' | Domains: ' || COUNT(DISTINCT context_domain_id)
+                                                  AS card_subtext,
+          'fa fa-bullseye'                          AS card_icon,
+          'is-success'                          AS card_color
+      FROM domain_intents;
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 10
+    parent-region: KPI # 161545498830169237
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Cards Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
+    css-classes: 
+    - '&card_color.'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 161542146681169204
+    appearance: 
+      layout: Grid
+      grid-columns: Auto
+      css-classes: 
+      - '&CARD_COLOR.'
+
+    title: 
+      advanced-formatting: false
+      column: CARD_TITLE
+
+    subtitle: 
+      advanced-formatting: false
+
+    body: 
+      advanced-formatting: false
+      column: CARD_SUBTEXT
+
+    secondary-body: 
+      advanced-formatting: false
+
+    icon-and-badge: 
+      icon-source: Icon Class Column
+      icon-column: CARD_ICON
+      icon-css-classes: '&CARD_COLOR.'
+      icon-position: Start
+
+    media: 
+      advanced-formatting: false
+      source: No Media
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Scroll
+      show-total-count: false
+
+- # ====== Region: KPI 3 — Data Sources ========================
+  id: 161542288659169205
+  identification: 
+    name: KPI 3 — Data Sources
+    type: Cards
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT
+          'Data Sources'                        AS card_title,
+          COUNT(*)                              AS card_value,
+          'Active: ' || SUM(CASE WHEN is_active = 'Y' THEN 1 ELSE 0 END)
+          || ' | Types: ' || COUNT(DISTINCT registry_source_type_code)
+                                                  AS card_subtext,
+          'fa fa-database'                         AS card_icon,
+          'is-warning'                          AS card_color
+      FROM context_registry;
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 10
+    parent-region: KPI # 161545498830169237
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Cards Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
+    css-classes: 
+    - '&CARD_ICON.'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 161542365155169206
+    appearance: 
+      layout: Grid
+      grid-columns: Auto
+      css-classes: 
+      - '&CARD_COLOR.'
+
+    title: 
+      advanced-formatting: false
+      column: CARD_TITLE
+
+    subtitle: 
+      advanced-formatting: false
+
+    body: 
+      advanced-formatting: false
+      column: CARD_SUBTEXT
+
+    secondary-body: 
+      advanced-formatting: false
+
+    icon-and-badge: 
+      icon-source: Icon Class Column
+      icon-column: CARD_ICON
+      icon-css-classes: '&CARD_COLOR.'
+      icon-position: Start
+
+    media: 
+      advanced-formatting: false
+      source: No Media
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Scroll
+      show-total-count: false
+
+- # ====== Region: Domain Health Matrix  =======================
+  id: 161542402391169207
+  identification: 
+    name: 'Domain Health Matrix '
+    type: Chart
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          cd.domain_name AS label,
+          cd.context_domain_code,
+          (SELECT COUNT(*)
+           FROM domain_intents di
+           WHERE di.context_domain_id = cd.context_domain_id
+             AND di.is_active = 'Y') AS intent_count,
+          (SELECT COUNT(DISTINCT cdr.context_registry_id)
+           FROM context_domain_registry cdr
+           WHERE cdr.context_domain_id = cd.context_domain_id
+             AND cdr.is_active = 'Y') AS data_source_count,
+          CASE 
+              WHEN (SELECT COUNT(*) FROM domain_intents di 
+                    WHERE di.context_domain_id = cd.context_domain_id 
+                      AND di.is_active = 'Y') = 0 THEN '#f44336'
+              WHEN (SELECT COUNT(*) FROM domain_intents di 
+                    WHERE di.context_domain_id = cd.context_domain_id 
+                      AND di.is_active = 'Y') < 3 THEN '#ff9800'
+              ELSE '#4caf50'
+          END AS status_color,
+          CASE 
+              WHEN (SELECT COUNT(*) FROM domain_intents di 
+                    WHERE di.context_domain_id = cd.context_domain_id 
+                      AND di.is_active = 'Y') = 0 THEN 'No Intents Defined'
+              WHEN (SELECT COUNT(*) FROM domain_intents di 
+                    WHERE di.context_domain_id = cd.context_domain_id 
+                      AND di.is_active = 'Y') < 3 THEN 'Low Intent Coverage'
+              ELSE 'Good Coverage'
+          END AS status_text,
+          cd.display_order,
+          '<strong>' || cd.domain_name || '</strong><br>' ||
+          'Intents: <strong>' || 
+              (SELECT COUNT(*) FROM domain_intents di 
+               WHERE di.context_domain_id = cd.context_domain_id 
+                 AND di.is_active = 'Y') || '</strong><br>' ||
+          'Status: <span style="color:' || 
+              CASE 
+                  WHEN (SELECT COUNT(*) FROM domain_intents di 
+                        WHERE di.context_domain_id = cd.context_domain_id 
+                          AND di.is_active = 'Y') = 0 THEN '#f44336'
+                  WHEN (SELECT COUNT(*) FROM domain_intents di 
+                        WHERE di.context_domain_id = cd.context_domain_id 
+                          AND di.is_active = 'Y') < 3 THEN '#ff9800'
+                  ELSE '#4caf50'
+              END || ';">' || 
+              CASE 
+                  WHEN (SELECT COUNT(*) FROM domain_intents di 
+                        WHERE di.context_domain_id = cd.context_domain_id 
+                          AND di.is_active = 'Y') = 0 THEN 'No Intents Defined'
+                  WHEN (SELECT COUNT(*) FROM domain_intents di 
+                        WHERE di.context_domain_id = cd.context_domain_id 
+                          AND di.is_active = 'Y') < 3 THEN 'Low Intent Coverage'
+                  ELSE 'Good Coverage'
+              END || '</span>' AS tooltip,
+          '<strong>' || cd.domain_name || '</strong><br>' ||
+          'Data Sources: <strong>' || 
+              (SELECT COUNT(DISTINCT cdr.context_registry_id) 
+               FROM context_domain_registry cdr 
+               WHERE cdr.context_domain_id = cd.context_domain_id 
+                 AND cdr.is_active = 'Y') || '</strong>' AS tooltip2
+      FROM context_domains cd
+      WHERE cd.is_active = 'Y'
+      ORDER BY cd.display_order NULLS LAST
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    css-classes: 
+    - domain-health-chart
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  security: 
+    escape-special-characters: true
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 161545556984169238
+    chart: 
+      type: Combination
+
+    appearance: 
+      orientation: Vertical
+      stack: false
+
+    layout: 
+      height: 400
+
+    data-cursor: 
+      cursor: Automatic
+      behavior: Automatic
+      dim-on-hover: true
+
+    multi-series-chart-data: 
+      fill-gaps-in-chart-data: true
+      sort-order: Label - Ascending
+      render-gap-as-zero: true
+
+    settings: 
+      zoom-and-scroll: No
+
+    animation: 
+      on-display: Automatic
+      on-data-change: Automatic
+
+    tooltip: 
+      show: true
+      show-series-name: true
+      show-group-name: true
+      show-value: true
+
+    legend: 
+      show: false
+
+    series: 
+    - # ====== Series: Intent Count ================================
+      id: 161545635005169239
+      identification: 
+        name: Intent Count
+        type: Bar
+
+      execution: 
+        sequence: 10
+
+      source: 
+        location: Region Source
+
+      column-mapping: 
+        label: LABEL
+        value-aggregation: No Aggregation
+        value: INTENT_COUNT
+        label-tooltip: TOOLTIP
+
+      appearance: 
+        color: '&STATUS_COLOR.'
+        assigned-to-y2-axis: false
+
+      line: 
+        style: Solid
+
+      label: 
+        show: false
+
+    - # ====== Series: Data Sources ================================
+      id: 161545907433169242
+      identification: 
+        name: Data Sources
+        type: Line
+
+      execution: 
+        sequence: 20
+
+      source: 
+        location: Region Source
+
+      column-mapping: 
+        label: LABEL
+        value-aggregation: No Aggregation
+        value: DATA_SOURCE_COUNT
+        label-tooltip: TOOLTIP2
+
+      appearance: 
+        color: '#2196f3'
+        assigned-to-y2-axis: false
+
+      line: 
+        style: Solid
+        type: Automatic
+
+      marker: 
+        show: Automatic
+        shape: Automatic
+
+      label: 
+        show: false
+
+    axes: 
+    - # ====== Axis: x =============================================
+      id: 161545707282169240
+      identification: 
+        name: x
+        show-axis: true
+        title: Context Domains
+
+      value: 
+        format-scaling: Automatic
+        baseline-scaling: Zero
+        scale: Linear
+
+      major-ticks: 
+        show: Yes
+
+      minor-ticks: 
+        show: false
+
+      tick-label: 
+        show: true
+        rotation: true
+        position: Outside
+
+    - # ====== Axis: y =============================================
+      id: 161545886634169241
+      identification: 
+        name: y
+        show-axis: true
+        title: Count
+
+      value: 
+        minimum: 0
+        format: Decimal
+        decimal-places: 0
+        format-scaling: None
+        baseline-scaling: Zero
+        scale: Linear
+
+      appearance: 
+        position: Automatic
+
+      major-ticks: 
+        show: Yes
+
+      minor-ticks: 
+        show: false
+
+      tick-label: 
+        show: true
+
+    - # ====== Axis: y2 ============================================
+      id: 161546086193169243
+      identification: 
+        name: y2
+        show-axis: true
+
+      value: 
+        format-scaling: Automatic
+        baseline-scaling: Zero
+        scale: Linear
+
+      appearance: 
+        position: Automatic
+
+      major-ticks: 
+        show: Yes
+
+      minor-ticks: 
+        show: false
+
+      tick-label: 
+        show: true
+
+      dual-y-axes: 
+        show: Automatic
+
+- # ====== Region: Domain Configuration Cards ==================
+  id: 161543714875169220
+  identification: 
+    name: Domain Configuration Cards
+    title: Domain Configuration Cards
+    type: Cards
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          cd.context_domain_id,
+          cd.domain_name,
+          cd.context_domain_code,
+          cd.description,
+          'fa '|| cd.icon_class icon_class,
+          cd.is_active,
+          COUNT(DISTINCT di.domain_intent_id) AS intent_count,
+          COUNT(DISTINCT cdr.context_registry_id) AS source_count,
+          ROUND(
+              (COUNT(DISTINCT di.domain_intent_id) * 50 + 
+               COUNT(DISTINCT cdr.context_registry_id) * 3.33) / 
+              NULLIF((5 * 50 + 15 * 3.33), 0) * 100, 
+              0
+          ) AS completion_pct,
+          'f?p=&APP_ID.:422:&SESSION.::&DEBUG.:RP,422:P422_CONTEXT_DOMAIN_ID:' || cd.context_domain_id AS edit_link
+      FROM context_domains cd,  domain_intents di,
+           context_domain_registry cdr
+      WHERE cd.context_domain_id = di.context_domain_id(+)
+        AND cd.context_domain_id = cdr.context_domain_id(+)
+      GROUP BY 
+          cd.context_domain_id,
+          cd.domain_name,
+          cd.context_domain_code,
+          cd.description,
+          cd.icon_class,
+          cd.is_active
+       
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 60
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Cards Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
+    - t-CardsRegion--styleC
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 161545390717169236
+    appearance: 
+      layout: Grid
+      grid-columns: Auto
+
+    card: 
+      primary-key-column-1: CONTEXT_DOMAIN_ID
+
+    title: 
+      advanced-formatting: false
+      column: DOMAIN_NAME
+
+    subtitle: 
+      advanced-formatting: false
+      column: CONTEXT_DOMAIN_CODE
+
+    body: 
+      advanced-formatting: false
+      column: DESCRIPTION
+
+    secondary-body: 
+      advanced-formatting: true
+      html-expression: |
+        Intent Count: &INTENT_COUNT. ,
+        Source Count: &SOURCE_COUNT.  
+
+    icon-and-badge: 
+      icon-source: Icon Class Column
+      icon-column: ICON_CLASS
+      icon-position: Start
+
+    media: 
+      advanced-formatting: false
+      source: No Media
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Scroll
+      show-total-count: false
+
+- # ====== Region: Domain Configuration Cards  =================
+  id: 161545043162169233
+  identification: 
+    name: 'Domain Configuration Cards '
+    type: Cards
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          'MISSING_INTENTS' AS alert_type,
+          'Warning' AS severity,
+          cd.domain_name || ' has no intents defined' AS message,
+          'f?p=&APP_ID.:422:&SESSION.::&DEBUG.:RP:P422_CONTEXT_DOMAIN_ID:' || cd.context_domain_id AS action_link
+      FROM context_domains cd
+      WHERE NOT EXISTS (
+          SELECT 1 
+          FROM domain_intents di 
+          WHERE di.context_domain_id = cd.context_domain_id
+      )
+        AND cd.is_active = 'Y'
+      UNION ALL
+      SELECT 
+          'LOW_SOURCES' AS alert_type,
+          'Info' AS severity,
+          cd.domain_name || ' has only ' || COUNT(cdr.context_registry_id) || ' data sources' AS message,
+          'f?p=&APP_ID.:424:&SESSION.::&DEBUG.:::' AS action_link
+      FROM context_domains cd,
+           context_domain_registry cdr
+      WHERE cd.context_domain_id = cdr.context_domain_id(+)
+        AND cd.is_active = 'Y'
+      GROUP BY cd.context_domain_id, cd.domain_name
+      HAVING COUNT(cdr.context_registry_id) < 5
+      UNION ALL
+      SELECT 
+          'INACTIVE_DOMAIN' AS alert_type,
+          'Warning' AS severity,
+          domain_name || ' is marked as inactive' AS message,
+          'f?p=&APP_ID.:422:&SESSION.::&DEBUG.:RP:P422_CONTEXT_DOMAIN_ID:' || context_domain_id AS action_link
+      FROM context_domains
+      WHERE is_active = 'N';
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 70
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Cards Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  configuration: 
+    build-option: Commented Out # 123954063565486069
+
+  attributes: 
+    id: 161545185615169234
+    appearance: 
+      layout: Grid
+      grid-columns: Auto
+
+    title: 
+      advanced-formatting: false
+      column: ALERT_TYPE
+
+    subtitle: 
+      advanced-formatting: false
+      column: SEVERITY
+
+    body: 
+      advanced-formatting: false
+      column: MESSAGE
+
+    secondary-body: 
+      advanced-formatting: false
+
+    icon-and-badge: 
+      icon-source: No Icon
+
+    media: 
+      advanced-formatting: false
+      source: No Media
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Scroll
+      show-total-count: false
+
+- # ====== Region: links =======================================
+  id: 161545288196169235
+  identification: 
+    name: links
+    type: Static Content
+
+  source: 
+    html-code: |
+      <div class="quick-links-container">
+          <div class="quick-links-header">
+              <h3>🧩 Context & Intent Management</h3>
+              <p class="help-text">Quick access to all context and intent configuration pages</p>
+          </div>
+          
+          <div class="quick-links-grid">
+              <!-- Current Page -->
+              <div class="quick-link-card current-page">
+                  <div class="card-icon">📊</div>
+                  <div class="card-content">
+                      <h4>Context Dashboard</h4>
+                      <p>Overview and metrics</p>
+                      <span class="badge-current">Current Page</span>
+                  </div>
+              </div>
+              
+              <!-- Page 422: Intention (Domains) List -->
+              <a href="f?p=&APP_ID.:422:&SESSION.::&DEBUG.::::" class="quick-link-card">
+                  <div class="card-icon">🎯</div>
+                  <div class="card-content">
+                      <h4>Intention (Domains) List</h4>
+                      <p>Manage context domains</p>
+                      <span class="badge-page">Page 422</span>
+                  </div>
+                  <div class="card-arrow">→</div>
+              </a>
+              
+              <!-- Page 424: Data Sources Registry -->
+              <a href="f?p=&APP_ID.:424:&SESSION.::&DEBUG.::::" class="quick-link-card">
+                  <div class="card-icon">💾</div>
+                  <div class="card-content">
+                      <h4>Data Sources Registry</h4>
+                      <p>Configure data sources</p>
+                      <span class="badge-page">Page 424</span>
+                  </div>
+                  <div class="card-arrow">→</div>
+              </a>
+              
+              <!-- Page 426: Intention & Data Sources -->
+              <a href="f?p=&APP_ID.:426:&SESSION.::&DEBUG.::::" class="quick-link-card">
+                  <div class="card-icon">🔗</div>
+                  <div class="card-content">
+                      <h4>Intention & Data Sources</h4>
+                      <p>Link domains to sources</p>
+                      <span class="badge-page">Page 426</span>
+                  </div>
+                  <div class="card-arrow">→</div>
+              </a>
+              
+              <!-- Page 428: Data Sources & Roles -->
+              <a href="f?p=&APP_ID.:428:&SESSION.::&DEBUG.::::" class="quick-link-card">
+                  <div class="card-icon">🔐</div>
+                  <div class="card-content">
+                      <h4>Data Sources & Roles</h4>
+                      <p>Role-based access control</p>
+                      <span class="badge-page">Page 428</span>
+                  </div>
+                  <div class="card-arrow">→</div>
+              </a>
+              
+              <!-- Page 440: Domain Retriever -->
+              <a href="f?p=&APP_ID.:440:&SESSION.::&DEBUG.::::" class="quick-link-card">
+                  <div class="card-icon">🔍</div>
+                  <div class="card-content">
+                      <h4>Domain Retriever</h4>
+                      <p>Test domain detection</p>
+                      <span class="badge-page">Page 440</span>
+                  </div>
+                  <div class="card-arrow">→</div>
+              </a>
+          </div>
+      </div>
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: KPI =========================================
+  id: 161545498830169237
+  identification: 
+    name: KPI
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: 5
+    new-column: true
+    column-span: 6
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Help ========================================
+  id: 161546132585169244
+  identification: 
+    name: Help
+    type: Static Content
+
+  source: 
+    html-code: |
+      <h4>Domain Health Matrix</h4>
+         <ul>
+             <li><strong>Bars:</strong> Number of defined intents per domain</li>
+             <li><strong>Line:</strong> Number of data sources linked to each domain</li>
+             <li><strong>Colors:</strong>
+                 <ul>
+                     <li>🟢 Green: Good coverage (3+ intents)</li>
+                     <li>🟡 Orange: Low coverage (1-2 intents)</li>
+                     <li>🔴 Red: No intents defined</li>
+                 </ul>
+             </li>
+         </ul>
+         <p><em>Click bars to drill down to domain details</em></p>
+
+  layout: 
+    sequence: 40
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 2
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--removeHeader js-removeLandmark
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+

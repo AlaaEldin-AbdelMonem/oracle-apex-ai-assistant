@@ -1,0 +1,25 @@
+---
+- # ====== Text Message: POLICY_MANAGER_ACCESS_DENIED ==========
+  id: 124122931931468804
+  identification: 
+    name: POLICY_MANAGER_ACCESS_DENIED
+
+  message: 
+    text: |
+      ⚠️ Access Denied
+             
+             You do not have permission to access the Policy Manager.
+             This page is restricted to HR Administrators and AI Governance Admins.
+             
+             Please contact your system administrator if you require access.
+
+  attributes: 
+    language: English (en)
+    used-in-javascript: false
+
+  comments: 
+    comments: for page 300
+
+  subscription: 
+    version-number: 38946753678022
+

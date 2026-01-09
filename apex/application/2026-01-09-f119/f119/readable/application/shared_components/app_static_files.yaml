@@ -1,0 +1,91 @@
+---
+- # ====== Static Application File: icons/app-icon-32.png ======
+  id: 123957347661486132
+  identification: 
+    file-name: icons/app-icon-32.png
+
+  attributes: 
+    mime-type: image/png
+    file-character-set: Unicode UTF-8
+
+- # ====== Static Application File: icons/app-icon-256-rounded.p
+  id: 123957695324486136
+  identification: 
+    file-name: icons/app-icon-256-rounded.png
+
+  attributes: 
+    mime-type: image/png
+    file-character-set: Unicode UTF-8
+
+- # ====== Static Application File: icons/app-icon-144-rounded.p
+  id: 123957949024486137
+  identification: 
+    file-name: icons/app-icon-144-rounded.png
+
+  attributes: 
+    mime-type: image/png
+    file-character-set: Unicode UTF-8
+
+- # ====== Static Application File: icons/app-icon-192.png =====
+  id: 123958219794486139
+  identification: 
+    file-name: icons/app-icon-192.png
+
+  attributes: 
+    mime-type: image/png
+    file-character-set: Unicode UTF-8
+
+- # ====== Static Application File: icons/app-icon-512.png =====
+  id: 123958563188486140
+  identification: 
+    file-name: icons/app-icon-512.png
+
+  attributes: 
+    mime-type: image/png
+    file-character-set: Unicode UTF-8
+
+- # ====== Static Application File: NAVBAR/NavBarCenterSelectLis
+  id: 124998258110202681
+  identification: 
+    file-name: NAVBAR/NavBarCenterSelectList.css
+
+  attributes: 
+    mime-type: text/css
+    file-character-set: Unicode UTF-8
+
+- # ====== Static Application File: RANGESLIDER_PLUGIN/range-sli
+  id: 131988240968464794
+  identification: 
+    file-name: RANGESLIDER_PLUGIN/range-slider.js
+
+  attributes: 
+    mime-type: text/javascript
+    file-character-set: Unicode UTF-8
+
+- # ====== Static Application File: RANGESLIDER_PLUGIN/range-sli
+  id: 131990035539467803
+  identification: 
+    file-name: RANGESLIDER_PLUGIN/range-slider.min.js
+
+  attributes: 
+    mime-type: text/javascript
+    file-character-set: Unicode UTF-8
+
+- # ====== Static Application File: RANGESLIDER_PLUGIN/range-sli
+  id: 131990387838471180
+  identification: 
+    file-name: RANGESLIDER_PLUGIN/range-slider.css
+
+  attributes: 
+    mime-type: text/css
+    file-character-set: Unicode UTF-8
+
+- # ====== Static Application File: RANGESLIDER_PLUGIN/range-sli
+  id: 131991366252472582
+  identification: 
+    file-name: RANGESLIDER_PLUGIN/range-slider.min.css
+
+  attributes: 
+    mime-type: text/css
+    file-character-set: Unicode UTF-8
+

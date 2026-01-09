@@ -1,0 +1,277 @@
+---
+# ====== Application: Enterprise Chatpot =====================
+identification: 
+  name: Enterprise Chatpot
+  alias: ENTERPRISE-CHATPOT
+  version: Release 1.0
+
+row-search: 
+  tokenize: true
+  text-query-function: None
+
+availability: 
+  status: Available with Developer Toolbar
+  build-status: Run and Build Application
+
+error-handling: 
+  default-display-location: Inline with Field and in Notification
+
+report-printing: 
+  type: Native Printing
+
+advanced: 
+  friendly-urls: true
+  allow-feedback: true
+  logging: true
+  debugging: false
+  compatibility-mode: 24.2
+  accessible-read-only-items: true
+  pass-ecid: Y
+
+authentication: 
+  public-user: APEX_PUBLIC_USER
+  authentication-scheme: Custom Authentication # 147184512221516461
+
+authorization: 
+  source-for-role-or-group-schemes: Access Control User Role Assignments
+
+session-management: 
+  rejoin-sessions: Disabled
+
+session-state-protection: 
+  enabled: true
+
+security: 
+  deep-linking: Disabled
+  browser-cache: Disabled
+  embed-in-frames: Deny
+  referrer-policy: strict-origin
+  html-escaping-mode: Extended
+  runtime-api-usage: 
+  - Modify This Application
+
+database-session: 
+  parsing-schema: AI8P
+
+globalization: 
+  primary-language: English (en)
+  document-direction: Language Default
+  language-derived-from: Application Primary Language
+  automatic-time-zone: false
+  automatic-csv-encoding: true
+
+application-format-masks: 
+  date: DS
+  timestamp: DS
+  timestamp-time-zone: DS
+
+character-value-comparison: 
+  behavior: Database session NLS setting (default)
+
+logo: 
+  type: Text
+  text: Enterprise Chatpot
+
+progressive-web-app: 
+  enable: true
+  installable: false
+  display: Standalone
+  screen-orientation: Any
+  ios-status-bar-style: Default
+  enable-push-notifications: false
+
+navigation: 
+  home-url: 
+    url: 'f?p=&APP_ID.:1:&APP_SESSION.::&DEBUG.:::'
+    page: 1 # Home
+
+  login-url: 
+    url: 'f?p=&APP_ID.:LOGIN:&APP_SESSION.::&DEBUG.:::'
+    page: LOGIN
+
+navigation-menu: 
+  list-template: Top Navigation Menu
+  template-options: 
+  - '#DEFAULT#'
+  - js-tabLike
+  list-position: Top
+  list: Navigation Menu # 123955114815486079
+
+navigation-bar: 
+  implementation: List
+  list: Navigation Bar # 123956269288486112
+  list-template: Navigation Bar
+  template-options: 
+  - '#DEFAULT#'
+
+javascript: 
+  file-urls: 
+  - '#WORKSPACE_FILES#help/help-system#MIN#.js'
+  include-jquery-migrate: false
+
+css: 
+  file-urls: 
+  - '#APP_FILES#NAVBAR/NavBarCenterSelectList.css'
+  - '#WORKSPACE_FILES#help/help_system#MIN#.css'
+
+attributes: 
+  theme: Universal Theme # 42
+  global-page: 0
+  enable-end-users-to-choose-theme-style: false
+  add-"built-with-apex"-to-footer: false
+  auto-dismiss-success-messages: false
+
+subscription: 
+  version-number: 38951771172486
+
+substitutions: 
+- # ====== Substitution: APP_NAME ==============================
+  id: 1
+  identification: 
+    name: APP_NAME
+
+  value: 
+    static-value: Enterprise Chatpot
+
+component-settings: 
+- # ====== Component Setting: NATIVE_DISPLAY_SELECTOR ==========
+  id: 123949857286486054
+  identification: 
+    name: NATIVE_DISPLAY_SELECTOR
+    type: Region
+
+  subscription: 
+    version-number: 38946746791101
+
+- # ====== Component Setting: NATIVE_SINGLE_CHECKBOX ===========
+  id: 123950183646486058
+  identification: 
+    name: NATIVE_SINGLE_CHECKBOX
+    type: Item
+
+  subscription: 
+    version-number: 38946746791101
+
+- # ====== Component Setting: NATIVE_STAR_RATING ===============
+  id: 123950427794486059
+  identification: 
+    name: NATIVE_STAR_RATING
+    type: Item
+
+  subscription: 
+    version-number: 38946746791102
+
+- # ====== Component Setting: NATIVE_YES_NO ====================
+  id: 123950777185486059
+  identification: 
+    name: NATIVE_YES_NO
+    type: Item
+
+  subscription: 
+    version-number: 38946746791102
+
+- # ====== Component Setting: NATIVE_DATE_PICKER_APEX ==========
+  id: 123951045740486060
+  identification: 
+    name: NATIVE_DATE_PICKER_APEX
+    type: Item
+
+  subscription: 
+    version-number: 38946746791102
+
+- # ====== Component Setting: NATIVE_MAP_REGION ================
+  id: 123951350209486061
+  identification: 
+    name: NATIVE_MAP_REGION
+    type: Region
+
+  settings: 
+    attribute-1: Y
+
+  subscription: 
+    version-number: 38946746791102
+
+- # ====== Component Setting: NATIVE_IR ========================
+  id: 123951647349486062
+  identification: 
+    name: NATIVE_IR
+    type: Region
+
+  subscription: 
+    version-number: 38946746791104
+
+- # ====== Component Setting: NATIVE_COLOR_PICKER ==============
+  id: 123951912730486063
+  identification: 
+    name: NATIVE_COLOR_PICKER
+    type: Item
+
+  subscription: 
+    version-number: 38946746791106
+
+- # ====== Component Setting: NATIVE_SELECT_MANY ===============
+  id: 123952282546486063
+  identification: 
+    name: NATIVE_SELECT_MANY
+    type: Item
+
+  subscription: 
+    version-number: 38946746791106
+
+- # ====== Component Setting: NATIVE_BOSS ======================
+  id: 123952525427486064
+  identification: 
+    name: NATIVE_BOSS
+    type: REST Data Source
+
+  subscription: 
+    version-number: 38946746791116
+
+- # ====== Component Setting: NATIVE_OPEN_AI_ASSISTANT =========
+  id: 123952847350486065
+  identification: 
+    name: NATIVE_OPEN_AI_ASSISTANT
+    type: Dynamic Action
+
+  subscription: 
+    version-number: 38946746791128
+
+- # ====== Component Setting: NATIVE_ADFBC =====================
+  id: 123953102960486066
+  identification: 
+    name: NATIVE_ADFBC
+    type: REST Data Source
+
+  subscription: 
+    version-number: 38946746791129
+
+- # ====== Component Setting: NATIVE_GEOCODING =================
+  id: 123953419521486067
+  identification: 
+    name: NATIVE_GEOCODING
+    type: Process
+
+  settings: 
+    attribute-1: RELAX_HOUSE_NUMBER
+
+  subscription: 
+    version-number: 38946746791129
+
+- # ====== Component Setting: NATIVE_GEOCODED_ADDRESS ==========
+  id: 123953724838486067
+  identification: 
+    name: NATIVE_GEOCODED_ADDRESS
+    type: Item
+
+  subscription: 
+    version-number: 38946746791129
+
+- # ====== Component Setting: PLUGIN_HR.BILOG.MGORICKI.ADVANCED_
+  id: 131985517653357388
+  identification: 
+    name: PLUGIN_HR.BILOG.MGORICKI.ADVANCED_SLIDER
+    type: Item
+
+  subscription: 
+    version-number: 38947038100752
+

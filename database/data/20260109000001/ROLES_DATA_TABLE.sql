@@ -1,0 +1,24 @@
+REM INSERTING into ROLES
+SET DEFINE OFF;
+Insert into ROLES (ROLE_ID,ROLE_CODE,ROLE_NAME,DESCRIPTION,IS_ACTIVE,CLEARANCE_LEVEL) values (6,'CONTRACTOR','Contractor / Contingent Worker',null,'Y',1);
+Insert into ROLES (ROLE_ID,ROLE_CODE,ROLE_NAME,DESCRIPTION,IS_ACTIVE,CLEARANCE_LEVEL) values (8,'HR_SUPPORT','HR Investigations',null,'Y',3);
+Insert into ROLES (ROLE_ID,ROLE_CODE,ROLE_NAME,DESCRIPTION,IS_ACTIVE,CLEARANCE_LEVEL) values (43,'VENDOR_USER','Vendor / Supplier User','External vendor with limited access','Y',1);
+Insert into ROLES (ROLE_ID,ROLE_CODE,ROLE_NAME,DESCRIPTION,IS_ACTIVE,CLEARANCE_LEVEL) values (44,'MGR_DEPT','Department Manager','Manager of a functional department','Y',2);
+Insert into ROLES (ROLE_ID,ROLE_CODE,ROLE_NAME,DESCRIPTION,IS_ACTIVE,CLEARANCE_LEVEL) values (45,'MGR_TEAM','Team Manager','Manages a team and reviews approvals','Y',2);
+Insert into ROLES (ROLE_ID,ROLE_CODE,ROLE_NAME,DESCRIPTION,IS_ACTIVE,CLEARANCE_LEVEL) values (46,'APPROVER','Business Approver','General workflow approval authority','N',2);
+Insert into ROLES (ROLE_ID,ROLE_CODE,ROLE_NAME,DESCRIPTION,IS_ACTIVE,CLEARANCE_LEVEL) values (47,'PROJECT_MGR','Project Manager','Manages project resources and budgets','Y',2);
+Insert into ROLES (ROLE_ID,ROLE_CODE,ROLE_NAME,DESCRIPTION,IS_ACTIVE,CLEARANCE_LEVEL) values (48,'HR_GENERALIST','HR Generalist','Access to employee HR information','Y',3);
+Insert into ROLES (ROLE_ID,ROLE_CODE,ROLE_NAME,DESCRIPTION,IS_ACTIVE,CLEARANCE_LEVEL) values (50,'FIN_ANALYST','Financial Analyst','Access to financial analysis data','Y',3);
+Insert into ROLES (ROLE_ID,ROLE_CODE,ROLE_NAME,DESCRIPTION,IS_ACTIVE,CLEARANCE_LEVEL) values (52,'AUDITOR_INTERNAL','Internal Auditor','Access to compliance and audit records','Y',3);
+Insert into ROLES (ROLE_ID,ROLE_CODE,ROLE_NAME,DESCRIPTION,IS_ACTIVE,CLEARANCE_LEVEL) values (55,'SEC_ADMIN','Security Administrator','Access to sensitive permissions & configuration','N',4);
+Insert into ROLES (ROLE_ID,ROLE_CODE,ROLE_NAME,DESCRIPTION,IS_ACTIVE,CLEARANCE_LEVEL) values (1,'EMPLOYEE','Employee','Regular employee','Y',1);
+Insert into ROLES (ROLE_ID,ROLE_CODE,ROLE_NAME,DESCRIPTION,IS_ACTIVE,CLEARANCE_LEVEL) values (2,'MANAGER','Manager','Can access team-level operational data.','Y',2);
+Insert into ROLES (ROLE_ID,ROLE_CODE,ROLE_NAME,DESCRIPTION,IS_ACTIVE,CLEARANCE_LEVEL) values (3,'HR_OFFICER','HR Admin','Access to HR employee records except payroll.','Y',3);
+Insert into ROLES (ROLE_ID,ROLE_CODE,ROLE_NAME,DESCRIPTION,IS_ACTIVE,CLEARANCE_LEVEL) values (4,'PAYROLL_ADMIN','Payroll Administrator','Restricted access to salary, payroll & sensitive HR data','Y',4);
+Insert into ROLES (ROLE_ID,ROLE_CODE,ROLE_NAME,DESCRIPTION,IS_ACTIVE,CLEARANCE_LEVEL) values (5,'AIADMIN','AI System Admin','AI platform administrator','N',1);
+Insert into ROLES (ROLE_ID,ROLE_CODE,ROLE_NAME,DESCRIPTION,IS_ACTIVE,CLEARANCE_LEVEL) values (51,'PROC_OFFICER','Procurement Officer','Manages procurement & purchasing data','Y',3);
+Insert into ROLES (ROLE_ID,ROLE_CODE,ROLE_NAME,DESCRIPTION,IS_ACTIVE,CLEARANCE_LEVEL) values (54,'FIN_CONTROLLER','Finance Controller','High-level access to financial data','Y',4);
+Insert into ROLES (ROLE_ID,ROLE_CODE,ROLE_NAME,DESCRIPTION,IS_ACTIVE,CLEARANCE_LEVEL) values (56,'COMPLIANCE_ADMIN','Compliance Administrator','Access to confidential compliance & audit information','Y',4);
+Insert into ROLES (ROLE_ID,ROLE_CODE,ROLE_NAME,DESCRIPTION,IS_ACTIVE,CLEARANCE_LEVEL) values (7,'INTERN','Intern / Trainee','Basic self-service access for interns','Y',1);
+Insert into ROLES (ROLE_ID,ROLE_CODE,ROLE_NAME,DESCRIPTION,IS_ACTIVE,CLEARANCE_LEVEL) values (9,'PAYROLL_AUDITOR',' Payroll Auditor',null,'Y',4);
+Insert into ROLES (ROLE_ID,ROLE_CODE,ROLE_NAME,DESCRIPTION,IS_ACTIVE,CLEARANCE_LEVEL) values (41,'EMP_SELF','Employee Self-Service','General employee self-service access','Y',1);

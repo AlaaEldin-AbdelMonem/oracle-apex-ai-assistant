@@ -1,0 +1,100 @@
+---
+- # ====== Application Item: G_SESSION_START ===================
+  id: 123972192120705565
+  identification: 
+    name: G_SESSION_START
+    scope: Global
+
+  security: 
+    session-state-protection: Unrestricted
+    escape-special-characters: true
+
+  subscription: 
+    version-number: 38947194620237
+
+- # ====== Application Item: G_TENANT_NAME =====================
+  id: 128693552434160497
+  identification: 
+    name: G_TENANT_NAME
+    scope: Global
+
+  security: 
+    session-state-protection: Unrestricted
+    escape-special-characters: true
+
+  subscription: 
+    version-number: 38947277397491
+
+- # ====== Application Item: G_TENANT_CODE =====================
+  id: 128693778506161865
+  identification: 
+    name: G_TENANT_CODE
+    scope: Global
+
+  security: 
+    session-state-protection: Unrestricted
+    escape-special-characters: true
+
+  subscription: 
+    version-number: 38947277391586
+
+- # ====== Application Item: G_TENANT_ID =======================
+  id: 128693997059163846
+  identification: 
+    name: G_TENANT_ID
+    scope: Global
+
+  security: 
+    session-state-protection: Unrestricted
+    escape-special-characters: true
+
+  subscription: 
+    version-number: 38947277385197
+
+- # ====== Application Item: G_USER_ID =========================
+  id: 139460659100766981
+  identification: 
+    name: G_USER_ID
+    scope: Global
+
+  security: 
+    session-state-protection: Restricted - May not be set from browser
+    escape-special-characters: true
+
+  subscription: 
+    version-number: 38947342612457
+
+- # ====== Application Item: G_CHAT_PROJECT_ID =================
+  id: 139460909463807913
+  identification: 
+    name: G_CHAT_PROJECT_ID
+    scope: Global
+
+  security: 
+    session-state-protection: Restricted - May not be set from browser
+    escape-special-characters: true
+
+  comments: 
+    comments: grouping llm interaction as projects
+
+  subscription: 
+    version-number: 38947342733352
+
+- # ====== Application Item: G_APP_ENV =========================
+  id: 150668404130221072
+  identification: 
+    name: G_APP_ENV
+    scope: Global
+
+  security: 
+    session-state-protection: Restricted - May not be set from browser
+    escape-special-characters: true
+
+  comments: 
+    comments: |
+      DEV for Development Environment and 
+      PROD for Production Environment
+
+  subscription: 
+    version-number: 38947821839243
+

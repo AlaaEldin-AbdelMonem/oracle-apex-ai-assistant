@@ -1,0 +1,1105 @@
+---
+# ====== Page: Deployment Dashboard ==========================
+id: 702
+identification: 
+  name: Deployment Dashboard
+  alias: DEPLOYMENT-DASHBOARD
+  title: Deployment Dashboard
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Dashboard Statistics ========================
+  id: 155691311978186649
+  identification: 
+    name: Dashboard Statistics
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT COUNT(*) AS value, 'active_deployments' AS label
+      FROM DEPLOYMENT_VERSIONS
+      WHERE is_active = 'Y'
+      
+      UNION ALL
+      
+      SELECT COUNT(*) AS value, 'production_count' AS label
+      FROM DEPLOYMENT_VERSIONS
+      WHERE deployment_type = 'PRODUCTION' AND is_active = 'Y'
+      
+      UNION ALL
+      
+      SELECT COUNT(*) AS value, 'shadow_count' AS label
+      FROM DEPLOYMENT_VERSIONS
+      WHERE deployment_type = 'SHADOW' AND is_active = 'Y'
+      
+      UNION ALL
+      
+      SELECT COUNT(*) AS value, 'canary_count' AS label
+      FROM DEPLOYMENT_VERSIONS
+      WHERE deployment_type = 'CANARY' AND is_active = 'Y'
+      
+      UNION ALL
+      
+      SELECT COUNT(*) AS value, 'active_experiments' AS label
+      FROM DEPLOYMENT_EXPERIMENTS
+      WHERE experiment_status = 'RUNNING'
+      
+      UNION ALL
+      
+      SELECT COUNT(DISTINCT user_id) AS value, 'users_in_segments' AS label
+      FROM USER_SEGMENT_ASSIGNMENTS
+      WHERE is_active = 'Y'
+      
+      UNION ALL
+      
+      SELECT COUNT(*) AS value, 'shadow_calls_today' AS label
+      FROM CHAT_CALLS
+      WHERE is_shadow_call = 'Y'
+        AND TRUNC(db_created_at) = TRUNC(SYSDATE);
+      
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+
+    pagination: 
+      type: Row Ranges X to Y (with next and previous links)
+      display-position: Bottom - Right
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: VALUE =======================================
+    id: 158154246047537602
+    identification: 
+      column-name: VALUE
+      type: Plain Text
+
+    heading: 
+      heading: Value
+      alignment: end
+
+    layout: 
+      sequence: 10
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LABEL =======================================
+    id: 158154367579537603
+    identification: 
+      column-name: LABEL
+      type: Plain Text
+
+    heading: 
+      heading: Label
+      alignment: start
+
+    layout: 
+      sequence: 20
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+- # ====== Region: Breadcrumb ==================================
+  id: 158152754812485171
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 123954626239486075
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region: Recent Deployment Activity ==================
+  id: 158154428305537604
+  identification: 
+    name: Recent Deployment Activity
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          e.event_id,
+          e.deployment_id,
+          d.deployment_name,
+          d.deployment_type,
+          e.event_type,
+          e.old_value,
+          e.new_value,
+          TO_CHAR(e.event_timestamp, 'YYYY-MM-DD HH24:MI:SS') AS event_time,
+          e.triggered_by_user_id,
+          CASE 
+              WHEN e.event_type IN ('ACTIVATED', 'PROMOTED', 'ROLLOUT_INCREASED') THEN 'success'
+              WHEN e.event_type IN ('PAUSED', 'DEACTIVATED', 'ROLLOUT_DECREASED') THEN 'warning'
+              WHEN e.event_type IN ('METRICS_THRESHOLD_BREACH') THEN 'danger'
+              ELSE 'info'
+          END AS event_severity
+      FROM DEPLOYMENT_AUDIT_LOG e
+      LEFT JOIN DEPLOYMENT_VERSIONS d 
+          ON d.deployment_id = e.deployment_id
+      WHERE e.event_timestamp >= SYSDATE - 7
+      ORDER BY e.event_timestamp DESC
+      FETCH FIRST 50 ROWS ONLY
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 158154527911537605
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 1000000
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 158164445675597962
+      identification: 
+        name: Primary Report
+        alias: 1581645
+
+    columns: 
+    - # ====== Column: EVENT_ID ====================================
+      id: 158154652824537606
+      identification: 
+        column-name: EVENT_ID
+        type: Plain Text
+
+      heading: 
+        heading: Event Id
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 10
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DEPLOYMENT_ID ===============================
+      id: 158154749421537607
+      identification: 
+        column-name: DEPLOYMENT_ID
+        type: Plain Text
+
+      heading: 
+        heading: Deployment Id
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 20
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DEPLOYMENT_NAME =============================
+      id: 158154860873537608
+      identification: 
+        column-name: DEPLOYMENT_NAME
+        type: Plain Text
+
+      heading: 
+        heading: Deployment Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 30
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: DEPLOYMENT_TYPE =============================
+      id: 158154928167537609
+      identification: 
+        column-name: DEPLOYMENT_TYPE
+        type: Plain Text
+
+      heading: 
+        heading: Deployment Type
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 40
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EVENT_TYPE ==================================
+      id: 158155043208537610
+      identification: 
+        column-name: EVENT_TYPE
+        type: Plain Text
+
+      heading: 
+        heading: Event Type
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 50
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: OLD_VALUE ===================================
+      id: 158155185058537611
+      identification: 
+        column-name: OLD_VALUE
+        type: Plain Text
+
+      heading: 
+        heading: Old Value
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 60
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: NEW_VALUE ===================================
+      id: 158155202432537612
+      identification: 
+        column-name: NEW_VALUE
+        type: Plain Text
+
+      heading: 
+        heading: New Value
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 70
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EVENT_TIME ==================================
+      id: 158155304809537613
+      identification: 
+        column-name: EVENT_TIME
+        type: Plain Text
+
+      heading: 
+        heading: Event Time
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 80
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: TRIGGERED_BY_USER_ID ========================
+      id: 158155444226537614
+      identification: 
+        column-name: TRIGGERED_BY_USER_ID
+        type: Plain Text
+
+      heading: 
+        heading: Triggered By User Id
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 90
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EVENT_SEVERITY ==============================
+      id: 158155536453537615
+      identification: 
+        column-name: EVENT_SEVERITY
+        type: Plain Text
+
+      heading: 
+        heading: Event Severity
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 100
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      column-formatting: 
+        html-expression: <span class="badge badge-#EVENT_SEVERITY#">#EVENT_TYPE#</span>
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+- # ====== Region:  Quick Actions ==============================
+  id: 158155629251537616
+  identification: 
+    name: ' Quick Actions'
+    type: Static Content
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+buttons: 
+- # ====== Button: Manage-Deployments ==========================
+  id: 158155733170537617
+  identification: 
+    button-name: Manage-Deployments
+    label: Manage-deployments
+
+  layout: 
+    sequence: 10
+    region: ' Quick Actions' # 158155629251537616
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-cogs
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:703:&SESSION.::&DEBUG.:::'
+      page: 703 # Deployment Versions
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: Manage-Experiments ==========================
+  id: 158155850369537618
+  identification: 
+    button-name: Manage-Experiments
+    label: Manage-experiments
+
+  layout: 
+    sequence: 20
+    region: ' Quick Actions' # 158155629251537616
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-flask
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.: 704:&SESSION.::&DEBUG.:::'
+      page: ' 704'
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: Manage-Segments =============================
+  id: 158155907175537619
+  identification: 
+    button-name: Manage-Segments
+    label: Manage-segments
+
+  layout: 
+    sequence: 30
+    region: ' Quick Actions' # 158155629251537616
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-users
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:705:&SESSION.::&DEBUG.:::'
+      page: 705 # User Segments Management
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: Monitor-Shadows =============================
+  id: 158156018732537620
+  identification: 
+    button-name: Monitor-Shadows
+    label: Monitor-shadows
+
+  layout: 
+    sequence: 40
+    region: ' Quick Actions' # 158155629251537616
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: ' fa-eye'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.: 706:&SESSION.::&DEBUG.:::'
+      page: ' 706'
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: View-Metrics ================================
+  id: 158156189832537621
+  identification: 
+    button-name: View-Metrics
+    label: View-metrics
+
+  layout: 
+    sequence: 50
+    region: ' Quick Actions' # 158155629251537616
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-chart-line
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:707:&SESSION.::&DEBUG.:::'
+      page: 707
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: Compare-Deployments =========================
+  id: 158156224778537622
+  identification: 
+    button-name: Compare-Deployments
+    label: Compare-deployments
+
+  layout: 
+    sequence: 60
+    region: ' Quick Actions' # 158155629251537616
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: ' fa-balance-scale'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:708:&SESSION.::&DEBUG.:::'
+      page: 708 # Deployment Comparison
+
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: New =================================
+  id: 155691429642186650
+  identification: 
+    name: New
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+
+  when: 
+    event: Page Load
+

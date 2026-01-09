@@ -1,0 +1,3002 @@
+---
+# ====== Page: deployments Edit ==============================
+id: 704
+identification: 
+  name: deployments Edit
+  alias: DEPLOYMENTS-EDIT
+  title: deployments Edit
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+javascript: 
+  execute-when-page-loads: |
+    // Initialize form based on deployment type
+    (function() {
+        // Hide conditional regions on load
+        $('#region_shadow_config').hide();
+        $('#region_canary_config').hide();
+        $('#region_ab_test_config').hide();
+        
+        // Show appropriate region based on current type
+        var deploymentType = apex.item('P704_DEPLOYMENT_TYPE').getValue();
+        if (deploymentType === 'SHADOW') {
+            $('#region_shadow_config').show();
+        } else if (deploymentType === 'CANARY') {
+            $('#region_canary_config').show();
+        } else if (deploymentType === 'AB_TEST') {
+            $('#region_ab_test_config').show();
+        }
+        
+        // Sync slider with number field
+        var syncSlider = function() {
+            var percentage = apex.item('P704_ROLLOUT_PERCENTAGE').getValue();
+            apex.item('P704_ROLLOUT_SLIDER').setValue(percentage);
+        };
+        
+        apex.item('P704_ROLLOUT_PERCENTAGE').onChange = syncSlider;
+        syncSlider(); // Initial sync
+        
+        // JSON syntax highlighting enhancement
+        if (typeof monaco !== 'undefined') {
+            // Monaco editor is available, enhance JSON fields
+            console.log('Monaco editor available for JSON editing');
+        }
+    })();
+
+css: 
+  inline: |
+    /* Modal dialog customization */
+    .deployment-form-dialog .t-DialogRegion {
+        max-width: 900px;
+    }
+    
+    /* Form sections */
+    .t-Region-header {
+        background: #f8f9fa;
+        border-bottom: 2px solid #dee2e6;
+        padding: 0.75rem 1rem;
+    }
+    
+    /* JSON editor enhancement */
+    .apex-item-textarea.monaco-editor {
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+        font-size: 0.9rem;
+    }
+    
+    /* Rollout percentage slider */
+    input[type="range"] {
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+        background: #0d6efd;
+    }
+    
+    /* Required field indicator */
+    .is-required label::after {
+        content: ' *';
+        color: #dc3545;
+        font-weight: bold;
+    }
+    
+    /* Conditional region styling */
+    #region_shadow_config,
+    #region_canary_config,
+    #region_ab_test_config {
+        border-left: 4px solid #0d6efd;
+        padding-left: 1rem;
+    }
+    
+    /* Help text styling */
+    .apex-item-help {
+        font-size: 0.85rem;
+        color: #6c757d;
+        font-style: italic;
+    }
+    
+    /* Button styling */
+    button[data-action="SAVE"] {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Basic Information ===========================
+  id: 158173071198674225
+  identification: 
+    name: Basic Information
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: deployments Edit # 158709440655133419
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Shadow_Configuration ========================
+  id: 158173158555674226
+  identification: 
+    name: Shadow_Configuration
+    title: Shadow Configuration
+    type: Static Content
+
+  layout: 
+    sequence: 140
+    parent-region: deployments Edit # 158709440655133419
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: region_shadow_config
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-side-condition: 
+    type: Item = Value
+    item: P704_DEPLOYMENT_TYPE
+    value: SHADOW
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Model Configuration =========================
+  id: 158173266640674227
+  identification: 
+    name: Model Configuration
+    type: Static Content
+
+  layout: 
+    sequence: 130
+    parent-region: deployments Edit # 158709440655133419
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Canary Configuration ========================
+  id: 158173975587674234
+  identification: 
+    name: Canary Configuration
+    type: Static Content
+
+  layout: 
+    sequence: 150
+    parent-region: deployments Edit # 158709440655133419
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: region_canary_config
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: A/B Test Configuration ======================
+  id: 158174009481674235
+  identification: 
+    name: A/B Test Configuration
+    type: Static Content
+
+  layout: 
+    sequence: 210
+    parent-region: deployments Edit # 158709440655133419
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: region_ab_test_config
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-side-condition: 
+    type: Item = Value
+    item: P704_DEPLOYMENT_TYPE
+    value: AB_TEST
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Targeting & Segmentation ====================
+  id: 158174175277674236
+  identification: 
+    name: Targeting & Segmentation
+    type: Static Content
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Metadata ====================================
+  id: 158174216399674237
+  identification: 
+    name: Metadata
+    type: Static Content
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Collapsible
+    template-options: 
+    - '#DEFAULT#'
+    - is-collapsed
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Breadcrumb ==================================
+  id: 158708742760133367
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 123954626239486075
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--compactTitle
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region: deployments Edit ============================
+  id: 158709440655133419
+  identification: 
+    name: deployments Edit
+    title: 'deployments '
+    type: Form
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: DEPLOYMENT_VERSIONS
+    include-rowid-column: false
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Add Row
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+
+page-items: 
+- # ====== Page Item: P704_ROLLOUT_SLIDER ======================
+  id: 158173554928674230
+  identification: 
+    name: P704_ROLLOUT_SLIDER
+    type: SLIDER
+
+  label: 
+    alignment: Left
+
+  settings: 
+    min-value: 0
+    max-value: 100
+    step: 1
+    return-item: P704_ROLLOUT_PERCENTAGE
+
+  layout: 
+    sequence: 20
+    region: Model Configuration # 158173266640674227
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  security: 
+    session-state-protection: Unrestricted
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P704_DEPLOYMENT_ID =======================
+  id: 158709753531133420
+  identification: 
+    name: P704_DEPLOYMENT_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: Basic Information # 158173071198674225
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: DEPLOYMENT_ID
+    data-type: NUMBER
+    query-only: true
+    primary-key: true
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P704_DEPLOYMENT_UUID =====================
+  id: 158710158025133425
+  identification: 
+    name: P704_DEPLOYMENT_UUID
+    type: Text Field
+
+  label: 
+    label: Deployment Uuid
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 10
+    region: Basic Information # 158173071198674225
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: true
+    maximum-length: 36
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: DEPLOYMENT_UUID
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P704_DEPLOYMENT_NAME =====================
+  id: 158710510989133427
+  identification: 
+    name: P704_DEPLOYMENT_NAME
+    type: Text Field
+
+  label: 
+    label: Deployment Name
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 30
+    region: Basic Information # 158173071198674225
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+    value-placeholder: e.g., "Production GPT-4o" or "Shadow Test - Claude"
+
+  validation: 
+    value-required: true
+    maximum-length: 100
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: DEPLOYMENT_NAME
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: Descriptive name for this deployment
+
+- # ====== Page Item: P704_DEPLOYMENT_TYPE =====================
+  id: 158710962535133428
+  identification: 
+    name: P704_DEPLOYMENT_TYPE
+    type: Select List
+
+  label: 
+    label: Deployment Type
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 20
+    region: Basic Information # 158173071198674225
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:Production;PRODUCTION,Shadow Testing;SHADOW,Canary Rollout; CANARY,A/B Test Variant;AB_TEST,Draft;DRAFT'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: DEPLOYMENT_TYPE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: Select the deployment strategy type
+
+- # ====== Page Item: P704_DEPLOYMENT_STATUS ===================
+  id: 158711337538133429
+  identification: 
+    name: P704_DEPLOYMENT_STATUS
+    type: Select List
+
+  label: 
+    label: Status
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 70
+    region: Basic Information # 158173071198674225
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:Draft;DRAFT,Active;ACTIVE,Paused;PAUSED,Completed;COMPLETED,Archived;ARCHIVED'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: DEPLOYMENT_STATUS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Static
+    static-value: DRAFT
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P704_PROVIDER ============================
+  id: 158711775003133431
+  identification: 
+    name: P704_PROVIDER
+    type: Select List
+
+  label: 
+    label: Provider
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 30
+    region: Model Configuration # 158173266640674227
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: LLM_PROVIDERS(CODE)-ACTIVE # 142748082094460762
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: PROVIDER
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P704_MODEL_NAME ==========================
+  id: 158712190330133432
+  identification: 
+    name: P704_MODEL_NAME
+    type: Select List
+
+  label: 
+    label: Model Name
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 40
+    region: Model Configuration # 158173266640674227
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: LLM_MODELS-(CODE) # 142749373454616369
+    display-extra-values: true
+    display-null-value: true
+
+  cascading-list-of-values: 
+    parent-item(s): 
+    - P704_PROVIDER
+    items-to-submit: 
+    - P704_MODEL_NAME
+    parent-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: MODEL_NAME
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P704_DEPLOYMENT_CONFIG ===================
+  id: 158712581132133433
+  identification: 
+    name: P704_DEPLOYMENT_CONFIG
+    type: Textarea
+
+  label: 
+    label: Deployment Config
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 50
+    region: Model Configuration # 158173266640674227
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 60
+    height: 4
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: DEPLOYMENT_CONFIG
+    data-type: CLOB
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: CLOB
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: JSON configuration for model parameters
+
+- # ====== Page Item: P704_ROLLOUT_PERCENTAGE ==================
+  id: 158712977033133436
+  identification: 
+    name: P704_ROLLOUT_PERCENTAGE
+    type: Number Field
+
+  label: 
+    label: Rollout Percentage
+    alignment: Left
+
+  settings: 
+    minimum-value: 0
+    maximum-value: 100
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 10
+    region: Model Configuration # 158173266640674227
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 255
+
+  advanced: 
+    post-text-: '%'
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: ROLLOUT_PERCENTAGE
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Static
+    static-value: 0
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  server-side-condition: 
+    type: Item is in colon delimited list
+    item: P704_DEPLOYMENT_TYPE
+    list: 'CANARY:AB_TEST'
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: Percentage of users to receive this deployment (0-100)
+
+- # ====== Page Item: P704_IS_ACTIVE ===========================
+  id: 158713343331133437
+  identification: 
+    name: P704_IS_ACTIVE
+    type: Select List
+
+  label: 
+    label: Is Active
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 50
+    region: Basic Information # 158173071198674225
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: 'YES_NO ' # 124111059557222693
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: IS_ACTIVE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Static
+    static-value: N
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: Activate this deployment immediately
+
+- # ====== Page Item: P704_PRIORITY ============================
+  id: 158713769720133438
+  identification: 
+    name: P704_PRIORITY
+    type: Number Field
+
+  label: 
+    label: Priority
+    alignment: Left
+
+  settings: 
+    minimum-value: 1
+    maximum-value: 100
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 60
+    region: Basic Information # 158173071198674225
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 255
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: PRIORITY
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Static
+    static-value: 50
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: Higher priority deployments are selected first (1-100)
+
+- # ====== Page Item: P704_TARGET_SEGMENT_IDS ==================
+  id: 158714186830133439
+  identification: 
+    name: P704_TARGET_SEGMENT_IDS
+    type: Shuttle
+
+  label: 
+    label: Target Segment Ids
+    alignment: Left
+
+  settings: 
+    show-controls: All
+
+  multiple-values: 
+    type: Delimited List
+    separator: ','
+
+  layout: 
+    sequence: 10
+    region: Targeting & Segmentation # 158174175277674236
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 5
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          segment_name || ' (' || segment_type || ') - ' || current_user_count || ' users' AS display_value,
+          segment_id AS return_value
+      FROM USER_SEGMENTS
+      WHERE is_active = 'Y'
+      ORDER BY segment_type, segment_name
+    display-extra-values: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: TARGET_SEGMENT_IDS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  server-side-condition: 
+    type: Item = Value
+    item: P704_DEPLOYMENT_TYPE
+    value: CANARY
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: ' Leave empty to target all users, or select specific segments'
+
+- # ====== Page Item: P704_EXCLUDED_USER_IDS ===================
+  id: 158714513112133441
+  identification: 
+    name: P704_EXCLUDED_USER_IDS
+    type: Textarea
+
+  label: 
+    label: ' Excluded User IDs'
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 30
+    region: Targeting & Segmentation # 158174175277674236
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 3
+    value-placeholder: 'Comma-separated user IDs: 101, 205, 340'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: EXCLUDED_USER_IDS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: Users who should never receive this deployment
+
+- # ====== Page Item: P704_SHADOW_PARENT_DEPLOYMENT_ID =========
+  id: 158714968866133442
+  identification: 
+    name: P704_SHADOW_PARENT_DEPLOYMENT_ID
+    type: Select List
+
+  label: 
+    label: 'Shadow Parent Deployment  '
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Shadow_Configuration # 158173158555674226
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          deployment_name || ' (' || deployment_type || ')' AS display_value,
+          deployment_id AS return_value
+      FROM DEPLOYMENT_VERSIONS
+      WHERE is_active = 'Y'
+        AND deployment_type IN ('PRODUCTION', 'CANARY')
+        AND deployment_status = 'ACTIVE'
+      ORDER BY 
+          CASE deployment_type 
+              WHEN 'PRODUCTION' THEN 1 
+              ELSE 2 
+          END
+    display-extra-values: true
+    display-null-value: true
+    null-display-value: '- All Active Deployments -'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: SHADOW_PARENT_DEPLOYMENT_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: Select the production deployment to shadow, or leave blank to shadow all
+
+- # ====== Page Item: P704_SHADOW_EXECUTION_MODE ===============
+  id: 158715637474133446
+  identification: 
+    name: P704_SHADOW_EXECUTION_MODE
+    type: Radio Group
+
+  label: 
+    label: ' Execution Mode'
+    alignment: Left
+
+  settings: 
+    number-of-columns: 1
+    page-action-on-selection: None
+
+  layout: 
+    sequence: 10
+    region: Shadow_Configuration # 158173158555674226
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC: Asynchronous (Recommended);ASYNC,Synchronous;SYNC,Scheduled Batch;SCHEDULED'
+    display-extra-values: true
+    display-null-value: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: SHADOW_EXECUTION_MODE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Static
+    static-value: ASYNC
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    escape-special-characters: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: |
+      ASYNC: Run in background (best UX)
+      SYNC: Run sequentially (testing only)
+      SCHEDULED: Batch replay (cost optimization)
+
+- # ====== Page Item: P704_EXPERIMENT_ID =======================
+  id: 158716024838133447
+  identification: 
+    name: P704_EXPERIMENT_ID
+    type: Select List
+
+  label: 
+    label: 'Experiment '
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: A/B Test Configuration # 158174009481674235
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          experiment_name || ' (' || experiment_status || ')' AS display_value,
+          experiment_id AS return_value
+      FROM DEPLOYMENT_EXPERIMENTS
+      WHERE experiment_status IN ('DRAFT', 'RUNNING')
+      ORDER BY 
+          CASE experiment_status 
+              WHEN 'RUNNING' THEN 1 
+              ELSE 2 
+          END,
+          created_at DESC
+    display-extra-values: true
+    display-null-value: true
+    null-display-value: '- Create New Experiment -'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: EXPERIMENT_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P704_VARIANT_LABEL =======================
+  id: 158716409052133448
+  identification: 
+    name: P704_VARIANT_LABEL
+    type: Text Field
+
+  label: 
+    label: Variant Label
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 20
+    region: A/B Test Configuration # 158174009481674235
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+    value-placeholder: e.g., A, B, CONTROL, VARIANT_1
+
+  validation: 
+    value-required: false
+    maximum-length: 10
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: VARIANT_LABEL
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: Identifier for this variant (A, B, C, CONTROL, etc.)
+
+- # ====== Page Item: P704_CANARY_SCHEDULE_JSON ================
+  id: 158716867603133450
+  identification: 
+    name: P704_CANARY_SCHEDULE_JSON
+    type: Textarea
+
+  label: 
+    label: Canary Schedule Json
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 10
+    region: Canary Configuration # 158173975587674234
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 60
+    height: 8
+    value-placeholder: '{   "stages": [     {"percentage": 10, "duration_hours": 24},     {"percentage": 25, "duration_hours": 48},     {"percentage": 50, "duration_hours": 72},     {"percentage": 100, "duration_hours": 0}   ],   "auto_promote": false,   "rollback_threshold": { '
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: CANARY_SCHEDULE_JSON
+    data-type: CLOB
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: CLOB
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: Define staged rollout schedule with automatic promotion rules
+
+- # ====== Page Item: P704_CANARY_CURRENT_STAGE ================
+  id: 158717255124133451
+  identification: 
+    name: P704_CANARY_CURRENT_STAGE
+    type: Display Only
+
+  label: 
+    label: Canary Current Stage
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: Canary Configuration # 158173975587674234
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    format-mask: 'Stage #CANARY_CURRENT_STAGE#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: CANARY_CURRENT_STAGE
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P704_DEPLOYMENT_ID
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P704_DESCRIPTION =========================
+  id: 158717630484133452
+  identification: 
+    name: P704_DESCRIPTION
+    type: Textarea
+
+  label: 
+    label: Description
+    alignment: Left
+
+  settings: 
+    resizable: true
+    auto-height: false
+    character-counter: false
+    trim-spaces: Leading and Trailing
+
+  layout: 
+    sequence: 40
+    region: Basic Information # 158173071198674225
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 60
+    height: 4
+
+  validation: 
+    value-required: false
+    maximum-length: 4000
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: DESCRIPTION
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P704_CREATED_BY ==========================
+  id: 158718040833133453
+  identification: 
+    name: P704_CREATED_BY
+    type: Display Only
+
+  label: 
+    label: Created By
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: Metadata # 158174216399674237
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: CREATED_BY
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P704_CREATED_AT ==========================
+  id: 158718435932133454
+  identification: 
+    name: P704_CREATED_AT
+    type: Display Only
+
+  label: 
+    label: Created At
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: Metadata # 158174216399674237
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    format-mask: ' YYYY-MM-DD HH24:MI'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: CREATED_AT
+    data-type: TIMESTAMP
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P704_UPDATED_BY ==========================
+  id: 158719274860133457
+  identification: 
+    name: P704_UPDATED_BY
+    type: Display Only
+
+  label: 
+    label: Updated By
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: Metadata # 158174216399674237
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: UPDATED_BY
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P704_UPDATED_AT ==========================
+  id: 158719615567133458
+  identification: 
+    name: P704_UPDATED_AT
+    type: Display Only
+
+  label: 
+    label: Updated At
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: Metadata # 158174216399674237
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    format-mask: ' YYYY-MM-DD HH24:MI'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: UPDATED_AT
+    data-type: TIMESTAMP
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P704_ACTIVATED_AT ========================
+  id: 158720478487133461
+  identification: 
+    name: P704_ACTIVATED_AT
+    type: Display Only
+
+  label: 
+    label: Activated At
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: Metadata # 158174216399674237
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    format-mask: ' YYYY-MM-DD HH24:MI'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: ACTIVATED_AT
+    data-type: TIMESTAMP
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P704_DEACTIVATED_AT ======================
+  id: 158721273340133463
+  identification: 
+    name: P704_DEACTIVATED_AT
+    type: Display Only
+
+  label: 
+    label: Deactivated At
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: Metadata # 158174216399674237
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    format-mask: ' YYYY-MM-DD HH24:MI'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: DEACTIVATED_AT
+    data-type: TIMESTAMP
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P704_PROMOTED_AT =========================
+  id: 158722033295133465
+  identification: 
+    name: P704_PROMOTED_AT
+    type: Display Only
+
+  label: 
+    label: Promoted At
+    alignment: Left
+
+  settings: 
+    format: Plain Text
+    based-on: Item Value
+    show-line-breaks: true
+    send-on-page-submit: true
+
+  layout: 
+    sequence: 10
+    region: Metadata # 158174216399674237
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    format-mask: ' YYYY-MM-DD HH24:MI'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: deployments Edit # 158709440655133419
+    column: PROMOTED_AT
+    data-type: TIMESTAMP
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: CANCEL ======================================
+  id: 158730962892133491
+  identification: 
+    button-name: CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 10
+    region: deployments Edit # 158709440655133419
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:702:&APP_SESSION.::&DEBUG.:::'
+      page: 702 # Deployment Dashboard
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: DELETE ======================================
+  id: 158731507898133493
+  identification: 
+    button-name: DELETE
+    label: Delete
+
+  layout: 
+    sequence: 20
+    region: deployments Edit # 158709440655133419
+    slot: DELETE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: false
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL DELETE action
+
+  confirmation: 
+    message: '&APP_TEXT$DELETE_MSG!RAW.'
+    style: Danger
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P704_DEPLOYMENT_ID
+
+- # ====== Button: SAVE ========================================
+  id: 158731941116133494
+  identification: 
+    button-name: SAVE
+    label: Apply Changes
+
+  layout: 
+    sequence: 30
+    region: deployments Edit # 158709440655133419
+    slot: CHANGE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL UPDATE action
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P704_DEPLOYMENT_ID
+
+- # ====== Button: CREATE ======================================
+  id: 158732350472133495
+  identification: 
+    button-name: CREATE
+    label: Create
+
+  layout: 
+    sequence: 40
+    region: deployments Edit # 158709440655133419
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL INSERT action
+
+  server-side-condition: 
+    type: Item is NULL
+    item: P704_DEPLOYMENT_ID
+
+dynamic-actions: 
+- # ====== Dynamic Action: New =================================
+  id: 158172875708674223
+  identification: 
+    name: New
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P704_DEPLOYMENT_TYPE
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 158172991039674224
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        // Show/hide conditional regions based on deployment type
+        var deploymentType = apex.item('P704_DEPLOYMENT_TYPE').getValue();
+        
+        // Hide all conditional regions first
+        $('#region_shadow_config').hide();
+        $('#region_canary_config').hide();
+        $('#region_ab_test_config').hide();
+        
+        // Show relevant region
+        if (deploymentType === 'SHADOW') {
+            $('#region_shadow_config').show();
+        } else if (deploymentType === 'CANARY') {
+            $('#region_canary_config').show();
+        } else if (deploymentType === 'AB_TEST') {
+            $('#region_ab_test_config').show();
+        }
+        
+        // Set default values
+        if (deploymentType === 'PRODUCTION') {
+            apex.item('P704_ROLLOUT_PERCENTAGE').setValue(100);
+            apex.item('P704_IS_ACTIVE').setValue('Y');
+        } else if (deploymentType === 'CANARY') {
+            apex.item('P704_ROLLOUT_PERCENTAGE').setValue(10);
+        } else if (deploymentType === 'DRAFT') {
+            apex.item('P704_IS_ACTIVE').setValue('N');
+        }
+
+    execution: 
+      sequence: 10
+      event: New # 158172875708674223
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: New_1 ===============================
+  id: 158173324781674228
+  identification: 
+    name: New_1
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P704_PROVIDER
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 158173428450674229
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        // Update model list based on provider
+        var provider = apex.item('P704_PROVIDER').getValue();
+        var modelSelect = apex.item('P704_MODEL_NAME');
+        
+        // Clear current value
+        modelSelect.setValue('');
+        
+        // Update model LOV via cascade
+        apex.item('P704_MODEL_NAME').enable();
+
+    execution: 
+      sequence: 10
+      event: New_1 # 158173324781674228
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: New_2 ===============================
+  id: 158173657216674231
+  identification: 
+    name: New_2
+
+  execution: 
+    sequence: 30
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P704_ROLLOUT_SLIDER
+
+  actions: 
+  - # ====== Action: Set Value ===================================
+    id: 158173716312674232
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: JavaScript Expression
+      javascript-expression: apex.item('P704_ROLLOUT_SLIDER').getValue()
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P704_ROLLOUT_PERCENTAGE
+
+    execution: 
+      sequence: 10
+      event: New_2 # 158173657216674231
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+validations: 
+- # ====== Validation: New =====================================
+  id: 158173859182674233
+  identification: 
+    name: New
+
+  execution: 
+    sequence: 270
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: |
+      DECLARE
+          v_json JSON;
+      BEGIN
+          -- Try to parse as JSON
+          v_json := JSON(:P704_DEPLOYMENT_CONFIG);
+          RETURN TRUE;
+      EXCEPTION
+          WHEN OTHERS THEN
+              RETURN FALSE;
+      END;
+    always-execute: false
+
+  error: 
+    error-message: Invalid JSON format. Please check syntax.
+    display-location: Inline with Field and in Notification
+    associated-item: P704_DEPLOYMENT_CONFIG # 158712581132133433
+
+- # ====== Validation: Deployment Name Required ================
+  id: 158174687782674241
+  identification: 
+    name: Deployment Name Required
+
+  execution: 
+    sequence: 280
+
+  validation: 
+    type: Item is NOT NULL
+    item: P704_DEPLOYMENT_NAME
+    always-execute: false
+
+  error: 
+    error-message: Deployment name is required
+    display-location: Inline with Field and in Notification
+    associated-item: P704_DEPLOYMENT_NAME # 158710510989133427
+
+- # ====== Validation: Valid Rollout Percentage ================
+  id: 158174757755674242
+  identification: 
+    name: Valid Rollout Percentage
+
+  execution: 
+    sequence: 290
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: |
+      BEGIN
+          IF :P704_DEPLOYMENT_TYPE IN ('CANARY', 'AB_TEST') THEN
+              RETURN :P704_ROLLOUT_PERCENTAGE BETWEEN 0 AND 100;
+          END IF;
+          RETURN TRUE;
+      END;
+    always-execute: false
+
+  error: 
+    error-message: Rollout percentage must be between 0 and 100
+    display-location: Inline with Field and in Notification
+    associated-item: P704_ROLLOUT_PERCENTAGE # 158712977033133436
+
+- # ====== Validation: Shadow Parent Required ==================
+  id: 158174879493674243
+  identification: 
+    name: Shadow Parent Required
+
+  execution: 
+    sequence: 300
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: |
+      BEGIN
+          IF :P704_DEPLOYMENT_TYPE = 'SHADOW' THEN
+              RETURN :P704_SHADOW_PARENT_DEPLOYMENT_ID IS NOT NULL OR TRUE;
+              -- Allow NULL for "shadow all active"
+          END IF;
+          RETURN TRUE;
+      END;
+    always-execute: false
+
+  error: 
+    error-message: ' Shadow Parent Required'
+    display-location: Inline with Field and in Notification
+    associated-item: P704_SHADOW_PARENT_DEPLOYMENT_ID # 158714968866133442
+
+- # ====== Validation: Experiment Required for A/B Test ========
+  id: 158174970742674244
+  identification: 
+    name: Experiment Required for A/B Test
+
+  execution: 
+    sequence: 310
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: |
+      BEGIN
+          IF :P704_DEPLOYMENT_TYPE = 'AB_TEST' THEN
+              RETURN :P704_EXPERIMENT_ID IS NOT NULL;
+          END IF;
+          RETURN TRUE;
+      END;
+    always-execute: false
+
+  error: 
+    error-message: Experiment selection is required for A/B Test deployments
+    display-location: Inline with Field and in Notification
+    associated-item: P704_EXPERIMENT_ID # 158716024838133447
+
+- # ====== Validation: P704_CREATED_AT must be timestamp =======
+  id: 158718922847133456
+  identification: 
+    name: P704_CREATED_AT must be timestamp
+
+  execution: 
+    sequence: 210
+
+  validation: 
+    type: Item is a valid timestamp
+    item: P704_CREATED_AT
+    always-execute: false
+
+  error: 
+    error-message: '#LABEL# must be a valid timestamp.'
+    display-location: Inline with Field and in Notification
+    associated-item: P704_CREATED_AT # 158718435932133454
+
+- # ====== Validation: P704_UPDATED_AT must be timestamp =======
+  id: 158720150551133460
+  identification: 
+    name: P704_UPDATED_AT must be timestamp
+
+  execution: 
+    sequence: 230
+
+  validation: 
+    type: Item is a valid timestamp
+    item: P704_UPDATED_AT
+    always-execute: false
+
+  error: 
+    error-message: '#LABEL# must be a valid timestamp.'
+    display-location: Inline with Field and in Notification
+    associated-item: P704_UPDATED_AT # 158719615567133458
+
+- # ====== Validation: P704_ACTIVATED_AT must be timestamp =====
+  id: 158720937984133462
+  identification: 
+    name: P704_ACTIVATED_AT must be timestamp
+
+  execution: 
+    sequence: 240
+
+  validation: 
+    type: Item is a valid timestamp
+    item: P704_ACTIVATED_AT
+    always-execute: false
+
+  error: 
+    error-message: '#LABEL# must be a valid timestamp.'
+    display-location: Inline with Field and in Notification
+    associated-item: P704_ACTIVATED_AT # 158720478487133461
+
+- # ====== Validation: P704_DEACTIVATED_AT must be timestamp ===
+  id: 158721728058133464
+  identification: 
+    name: P704_DEACTIVATED_AT must be timestamp
+
+  execution: 
+    sequence: 250
+
+  validation: 
+    type: Item is a valid timestamp
+    item: P704_DEACTIVATED_AT
+    always-execute: false
+
+  error: 
+    error-message: '#LABEL# must be a valid timestamp.'
+    display-location: Inline with Field and in Notification
+    associated-item: P704_DEACTIVATED_AT # 158721273340133463
+
+- # ====== Validation: P704_PROMOTED_AT must be timestamp ======
+  id: 158722587004133466
+  identification: 
+    name: P704_PROMOTED_AT must be timestamp
+
+  execution: 
+    sequence: 260
+
+  validation: 
+    type: Item is a valid timestamp
+    item: P704_PROMOTED_AT
+    always-execute: false
+
+  error: 
+    error-message: '#LABEL# must be a valid timestamp.'
+    display-location: Inline with Field and in Notification
+    associated-item: P704_PROMOTED_AT # 158722033295133465
+
+processes: 
+- # ====== Process: intit ======================================
+  id: 158174340362674238
+  identification: 
+    name: intit
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_deployment DEPLOYMENT_VERSIONS%ROWTYPE;
+      BEGIN
+          SELECT *
+          INTO v_deployment
+          FROM DEPLOYMENT_VERSIONS
+          WHERE deployment_id = :P704_DEPLOYMENT_ID;
+          
+          -- Populate form items
+          :P704_DEPLOYMENT_NAME := v_deployment.deployment_name;
+          :P704_DEPLOYMENT_TYPE := v_deployment.deployment_type;
+          :P704_DEPLOYMENT_STATUS := v_deployment.deployment_status;
+          :P704_PROVIDER := v_deployment.provider;
+          :P704_MODEL_NAME := v_deployment.model_name;
+          :P704_ROLLOUT_PERCENTAGE := v_deployment.rollout_percentage;
+          :P704_IS_ACTIVE := v_deployment.is_active;
+          :P704_PRIORITY := v_deployment.priority;
+          
+          -- ✅ FIXED: Use JSON_SERIALIZE for JSON → CLOB conversion
+          :P704_DEPLOYMENT_CONFIG := JSON_SERIALIZE(v_deployment.deployment_config RETURNING CLOB PRETTY);
+          
+          :P704_TARGET_SEGMENT_IDS := v_deployment.target_segment_ids;
+          :P704_EXCLUDED_USER_IDS := v_deployment.excluded_user_ids;
+          
+          -- Shadow-specific
+          :P704_SHADOW_PARENT_DEPLOYMENT_ID := v_deployment.shadow_parent_deployment_id;
+          :P704_SHADOW_EXECUTION_MODE := v_deployment.shadow_execution_mode;
+          
+          -- ✅ FIXED: Use JSON_SERIALIZE for canary schedule
+          IF v_deployment.canary_schedule_json IS NOT NULL THEN
+              :P704_CANARY_SCHEDULE_JSON := JSON_SERIALIZE(v_deployment.canary_schedule_json RETURNING CLOB PRETTY);
+          ELSE
+              :P704_CANARY_SCHEDULE_JSON := NULL;
+          END IF;
+          
+          :P704_CANARY_CURRENT_STAGE := v_deployment.canary_current_stage;
+          
+          -- A/B Test-specific
+          :P704_EXPERIMENT_ID := v_deployment.experiment_id;
+          :P704_VARIANT_LABEL := v_deployment.variant_label;
+          
+          -- Metadata
+          :P704_CREATED_BY := v_deployment.created_by;
+          :P704_CREATED_AT := TO_CHAR(v_deployment.created_at, 'YYYY-MM-DD HH24:MI');
+          :P704_ACTIVATED_AT := TO_CHAR(v_deployment.activated_at, 'YYYY-MM-DD HH24:MI');
+          
+      EXCEPTION
+          WHEN NO_DATA_FOUND THEN
+              -- New deployment - set defaults
+              :P704_DEPLOYMENT_STATUS := 'DRAFT';
+              :P704_IS_ACTIVE := 'N';
+              :P704_PRIORITY := 50;
+              :P704_ROLLOUT_PERCENTAGE := 0;
+              :P704_DEPLOYMENT_CONFIG := NULL;
+              :P704_CANARY_SCHEDULE_JSON := NULL;
+      END;
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P704_DEPLOYMENT_ID
+
+- # ====== Process: Save Deployment ============================
+  id: 158174449730674239
+  identification: 
+    name: Save Deployment
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_deployment_id NUMBER;
+          v_json_config JSON;
+          v_canary_schedule JSON;
+      BEGIN
+          -- Validate and parse JSON configs
+          IF :P704_DEPLOYMENT_CONFIG IS NOT NULL THEN
+              BEGIN
+                  v_json_config := JSON(:P704_DEPLOYMENT_CONFIG);
+              EXCEPTION
+                  WHEN OTHERS THEN
+                      apex_error.add_error(
+                          p_message => 'Invalid JSON in Model Configuration: ' || SQLERRM,
+                          p_display_location => apex_error.c_inline_with_field_and_notif,
+                          p_page_item_name => 'P704_DEPLOYMENT_CONFIG'
+                      );
+                      RETURN;
+              END;
+          END IF;
+          
+          IF :P704_DEPLOYMENT_TYPE = 'CANARY' AND :P704_CANARY_SCHEDULE_JSON IS NOT NULL THEN
+              BEGIN
+                  v_canary_schedule := JSON(:P704_CANARY_SCHEDULE_JSON);
+              EXCEPTION
+                  WHEN OTHERS THEN
+                      apex_error.add_error(
+                          p_message => 'Invalid JSON in Canary Schedule: ' || SQLERRM,
+                          p_display_location => apex_error.c_inline_with_field_and_notif,
+                          p_page_item_name => 'P704_CANARY_SCHEDULE_JSON'
+                      );
+                      RETURN;
+              END;
+          END IF;
+          
+          -- INSERT or UPDATE
+          IF :P704_DEPLOYMENT_ID IS NULL THEN
+              -- Create new deployment
+              INSERT INTO DEPLOYMENT_VERSIONS (
+                  deployment_name, deployment_type, deployment_status,
+                  provider, model_name, deployment_config,
+                  rollout_percentage, is_active, priority,
+                  target_segment_ids, excluded_user_ids,
+                  shadow_parent_deployment_id, shadow_execution_mode,
+                  canary_schedule_json, canary_current_stage,
+                  experiment_id, variant_label,
+                  created_by, created_at
+              ) VALUES (
+                  :P704_DEPLOYMENT_NAME, :P704_DEPLOYMENT_TYPE, :P704_DEPLOYMENT_STATUS,
+                  :P704_PROVIDER, :P704_MODEL_NAME, v_json_config,
+                  :P704_ROLLOUT_PERCENTAGE, :P704_IS_ACTIVE, :P704_PRIORITY,
+                  :P704_TARGET_SEGMENT_IDS, :P704_EXCLUDED_USER_IDS,
+                  :P704_SHADOW_PARENT_DEPLOYMENT_ID, :P704_SHADOW_EXECUTION_MODE,
+                  v_canary_schedule, CASE WHEN :P704_DEPLOYMENT_TYPE = 'CANARY' THEN 1 ELSE NULL END,
+                  :P704_EXPERIMENT_ID, :P704_VARIANT_LABEL,
+                  :APP_USER, SYSTIMESTAMP
+              ) RETURNING deployment_id INTO v_deployment_id;
+              
+              :P704_DEPLOYMENT_ID := v_deployment_id;
+              
+              -- Log creation event
+              DEPLOYMENT_MANAGER_PKG.log_deployment_event(
+                  p_deployment_id => v_deployment_id,
+                  p_event_type => 'CREATED',
+                  p_new_value => :P704_DEPLOYMENT_NAME
+              );
+              
+              apex_application.g_print_success_message := 'Deployment created successfully (ID: ' || v_deployment_id || ')';
+              
+          ELSE
+              -- Update existing deployment
+              UPDATE DEPLOYMENT_VERSIONS SET
+                  deployment_name = :P704_DEPLOYMENT_NAME,
+                  deployment_type = :P704_DEPLOYMENT_TYPE,
+                  deployment_status = :P704_DEPLOYMENT_STATUS,
+                  provider = :P704_PROVIDER,
+                  model_name = :P704_MODEL_NAME,
+                  deployment_config = v_json_config,
+                  rollout_percentage = :P704_ROLLOUT_PERCENTAGE,
+                  is_active = :P704_IS_ACTIVE,
+                  priority = :P704_PRIORITY,
+                  target_segment_ids = :P704_TARGET_SEGMENT_IDS,
+                  excluded_user_ids = :P704_EXCLUDED_USER_IDS,
+                  shadow_parent_deployment_id = :P704_SHADOW_PARENT_DEPLOYMENT_ID,
+                  shadow_execution_mode = :P704_SHADOW_EXECUTION_MODE,
+                  canary_schedule_json = v_canary_schedule,
+                  experiment_id = :P704_EXPERIMENT_ID,
+                  variant_label = :P704_VARIANT_LABEL
+              WHERE deployment_id = :P704_DEPLOYMENT_ID;
+              
+              -- Log update event
+              DEPLOYMENT_MANAGER_PKG.log_deployment_event(
+                  p_deployment_id => :P704_DEPLOYMENT_ID,
+                  p_event_type => 'CONFIG_CHANGED',
+                  p_new_value => :P704_DEPLOYMENT_NAME
+              );
+              
+              apex_application.g_print_success_message := 'Deployment updated successfully';
+          END IF;
+          
+          COMMIT;
+          
+      EXCEPTION
+          WHEN OTHERS THEN
+              ROLLBACK;
+              apex_error.add_error(
+                  p_message => 'Error saving deployment: ' || SQLERRM,
+                  p_display_location => apex_error.c_on_error_page
+              );
+              RAISE;
+      END;
+
+  execution: 
+    sequence: 30
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    type: Request = Value
+    value: SAVE
+
+- # ====== Process:  Close Dialog  =============================
+  id: 158174518783674240
+  identification: 
+    name: ' Close Dialog '
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      BEGIN
+          apex_util.set_session_state('P703_LAST_UPDATED', SYSTIMESTAMP);
+      END;
+
+  execution: 
+    sequence: 40
+    point: After Submit
+    run-process: Once Per Page Visit (default)
+
+  success-message: 
+    success-message: Deployment saved successfully
+
+  error: 
+    display-location: Inline in Notification
+
+- # ====== Process: Initialize form deployments Edit ===========
+  id: 158733165332133497
+  identification: 
+    name: Initialize form deployments Edit
+    type: Form - Initialization
+    execution-chain: None
+    form-region: deployments Edit # 158709440655133419
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Process form deployments Edit ==============
+  id: 158733512559133498
+  identification: 
+    name: Process form deployments Edit
+    type: Form - Automatic Row Processing (DML)
+    execution-chain: None
+    form-region: deployments Edit # 158709440655133419
+
+  settings: 
+    target-type: Region Source
+    prevent-lost-updates: true
+    lock-row: Yes
+    return-primary-key(s)-after-insert: true
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+branches: 
+- # ====== Branch: Go To Page 703 ==============================
+  id: 158732603917133495
+  identification: 
+    name: Go To Page 703
+
+  execution: 
+    sequence: 1
+    point: After Processing
+
+  behavior: 
+    type: Page or URL (Redirect)
+    target: 
+      url: 'f?p=&APP_ID.: 703:&SESSION.::&DEBUG.: 704::&success_msg=#SUCCESS_MSG#'
+      page: ' 703'
+      clear-cache: 704
+

@@ -1,0 +1,708 @@
+---
+- # ====== Breadcrumb: Breadcrumb ==============================
+  id: 123954626239486075
+  identification: 
+    name: Breadcrumb
+
+  entries: 
+  - # ====== Entry: Home =========================================
+    id: 123954823335486076
+    identification: 
+      name: Home
+      page-number: 1
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1:&APP_SESSION.::&DEBUG.:::'
+        page: 1 # Home
+
+  - # ====== Entry: Chat History =================================
+    id: 124005710616353983
+    identification: 
+      name: Chat History
+      page-number: 150
+
+    execution: 
+      sequence: 10
+
+    appearance: 
+      parent-entry: Home # 123954823335486076
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:150:&SESSION.::&DEBUG.:::'
+        page: 150 # Chat History
+
+  - # ====== Entry: Chat History =================================
+    id: 124006962070353987
+    identification: 
+      name: Chat History
+      page-number: 151
+
+    execution: 
+      sequence: 10
+
+    appearance: 
+      parent-entry: Chat History # 124005710616353983
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:151:&APP_SESSION.::&DEBUG.:::'
+        page: 151 # Chat History
+
+  - # ====== Entry: Policy Manager ===============================
+    id: 124108716346184691
+    identification: 
+      name: Policy Manager
+      page-number: 300
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:300:&APP_SESSION.::&DEBUG.:::'
+        page: 300 # AI Governance - Policy Manager
+
+  - # ====== Entry: Redaction Rules ==============================
+    id: 124679942217841597
+    identification: 
+      name: Redaction Rules
+      page-number: 400
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:400:&APP_SESSION.::&DEBUG.:::'
+        page: 400 # Redaction Rules
+
+  - # ====== Entry: Governance Dashboard =========================
+    id: 124703649940091097
+    identification: 
+      name: Governance Dashboard
+      page-number: 500
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:500:&APP_SESSION.::&DEBUG.:::'
+        page: 500 # Governance Dashboard
+
+  - # ====== Entry: AI Parameters ================================
+    id: 124744357712468374
+    identification: 
+      name: AI Parameters
+      page-number: 1000
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1000:&APP_SESSION.::&DEBUG.:::'
+        page: 1000 # AI Parameters
+
+  - # ====== Entry: Alert Threshold ==============================
+    id: 124766290807481582
+    identification: 
+      name: Alert Threshold
+      page-number: 1010
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1010:&APP_SESSION.::&DEBUG.:::'
+        page: 1010 # Alert Threshold
+
+  - # ====== Entry: Models =======================================
+    id: 124788127303490324
+    identification: 
+      name: Models
+      page-number: 1020
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1020:&APP_SESSION.::&DEBUG.:::'
+        page: 1020 # Models
+
+  - # ====== Entry: HCM_ASSIGNMENT ===============================
+    id: 124790761477508008
+    identification: 
+      name: HCM_ASSIGNMENT
+      page-number: 1030
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1030:&APP_SESSION.::&DEBUG.:::'
+        page: 1030 # HCM_ASSIGNMENT
+
+  - # ====== Entry: HCM_EMPLOYEE =================================
+    id: 124803014214513050
+    identification: 
+      name: HCM_EMPLOYEE
+      page-number: 1031
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1031:&APP_SESSION.::&DEBUG.:::'
+        page: 1031 # HCM_EMPLOYEE
+
+  - # ====== Entry: HCM_LEAVE_BALANCE ============================
+    id: 124817672326517414
+    identification: 
+      name: HCM_LEAVE_BALANCE
+      page-number: 1033
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1033:&APP_SESSION.::&DEBUG.:::'
+        page: 1033 # HCM_LEAVE_BALANCE
+
+  - # ====== Entry: HCM_SALARY ===================================
+    id: 124827666732521758
+    identification: 
+      name: HCM_SALARY
+      page-number: 1034
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1034:&APP_SESSION.::&DEBUG.:::'
+        page: 1034 # HCM_SALARY
+
+  - # ====== Entry: User Roles ===================================
+    id: 124854476486531073
+    identification: 
+      name: User Roles
+      page-number: 1040
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1040:&APP_SESSION.::&DEBUG.:::'
+        page: 1040 # User Roles
+
+  - # ====== Entry: RAG Embeddigns ===============================
+    id: 124897868029551287
+    identification: 
+      name: RAG Embeddigns
+      page-number: 1060
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1060:&APP_SESSION.::&DEBUG.:::'
+        page: 1060 # RAG Embeddigns
+
+  - # ====== Entry: Model Usage ==================================
+    id: 124938982211612988
+    identification: 
+      name: Model Usage
+      page-number: 1080
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1080:&APP_SESSION.::&DEBUG.:::'
+        page: 1080 # Model Usage
+
+  - # ====== Entry: Document Library =============================
+    id: 125559365663396760
+    identification: 
+      name: Document Library
+      page-number: 610
+
+    execution: 
+      sequence: 10
+
+    appearance: 
+      parent-entry: Home # 123954823335486076
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:610:&APP_SESSION.::&DEBUG.:::'
+        page: 610 # Document Library
+
+  - # ====== Entry: Document Details =============================
+    id: 125611231705811292
+    identification: 
+      name: Document Details
+      page-number: 630
+
+    execution: 
+      sequence: 10
+
+    appearance: 
+      parent-entry: Document Library # 125559365663396760
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:630:&SESSION.::&DEBUG.:::'
+        page: 630 # Document Details
+
+  - # ====== Entry: Document Repository ==========================
+    id: 125700651112439495
+    identification: 
+      name: Document Repository
+      page-number: 600
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:600:&SESSION.::&DEBUG.:RP::'
+        page: 600 # Document Dashboard
+        clear-cache: RP
+
+  - # ====== Entry: Chunking Analytics ===========================
+    id: 125724405743710326
+    identification: 
+      name: Chunking Analytics
+      page-number: 655
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:655:&APP_SESSION.::&DEBUG.:::'
+        page: 655 # Chunking Analytics
+
+  - # ====== Entry: Strategy Manager =============================
+    id: 125816078836830253
+    identification: 
+      name: Strategy Manager
+      page-number: 665
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:665:&APP_SESSION.::&DEBUG.:::'
+        page: 665 # Strategy Manager
+
+  - # ====== Entry: Smart Document Search ========================
+    id: 131979642632579939
+    identification: 
+      name: Smart Document Search
+      page-number: 650
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:650:&APP_SESSION.::&DEBUG.:::'
+        page: 650 # Smart Document Search
+
+  - # ====== Entry: Registry Assigned Roles ======================
+    id: 140874810958818214
+    identification: 
+      name: Registry Assigned Roles
+      page-number: 410
+
+    execution: 
+      sequence: 10
+
+    appearance: 
+      parent-entry: Context # 141125043951667343
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:420:&SESSION.::&DEBUG.:::'
+        page: 420 # Context Dashboard
+
+  - # ====== Entry: Registry &amp; Roles =========================
+    id: 140876054448818222
+    identification: 
+      name: Registry &amp; Roles
+      page-number: 411
+
+    execution: 
+      sequence: 10
+
+    appearance: 
+      parent-entry: Registry Assigned Roles # 140874810958818214
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:411:&APP_SESSION.::&DEBUG.:::'
+        page: 411 # Registry & Roles
+
+  - # ====== Entry: Domains ======================================
+    id: 141018170447402967
+    identification: 
+      name: Domains
+      page-number: 422
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:422:&APP_SESSION.::&DEBUG.:::'
+        page: 422 # Intentions(Domains) List
+
+  - # ====== Entry: Data Source Registration =====================
+    id: 141066555461429679
+    identification: 
+      name: Data Source Registration
+      page-number: 424
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:420:&SESSION.::&DEBUG.:::'
+        page: 420 # Context Dashboard
+
+  - # ====== Entry: Intention & Data Source Assignment ===========
+    id: 141084849269441682
+    identification: 
+      name: Intention & Data Source Assignment
+      page-number: 426
+
+    execution: 
+      sequence: 10
+
+    appearance: 
+      parent-entry: Context # 141125043951667343
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:420:&SESSION.::&DEBUG.:::'
+        page: 420 # Context Dashboard
+
+  - # ====== Entry: Data Sources Assignments to Roles ============
+    id: 141116157014451104
+    identification: 
+      name: Data Sources Assignments to Roles
+      page-number: 428
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:420:&SESSION.::&DEBUG.:::'
+        page: 420 # Context Dashboard
+
+  - # ====== Entry: Context ======================================
+    id: 141125043951667343
+    identification: 
+      name: Context
+      page-number: 420
+
+    execution: 
+      sequence: 10
+
+  - # ====== Entry: Roles ========================================
+    id: 141743687488812886
+    identification: 
+      name: Roles
+      page-number: 350
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:350:&APP_SESSION.::&DEBUG.:::'
+        page: 350 # Roles
+
+  - # ====== Entry: Enterprise AI Assistant ======================
+    id: 144722174128178664
+    identification: 
+      name: Enterprise AI Assistant
+      page-number: 110
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:110:&APP_SESSION.::&DEBUG.:::'
+        page: 110 # Enterprise AI Assistant
+
+  - # ====== Entry: test_token ===================================
+    id: 145255490974705748
+    identification: 
+      name: test_token
+      page-number: 9
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:9:&APP_SESSION.::&DEBUG.:::'
+        page: 9 # test_token
+
+  - # ====== Entry: Feedback Dashboard ===========================
+    id: 155700983535219563
+    identification: 
+      name: Feedback Dashboard
+      page-number: 115
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:115:&APP_SESSION.::&DEBUG.:::'
+        page: 115 # Feedback Dashboard
+
+  - # ====== Entry: Domain Retriever =============================
+    id: 155718270355975542
+    identification: 
+      name: Domain Retriever
+      page-number: 440
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:440:&APP_SESSION.::&DEBUG.:::'
+        page: 440 # Domain Retriever
+
+  - # ====== Entry: Administration ===============================
+    id: 157647004209345872
+    identification: 
+      name: Administration
+      page-number: 10000
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:10000:&APP_SESSION.::&DEBUG.:::'
+        page: 10000 # Administration
+
+  - # ====== Entry: Deployment Dashboard =========================
+    id: 158153245796485181
+    identification: 
+      name: Deployment Dashboard
+      page-number: 702
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:702:&APP_SESSION.::&DEBUG.:::'
+        page: 702 # Deployment Dashboard
+
+  - # ====== Entry: Deployment Versions ==========================
+    id: 158170489639665417
+    identification: 
+      name: Deployment Versions
+      page-number: 703
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:703:&APP_SESSION.::&DEBUG.:::'
+        page: 703 # Deployment Versions
+
+  - # ====== Entry: deployments Edit =============================
+    id: 158709211294133374
+    identification: 
+      name: deployments Edit
+      page-number: 704
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:704:&APP_SESSION.::&DEBUG.:::'
+        page: 704 # deployments Edit
+
+  - # ====== Entry: User Segments Management =====================
+    id: 158788330860773410
+    identification: 
+      name: User Segments Management
+      page-number: 705
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:705:&APP_SESSION.::&DEBUG.:::'
+        page: 705 # User Segments Management
+
+  - # ====== Entry: Deployment Comparison ========================
+    id: 159358665513979813
+    identification: 
+      name: Deployment Comparison
+      page-number: 708
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:708:&APP_SESSION.::&DEBUG.:::'
+        page: 708 # Deployment Comparison
+
+  - # ====== Entry: My Issues ====================================
+    id: 160977003555775443
+    identification: 
+      name: My Issues
+      page-number: 117
+
+    execution: 
+      sequence: 10
+
+    appearance: 
+      parent-entry: Home # 123954823335486076
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:117:&SESSION.::&DEBUG.:::'
+        page: 117 # My Issues
+
+  - # ====== Entry: Debug Configuration 🛠️ =======================
+    id: 161028402840079772
+    identification: 
+      name: Debug Configuration 🛠️
+      page-number: 716
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:716:&SESSION.::&DEBUG.:::'
+        page: 716 # Debug Configuration 🛠️
+
+  - # ====== Entry: User Issues ==================================
+    id: 161671350054190539
+    identification: 
+      name: User Issues
+      page-number: 120
+
+    execution: 
+      sequence: 10
+
+    appearance: 
+      parent-entry: Feedback Dashboard # 155700983535219563
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:120:&APP_SESSION.::&DEBUG.:::'
+        page: 120 # User Issues
+
+  - # ====== Entry: User Issues(edit) ============================
+    id: 161707928190451873
+    identification: 
+      name: User Issues(edit)
+      page-number: 121
+
+    execution: 
+      sequence: 10
+
+    appearance: 
+      parent-entry: User Issues # 161671350054190539
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:121:&APP_SESSION.::&DEBUG.:::'
+        page: 121 # User Issues(edit)
+
+  - # ====== Entry: test =========================================
+    id: 162216687386776701
+    identification: 
+      name: test
+      page-number: 14
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:14:&APP_SESSION.::&DEBUG.:::'
+        page: 14 # test
+
+  - # ====== Entry: Audit Log Viewer =============================
+    id: 164001379580856595
+    identification: 
+      name: Audit Log Viewer
+      page-number: 720
+
+    execution: 
+      sequence: 10
+
+    appearance: 
+      parent-entry: Governance Dashboard # 124703649940091097
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:720:&APP_SESSION.::&DEBUG.:::'
+        page: 720 # Audit Log Viewer
+
+  - # ====== Entry: Audit Intelligence Dashboard =================
+    id: 164483974034510867
+    identification: 
+      name: Audit Intelligence Dashboard
+      page-number: 721
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:721:&APP_SESSION.::&DEBUG.:::'
+        page: 721 # Audit Intelligence Dashboard
+
+  - # ====== Entry: Chat Calls Viewer ============================
+    id: 164973985216005858
+    identification: 
+      name: Chat Calls Viewer
+      page-number: 722
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:722:&APP_SESSION.::&DEBUG.:::'
+        page: 722 # Chat Calls Viewer
+

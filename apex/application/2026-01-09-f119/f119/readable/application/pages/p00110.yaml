@@ -1,0 +1,2234 @@
+---
+# ====== Page: Enterprise AI Assistant =======================
+id: 110
+identification: 
+  name: Enterprise AI Assistant
+  alias: ENTERPRISE-AI-ASSISTANT
+  title: Enterprise AI Assistant
+
+appearance: 
+  page-mode: Normal
+  page-template: Right Side Column
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+javascript: 
+  function-and-global-variable-declaration: |
+    // ========================================================
+    // GLOBAL variables
+    // ========================================================
+    let historyOffset = 0;
+    let historyPageSize = 50;
+    
+    let chatWindow;
+    let txtMessage;
+    let btnSend;
+    let typing;
+    
+    function addBubble() {}         // placeholder (real version in page load)
+    function loadHistory() {}       // placeholder
+    function sendMessageSSE() {}    // placeholder
+    function regenerateLLM() {}     // placeholder
+    
+  execute-when-page-loads: |
+    apex.jQuery(function () {
+    
+        console.log("🔵 Page 110 init start");
+    
+        // ============= DOM =============
+        chatWindow = document.getElementById("chatWindow");
+        txtMessage = document.getElementById("txtMessage");
+        btnSend    = document.getElementById("btnSend");
+        typing     = document.getElementById("typingIndicator");
+    
+        function checkDOM(id, el) {
+            if (!el) console.error("❌ MISSING DOM ELEMENT:", id);
+            else console.log("✔ Found:", id);
+        }
+    
+        checkDOM("chatWindow", chatWindow);
+        checkDOM("txtMessage", txtMessage);
+        checkDOM("btnSend", btnSend);
+        checkDOM("typingIndicator", typing);
+    
+        // STOP if critical missing
+        if (!chatWindow || !btnSend || !txtMessage) {
+            console.error("❌ STOP — Critical DOM missing");
+            return;
+        }
+    
+        // ============= addBubble =============
+        addBubble = function(role, text, rag = null, parentId = null, regenerated = null) {
+            try {
+                const div = document.createElement("div");
+                div.className = "chat-bubble " + (role === "USER" ? "chat-user" : "chat-assistant");
+    
+                const content = document.createElement("div");
+                content.innerText = text;
+                div.appendChild(content);
+    
+                if (rag) {
+                    const badge = document.createElement("div");
+                    badge.className = "rag-badge";
+                    badge.innerText = "RAG • " + rag;
+                    div.appendChild(badge);
+                }
+    
+                if (regenerated === "Y") {
+                    const info = document.createElement("div");
+                    info.style.fontSize = "11px";
+                    info.style.color = "#888";
+                    info.innerText = "Regenerated from #" + parentId;
+                    div.appendChild(info);
+                }
+    
+                if (role === "ASSISTANT") {
+                    const btn = document.createElement("button");
+                    btn.className = "regen-btn";
+                    btn.innerText = "↺ Regenerate";
+                    btn.onclick = () => regenerateLLM(parentId);
+                    div.appendChild(btn);
+                }
+    
+                chatWindow.appendChild(div);
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+    
+            } catch (e) {
+                console.error("❌ ERROR in addBubble:", e);
+            }
+        };
+    
+        // ============= loadHistory =============
+        loadHistory = function(append = false) {
+    
+            console.log("🔵 loadHistory called… offset=", historyOffset);
+    
+            apex.server.process("LOAD_CHAT_HISTORY", {
+                x01: historyOffset,
+                x02: historyPageSize
+            }, {
+                dataType: "json",
+                success: function (data) {
+                    try {
+    
+                        if (!data || !data.rows) {
+                            console.warn("⚠ No history returned");
+                            return;
+                        }
+    
+                        if (!append) chatWindow.innerHTML = "";
+    
+                        data.rows.reverse().forEach(m => {
+                            addBubble(m.role, m.content, m.rag_context, m.parent_id, m.regenerated);
+                        });
+    
+                        historyOffset += data.rows.length;
+    
+                        document.getElementById("loadMoreBtn").style.display =
+                            (data.rows.length === historyPageSize ? "block" : "none");
+    
+                    } catch (e) {
+                        console.error("❌ ERROR in loadHistory:", e);
+                    }
+                },
+                error: function(err){
+                    console.error("❌ APEX loadHistory Ajax error:", err);
+                }
+            });
+        };
+    
+        // ============= regenerate =============
+        regenerateLLM = function(parentId) {
+            console.log("🔵 regenerateLLM called…", parentId);
+    
+            apex.server.process("REGENERATE_ASSISTANT", {}, {
+                dataType: "json",
+                success: function (data) {
+    
+                    addBubble("ASSISTANT",
+                        "[Regenerating...]", null, parentId, "Y"
+                    );
+    
+                    sendMessageSSE("regenerate");
+                }
+            });
+        };
+    
+        // ============= SSE =============
+     sendMessageSSE = async function(userText) {
+        try {
+            typing.style.display = "block";
+            addBubble("USER", userText);
+    
+            const payload = {
+                provider: $v("P110_PROVIDER"),
+                model: $v("P110_MODEL"),
+                prompt: userText,
+                user_id: "APEX_USER",
+                user_name: "APEX_USER",
+                app_session_id: $v("P110_CHAT_SESSION_ID"),
+    
+                temperature: Number($v("P110_TEMPERATURE")),
+                max_tokens: Number($v("P110_MAX_TOKENS")),
+                top_p: Number($v("P110_TOP_P")),
+                top_k: Number($v("P110_TOP_K")),
+                json_mode: $v("P110_JSON_MODE")
+            };
+    
+            const response = await fetch("/ords/ai/ai/stream/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/event-stream"
+                },
+                body: JSON.stringify(payload)
+            });
+    
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let fullText = "";
+    
+            while (true) {
+                const {value, done} = await reader.read();
+                if (done) break;
+    
+                const chunk = decoder.decode(value, {stream: true});
+                const lines = chunk.split("\n");
+    
+                lines.forEach(line => {
+                    if (!line.startsWith("data:")) return;
+                    const data = line.substring(5).trim();
+    
+                    if (data === "[[END]]") {
+                        typing.style.display = "none";
+                        addBubble("ASSISTANT", fullText);
+    
+                        apex.server.process("SAVE_ASSISTANT_MESSAGE", {x01: fullText});
+    
+                        return;
+                    }
+    
+                    fullText += data;
+                });
+            }
+        }
+        catch (err) {
+            console.error("❌ SSE POST ERROR:", err);
+            typing.style.display = "none";
+        }
+    };
+    
+        // ============= SEND BUTTON =============
+            btnSend.addEventListener("click", function(){
+                const msg = txtMessage.value.trim();
+                if (msg.length === 0) return;
+    
+                txtMessage.value = "";
+    
+                apex.server.process("SAVE_USER_MESSAGE", {x01: msg});
+    
+                sendMessageSSE(msg);
+            });
+    
+        // ===========================================
+        // INITIAL LOAD
+        // ===========================================
+        setTimeout(() => {
+            console.log("🔵 Initial history load…");
+            loadHistory();
+        }, 300);
+    
+    });
+    
+
+css: 
+  inline: |
+    .chat-window {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+    
+    .chat-bubble {
+        padding: 14px 18px;
+        border-radius: 12px;
+        max-width: 85%;
+        font-size: 15px;
+        line-height: 1.55;
+        white-space: pre-line;
+    }
+    
+    .chat-user {
+        background: #d0e8ff;
+        align-self: flex-end;
+        color: #003366;
+    }
+    
+    .chat-assistant {
+        background: #f5f5f5;
+        border: 1px solid #ddd;
+        align-self: flex-start;
+    }
+    
+    .chat-system {
+        background: #efefef;
+        border-left: 4px solid #666;
+        font-size: 13px;
+        color: #555;
+    }
+    
+    /* RAG context badge */
+    .rag-badge {
+        font-size: 11px;
+        padding: 2px 6px;
+        background: #eee;
+        color: #666;
+        border-radius: 4px;
+        margin-top: 4px;
+        display: inline-block;
+    }
+    
+    /* Typing indicator */
+    .typing-indicator {
+        display: flex;
+        gap: 6px;
+        margin: 12px;
+        padding-left: 6px;
+    }
+    
+    .typing-indicator .dot {
+        width: 8px;
+        height: 8px;
+        background: #888;
+        border-radius: 50%;
+        animation: blink 1s infinite;
+    }
+    
+    @keyframes blink {
+        0%   { opacity: 0.2; }
+        50%  { opacity: 1; }
+        100% { opacity: 0.2; }
+    }
+    
+    .typing-holder {
+      display: flex;
+      gap: 6px;
+      margin-left: 20px;
+    }
+    .typing-holder .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #999;
+      animation: blink 1.2s infinite ease-in-out;
+    }
+    @keyframes blink {
+      0% { opacity: 0.2; }
+      50% { opacity: 1; }
+      100% { opacity: 0.2; }
+    }
+    
+    .chat-window {
+        height: 70vh;
+        overflow-y: auto;
+        padding: 15px;
+        background: #fafafa;
+        border-radius: 8px;
+    }
+    
+    .chat-bubble {
+        margin: 10px 0;
+        max-width: 80%;
+    }
+    
+    .chat-bubble.user {
+        text-align: right;
+    }
+    
+    .chat-bubble.user .user-msg {
+        background: #d1e7ff;
+        display: inline-block;
+        padding: 10px 14px;
+        border-radius: 12px;
+        color: #003366;
+    }
+    
+    .chat-bubble.assistant .assistant-msg {
+        background: #ffffff;
+        border: 1px solid #ddd;
+        padding: 10px 14px;
+        border-radius: 12px;
+        display: inline-block;
+    }
+    
+    .chat-bubble.system-msg {
+        text-align: center;
+        color: #666;
+        font-style: italic;
+        padding: 5px;
+    }
+    .settings-panel {
+        position: fixed;
+        top: 0;
+        right: -350px;
+        width: 350px;
+        height: 100vh;
+        background: #ffffff;
+        border-left: 1px solid #ddd;
+        padding: 20px;
+        transition: right 0.35s ease;
+        overflow-y: auto;
+        z-index: 900;
+    }
+    
+    .settings-panel.open {
+        right: 0;
+    }
+    
+    .chat-history {
+        max-height: 75vh;
+        overflow-y: auto;
+        padding: 15px;
+    }
+    
+    .chat-bubble {
+        padding: 12px 15px;
+        border-radius: 12px;
+        margin: 10px 0;
+        max-width: 80%;
+        line-height: 1.4em;
+    }
+    
+    .chat-user {
+        background: #2563eb;
+        color: white;
+        margin-left: auto;
+    }
+    
+    .chat-assistant {
+        background: #e5e7eb;
+        color: #111;
+        margin-right: auto;
+    }
+    
+    .typing-indicator span {
+        height: 8px;
+        width: 8px;
+        background: #999;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 4px;
+        animation: blink 1.2s infinite;
+    }
+    
+    @keyframes blink {
+        0% { opacity: .2 }
+        20% { opacity: 1 }
+        100% { opacity: .2 }
+    } 
+    
+    
+    
+    /******************************************************
+        🎨 Enterprise AI Assistant — Premium Chat Theme
+        Author: ChatGPT
+    ******************************************************/
+    
+    /* ---------------------------------------------------
+       GLOBAL COLORS & VARIABLES
+    --------------------------------------------------- */
+    :root {
+        --bg-main: #f6f7f9;
+        --bg-panel: rgba(255,255,255,0.8);
+        --border-color: rgba(0,0,0,0.05);
+        --text-color: #111;
+        --assistant-bg: #ffffff;
+        --assistant-border: #e2e2e2;
+        --user-bg: #2563eb;
+        --user-text: #fff;
+    
+        --bubble-radius: 14px;
+        --transition-fast: 0.15s ease;
+        --transition-med: 0.25s ease;
+    
+        --shadow-soft: 0 3px 12px rgba(0,0,0,0.08);
+        --shadow-medium: 0 6px 20px rgba(0,0,0,0.12);
+    }
+    
+    /* ---------------------------------------------------
+       PAGE BACKGROUND WITH SOFT GRADIENT
+    --------------------------------------------------- */
+    body#t_PageBody {
+        background: linear-gradient(135deg, #e9eef7, #f8f9fc);
+        backdrop-filter: blur(5px);
+    }
+    
+    /* ---------------------------------------------------
+       CHAT HEADER
+    --------------------------------------------------- */
+    .chat-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #1e293b;
+        padding: 10px 0 5px 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    /* ---------------------------------------------------
+       CHAT HISTORY SCROLL AREA
+    --------------------------------------------------- */
+    #chatHistory {
+        max-height: calc(75vh);
+        overflow-y: auto;
+        padding: 20px;
+        scroll-behavior: smooth;
+    }
+    
+    /* Custom scrollbar */
+    #chatHistory::-webkit-scrollbar {
+        width: 10px;
+    }
+    #chatHistory::-webkit-scrollbar-track {
+        background: rgba(0,0,0,0.05);
+        border-radius: 5px;
+    }
+    #chatHistory::-webkit-scrollbar-thumb {
+        background: rgba(0,0,0,0.15);
+        border-radius: 5px;
+    }
+    
+    /* ---------------------------------------------------
+       CHAT BUBBLES
+    --------------------------------------------------- */
+    .chat-bubble {
+        padding: 14px 18px;
+        margin: 12px 0;
+        font-size: 15px;
+        max-width: 80%;
+        line-height: 1.6;
+        border-radius: var(--bubble-radius);
+        box-shadow: var(--shadow-soft);
+        position: relative;
+        animation: fadeInUp 0.3s ease;
+    }
+    
+    /* User bubble */
+    .chat-user {
+        background: var(--user-bg);
+        color: var(--user-text);
+        margin-left: auto;
+    }
+    
+    /* Assistant bubble */
+    .chat-assistant {
+        background: var(--assistant-bg);
+        border: 1px solid var(--assistant-border);
+        margin-right: auto;
+    }
+    
+    /* Bubble fade animation */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0; 
+            transform: translateY(6px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* ---------------------------------------------------
+       TYPING INDICATOR (3 dots)
+    --------------------------------------------------- */
+    .typing-indicator {
+        margin: 5px;
+        padding: 10px 14px;
+        background: #fff;
+        border-radius: var(--bubble-radius);
+        box-shadow: var(--shadow-soft);
+        width: fit-content;
+    }
+    
+    .typing-indicator span {
+        height: 8px;
+        width: 8px;
+        background: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 5px;
+        animation: typingBlink 1.3s infinite ease-in-out;
+    }
+    
+    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+    
+    @keyframes typingBlink {
+        0%, 100% { opacity: 0.2 }
+        50% { opacity: 1 }
+    }
+    
+    /* ---------------------------------------------------
+       MESSAGE ENTRY BAR
+    --------------------------------------------------- */
+    .chat-input-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 18px;
+        background: var(--bg-panel);
+        backdrop-filter: blur(10px);
+        border-top: 1px solid var(--border-color);
+        position: sticky;
+        bottom: 0;
+        z-index: 100;
+    }
+    
+    .chat-input {
+        flex: 1;
+        border: 1px solid var(--border-color);
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-size: 15px;
+        resize: none;
+        box-shadow: inset 0 0 4px rgba(0,0,0,0.04);
+        transition: var(--transition-fast);
+    }
+    
+    .chat-input:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+    }
+    
+    /* Send button */
+    #btnSend {
+        background: #2563eb;
+        color: #fff !important;
+        border-radius: 10px;
+        padding: 10px 18px;
+        font-size: 15px;
+        box-shadow: var(--shadow-soft);
+        border: none !important;
+        transition: var(--transition-fast);
+    }
+    
+    #btnSend:hover {
+        background: #1d4ed8;
+        box-shadow: var(--shadow-medium);
+    }
+    
+    /* ---------------------------------------------------
+       MODEL SETTINGS PANEL
+    --------------------------------------------------- */
+    #region_modelSettings {
+        background: var(--bg-panel);
+        padding: 15px;
+        border-radius: 12px;
+        box-shadow: var(--shadow-soft);
+        border: 1px solid var(--border-color);
+    }
+    
+    /* Field labels inside settings panel */
+    #region_modelSettings .t-Form-label {
+        font-weight: 600;
+        color: #374151;
+    }
+    
+    /* ---------------------------------------------------
+       FILE UPLOAD (future support)
+    --------------------------------------------------- */
+    .file-upload-placeholder {
+        border: 2px dashed #cbd5e1;
+        padding: 20px;
+        text-align: center;
+        border-radius: 12px;
+        color: #64748b;
+        margin-top: 12px;
+        transition: var(--transition-fast);
+    }
+    .file-upload-placeholder:hover {
+        border-color: #2563eb;
+        color: #2563eb;
+    }
+    
+    /******************************************************
+        END OF THEME
+    ******************************************************/
+    .rag-badge {
+        background: #eef0f3;
+        color: #555;
+        padding: 3px 6px;
+        border-radius: 4px;
+        font-size: 11px;
+        display: inline-block;
+        margin-top: 4px;
+    }
+    
+    .regen-btn {
+        margin-top: 6px;
+        background: #f1f1f1;
+        border: 1px solid #ccc;
+        padding: 4px 8px;
+        font-size: 12px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+    .regen-btn:hover {
+        background: #e3e3e3;
+    }
+    
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: MAIN CONTAINER ==============================
+  id: 143301088258236514
+  identification: 
+    name: MAIN CONTAINER
+    title: AI Assistant
+    type: Static Content
+
+  source: 
+    html-code: |
+      <div id="chatWindow" class="chat-window"></div>
+      
+      <button id="loadMoreBtn" style="
+          display:none;
+          margin: 10px auto;
+          padding: 8px 18px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          background: #fff;
+      ">Load More</button>
+      
+      <div id="typingIndicator" class="typing-indicator" style="display:none;">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      </div>
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    icon: fa-ai-sparkle-enlarge
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: AI_CHAT_CONTAINER
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Breadcrumb ==================================
+  id: 144721608987178655
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 123954626239486075
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--compactTitle
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region: Settings Panel ==============================
+  id: 144730710914653622
+  identification: 
+    name: Settings Panel
+    type: Static Content
+
+  source: 
+    html-code: |
+      <div class="settings-panel">
+          <label>Temperature</label>
+          <input type="number" id="temperature" value="0.7" step="0.1" min="0" max="2">
+      
+          <label>Max Tokens</label>
+          <input type="number" id="maxTokens" value="512" min="1">
+      
+          <label>Top P</label>
+          <input type="number" id="topP" value="1" step="0.01" min="0" max="1">
+      
+          <label>Model</label>
+          <select id="modelSelect"></select>
+      </div>
+      
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: REGION_POSITION_03
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Inline Drawer
+    template-options: 
+    - '#DEFAULT#'
+    - js-dialog-class-t-Drawer--pullOutEnd
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: messageEntry ================================
+  id: 144731657740653631
+  identification: 
+    name: messageEntry
+    type: Static Content
+
+  source: 
+    html-code: |
+      <div class="chat-input-container">
+          <textarea id="txtMessage" class="chat-input" placeholder="Write your message..."></textarea>
+      
+          <button id="btnSend" class="a-Button a-Button--hot" type="button">Send</button>
+      
+          <div id="localTypingIndicator" class="typing-indicator" style="display:none;">
+              <span></span><span></span><span></span>
+          </div>
+      </div>
+      
+      
+      
+
+  layout: 
+    sequence: 10
+    parent-region: MAIN CONTAINER # 143301088258236514
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: messageEntry
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Right Panel =================================
+  id: 144731729778653632
+  identification: 
+    name: Right Panel
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_03
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: JS Loader ===================================
+  id: 144732353491653638
+  identification: 
+    name: JS Loader
+    type: Static Content
+
+  layout: 
+    sequence: 80
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: chatScripts
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P110_CHAT_SESSION_ID =====================
+  id: 143301234329236516
+  identification: 
+    name: P110_CHAT_SESSION_ID
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 10
+    region: MAIN CONTAINER # 143301088258236514
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P110_STREAM_CHANNEL ======================
+  id: 143301391772236517
+  identification: 
+    name: P110_STREAM_CHANNEL
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 20
+    region: MAIN CONTAINER # 143301088258236514
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: APEX$CHAT110
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P110_TYPING_FLAG =========================
+  id: 143301462720236518
+  identification: 
+    name: P110_TYPING_FLAG
+    type: Hidden
+
+  settings: 
+    value-protected: false
+
+  layout: 
+    sequence: 30
+    region: MAIN CONTAINER # 143301088258236514
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: N
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P110_PROVIDER ============================
+  id: 143301687321236520
+  identification: 
+    name: P110_PROVIDER
+    type: Select List
+
+  label: 
+    label: Provider
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Right Panel # 144731729778653632
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      SELECT provider_name  AS display_value,
+             provider_code  AS return_value
+      FROM   llm_providers
+      WHERE  is_active = 'Y'
+      ORDER BY display_order;
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: OPENAI
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P110_MODEL ===============================
+  id: 143301790226236521
+  identification: 
+    name: P110_MODEL
+    type: Select List
+
+  label: 
+    label: Model
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Right Panel # 144731729778653632
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      SELECT model_name AS display_value,
+             model_code AS return_value
+      FROM   llm_provider_models
+      WHERE  is_active = 'Y'
+        AND provider_code = :P110_PROVIDER
+      ORDER BY display_order;
+    display-extra-values: true
+    display-null-value: false
+
+  cascading-list-of-values: 
+    parent-item(s): 
+    - P110_PROVIDER
+    items-to-submit: 
+    - P110_PROVIDER
+    parent-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P110_UPLOADED_FILE =======================
+  id: 143301848431236522
+  identification: 
+    name: P110_UPLOADED_FILE
+    type: Text Field
+
+  label: 
+    label: Uploaded File
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 10
+    region: Right Panel # 144731729778653632
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P110_LLM_RESPONSE ========================
+  id: 143304079750236544
+  identification: 
+    name: P110_LLM_RESPONSE
+    type: Text Field
+
+  label: 
+    label: Llm Response
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 10
+    region: Right Panel # 144731729778653632
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P110_USER_PROMPT =========================
+  id: 143304138113236545
+  identification: 
+    name: P110_USER_PROMPT
+    type: Text Field
+
+  label: 
+    label: User Prompt
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 10
+    region: messageEntry # 144731657740653631
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P110_SELECTED_PROVIDER ===================
+  id: 143304209931236546
+  identification: 
+    name: P110_SELECTED_PROVIDER
+    type: Text Field
+
+  label: 
+    label: Selected Provider
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 10
+    region: Right Panel # 144731729778653632
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P110_SELECTED_MODEL ======================
+  id: 143304349119236547
+  identification: 
+    name: P110_SELECTED_MODEL
+    type: Text Field
+
+  label: 
+    label: Selected Model
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 10
+    region: Right Panel # 144731729778653632
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P110_STREAM_ENABLED ======================
+  id: 143304410457236548
+  identification: 
+    name: P110_STREAM_ENABLED
+    type: Switch
+
+  label: 
+    label: Stream Enabled
+    alignment: Left
+
+  settings: 
+    use-defaults: true
+
+  layout: 
+    sequence: 10
+    region: Right Panel # 144731729778653632
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: Y
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P110_SESSION_ID ==========================
+  id: 143304571259236549
+  identification: 
+    name: P110_SESSION_ID
+    type: Text Field
+
+  label: 
+    label: Session Id
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 10
+    region: Right Panel # 144731729778653632
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P110_CONTEXT_DOMAIN_ID ===================
+  id: 143304605958236550
+  identification: 
+    name: P110_CONTEXT_DOMAIN_ID
+    type: Text Field
+
+  label: 
+    label: Context Domain Id
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 10
+    region: Right Panel # 144731729778653632
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P110_CHAT_HISTORY_JSON ===================
+  id: 144729850111653613
+  identification: 
+    name: P110_CHAT_HISTORY_JSON
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 140
+    region: MAIN CONTAINER # 143301088258236514
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P110_TEMPERATURE =========================
+  id: 144730249009653617
+  identification: 
+    name: P110_TEMPERATURE
+    type: Number Field
+
+  label: 
+    label: Temperature
+    alignment: Left
+
+  settings: 
+    minimum-value: 0
+    maximum-value: 2
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 10
+    region: Right Panel # 144731729778653632
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P110_TOP_P ===============================
+  id: 144730325476653618
+  identification: 
+    name: P110_TOP_P
+    type: Number Field
+
+  label: 
+    label: Top P
+    alignment: Left
+
+  settings: 
+    minimum-value: 0
+    maximum-value: 1
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 10
+    region: Right Panel # 144731729778653632
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P110_MAX_TOKENS ==========================
+  id: 144730474014653619
+  identification: 
+    name: P110_MAX_TOKENS
+    type: Number Field
+
+  label: 
+    label: Max Tokens
+    alignment: Left
+
+  settings: 
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 10
+    region: Right Panel # 144731729778653632
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: SQL Query (return single value)
+    sql-query-(return-single-value): |
+      SELECT default_temperature FROM llm_provider_models
+       WHERE model_code = :P110_MODEL;
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P110_TOP_K ===============================
+  id: 144730557304653620
+  identification: 
+    name: P110_TOP_K
+    type: Text Field
+
+  label: 
+    label: Top K
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 10
+    region: Right Panel # 144731729778653632
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P110_JSON_MODE ===========================
+  id: 144730618214653621
+  identification: 
+    name: P110_JSON_MODE
+    type: Switch
+
+  label: 
+    label: Json Mode
+    alignment: Left
+
+  settings: 
+    use-defaults: true
+
+  layout: 
+    sequence: 190
+    region: MAIN CONTAINER # 143301088258236514
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: Y
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: BTN_SETTINGS ================================
+  id: 144730847986653623
+  identification: 
+    button-name: BTN_SETTINGS
+    label: ⚙ Settings
+
+  layout: 
+    sequence: 10
+    region: Settings Panel # 144730710914653622
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+  advanced: 
+    static-id: btnSettings
+
+- # ====== Button: BTN_CLOSE_SETTINGS ==========================
+  id: 144731177919653626
+  identification: 
+    button-name: BTN_CLOSE_SETTINGS
+    label: '  Close Settings'
+
+  layout: 
+    sequence: 20
+    region: Settings Panel # 144730710914653622
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    icon: fa-window-close-o
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+computations: 
+- # ====== Computation: P110_CHAT_SESSION_ID ===================
+  id: 144732476687653639
+  identification: 
+    item-name: P110_CHAT_SESSION_ID
+
+  execution: 
+    sequence: 10
+    point: Before Header
+
+  computation: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: RAWTOHEX(SYS_GUID())
+
+processes: 
+- # ====== Process: SAVE_USER_MESSAGE ==========================
+  id: 144729418948653609
+  identification: 
+    name: SAVE_USER_MESSAGE
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_msg_id NUMBER;
+      BEGIN
+          v_msg_id :=
+              chat_message_pkg.add_message(
+                  p_session_id     => :P110_CHAT_SESSION_ID,
+                  p_message_role   => 'USER',
+                  p_content        => apex_application.g_x01,
+                  p_params         => NULL,
+                  p_rag_context    => NULL,
+                  p_rag_doc_count  => NULL,
+                  p_input_tokens   => NULL,
+                  p_output_tokens  => NULL,
+                  p_total_tokens   => NULL,
+                  p_processing_ms  => NULL,
+                  p_metadata       => NULL
+              );
+      
+          HTP.p( JSON_OBJECT('message_id' VALUE v_msg_id) );
+      
+      END;
+      
+
+  execution: 
+    sequence: 80
+    point: Ajax Callback
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: SAVE_ASSISTANT_MESSAGE =====================
+  id: 144729790998653612
+  identification: 
+    name: SAVE_ASSISTANT_MESSAGE
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_msg_id NUMBER;
+      BEGIN
+          v_msg_id :=
+              chat_message_pkg.add_message(
+                  p_session_id     => :P110_CHAT_SESSION_ID,
+                  p_message_role   => 'ASSISTANT',
+                  p_content        => apex_application.g_x01,
+                  p_params         => NULL,
+                  p_rag_context    => NULL,
+                  p_rag_doc_count  => NULL,
+                  p_input_tokens   => NULL,
+                  p_output_tokens  => NULL,
+                  p_total_tokens   => NULL,
+                  p_processing_ms  => NULL,
+                  p_metadata       => NULL
+              );
+      
+          HTP.p( JSON_OBJECT('message_id' VALUE v_msg_id) );
+      
+      END;
+      
+
+  execution: 
+    sequence: 90
+    point: Ajax Callback
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: LOAD_CHAT_HISTORY ==========================
+  id: 144730001469653615
+  identification: 
+    name: LOAD_CHAT_HISTORY
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_offset NUMBER := NVL(TO_NUMBER(apex_application.g_x01), 0);  -- starting row
+          v_limit  NUMBER := NVL(TO_NUMBER(apex_application.g_x02), 50); -- page size
+          v_json   CLOB;
+      BEGIN
+          APEX_JSON.initialize_clob_output;
+      
+          APEX_JSON.open_object;
+          APEX_JSON.write('offset', v_offset);
+          APEX_JSON.write('limit',  v_limit);
+      
+          APEX_JSON.open_array('rows');
+      
+          FOR rec IN (
+              SELECT 
+                  message_id,
+                  message_role,
+                  message_content,
+                  rag_context,
+                  is_regenerated,
+                  parent_message_id,
+                  TO_CHAR(message_timestamp,'YYYY-MM-DD HH24:MI:SS') ts
+              FROM ai_chat_messages
+              WHERE session_id = :P110_CHAT_SESSION_ID
+              ORDER BY message_seq DESC   -- newest first
+              OFFSET v_offset ROWS
+              FETCH NEXT v_limit ROWS ONLY
+          )
+          LOOP
+              APEX_JSON.open_object;
+              APEX_JSON.write('id',          rec.message_id);
+              APEX_JSON.write('role',        rec.message_role);
+              APEX_JSON.write('content',     rec.message_content);
+              APEX_JSON.write('timestamp',   rec.ts);
+              APEX_JSON.write('rag_context', rec.rag_context);
+              APEX_JSON.write('regenerated', rec.is_regenerated);
+              APEX_JSON.write('parent_id',   rec.parent_message_id);
+              APEX_JSON.close_object;
+          END LOOP;
+      
+          APEX_JSON.close_array;
+          APEX_JSON.close_object;
+      
+          v_json := APEX_JSON.get_clob_output;
+          APEX_JSON.free_output;
+      
+          HTP.p(v_json);
+      END;
+      
+
+  execution: 
+    sequence: 100
+    point: Ajax Callback
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: REGENERATE_ASSISTANT =======================
+  id: 144732539449653640
+  identification: 
+    name: REGENERATE_ASSISTANT
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_new_msg NUMBER;
+      BEGIN
+          v_new_msg := chat_message_pkg.regenerate(:P110_CHAT_SESSION_ID);
+          HTP.p( JSON_OBJECT('new_message_id' VALUE v_new_msg) );
+      END;
+
+  execution: 
+    sequence: 110
+    point: Ajax Callback
+    run-process: Once Per Page Visit (default)
+

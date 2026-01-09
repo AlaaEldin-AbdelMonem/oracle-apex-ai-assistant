@@ -1,0 +1,12 @@
+---
+- # ====== Role: AI_USER =======================================
+  id: 145253725167333305
+  identification: 
+    name: AI_USER
+
+  advanced: 
+    static-id: AI_USER
+
+  subscription: 
+    version-number: 38947586990787
+

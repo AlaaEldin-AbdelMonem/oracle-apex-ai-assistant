@@ -1,0 +1,11 @@
+.range-slider {
+  width: 100%;
+  accent-color: var(--ut-color-primary,#c74634);
+}
+
+.slider-value {
+  text-align: right;
+  font-weight: 600;
+  margin-top: 4px;
+  color: #0d1b2a;
+}

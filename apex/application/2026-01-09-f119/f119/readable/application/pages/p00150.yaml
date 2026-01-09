@@ -1,0 +1,1060 @@
+---
+# ====== Page: Chat History ==================================
+id: 150
+identification: 
+  name: Chat History
+  alias: CHAT-HISTORY1
+  title: Chat History
+
+appearance: 
+  page-mode: Normal
+  page-template: Left Side Column
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    /* ===============================
+       ENTERPRISE CHAT HISTORY
+       Page 150
+       =============================== */
+    
+    #chatHistory {
+      padding: 6px 8px;
+    }
+    
+    /* One turn */
+    .chat-turn {
+      margin-bottom: 6px;
+    }
+    
+    /* One line */
+    .chat-line {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      margin: 2px 0;
+      width: 100%;
+    }
+    
+    /* Icon */
+    .chat-icon {
+      font-size: 14px;
+      opacity: 0.7;
+      line-height: 1.4;
+      flex-shrink: 0;
+    }
+    
+    /* Bubble */
+    .chat-bubble {
+      padding: 6px 8px;
+      border-radius: 6px;
+      line-height: 1.4;
+      font-size: 13px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      max-width: 100%;
+    }
+    
+    /* User bubble */
+    .user-bubble {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      color: #111827;
+    }
+    
+    /* Assistant bubble */
+    .ai-bubble {
+      background: #fffbe6;       /* very light yellow */
+      border: 1px solid #f5e6a8;
+      color: #3a2f00;
+    }
+    
+    /* Right-side meta (USER only) */
+    .chat-meta-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #6b7280;
+      white-space: nowrap;
+    }
+    
+    /* Timestamp */
+    .chat-time {
+      opacity: 0.8;
+    }
+    
+    /* Dotted menu */
+    .chat-menu {
+      font-size: 16px;
+      line-height: 1;
+      padding: 0 2px;
+    }
+    
+    /* Disabled menu */
+    .chat-menu.disabled {
+      opacity: 0.35;
+      pointer-events: none;
+    }
+    
+    /* Remove Classic Report spacing */
+    #chatHistory table,
+    #chatHistory tr,
+    #chatHistory td {
+      padding: 0 !important;
+      border: none !important;
+    }
+    
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Chat History ================================
+  id: 123998686940353957
+  identification: 
+    name: Chat History
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT
+          c.call_id,
+          c.call_seq,
+          c.message_role,
+          c.user_prompt,
+          c.response_text,
+          c.db_created_at,
+          c.processing_status,
+          c.success,
+          c.is_refusal
+      FROM chat_calls c
+      WHERE c.chat_session_id = :P150_CHAT_SESSION_ID
+        AND c.is_deleted = 'N'
+      ORDER BY c.call_seq;
+    page-items-to-submit: 
+    - P150_CHAT_SESSION_ID
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 60
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: chatHistory
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: ChatHistory Region
+      template-options: 
+      - '#DEFAULT#'
+
+    pagination: 
+      type: Row Ranges X to Y (with next and previous links)
+      display-position: Bottom - Right
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: CALL_ID =====================================
+    id: 154734920082983120
+    identification: 
+      column-name: CALL_ID
+      type: Plain Text
+
+    heading: 
+      heading: Call Id
+      alignment: end
+
+    layout: 
+      sequence: 10
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CALL_SEQ ====================================
+    id: 154735070580983121
+    identification: 
+      column-name: CALL_SEQ
+      type: Plain Text
+
+    heading: 
+      heading: Call Seq
+      alignment: end
+
+    layout: 
+      sequence: 20
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: MESSAGE_ROLE ================================
+    id: 154735196665983122
+    identification: 
+      column-name: MESSAGE_ROLE
+      type: Plain Text
+
+    heading: 
+      heading: Message Role
+      alignment: start
+
+    layout: 
+      sequence: 30
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: USER_PROMPT =================================
+    id: 154735264042983123
+    identification: 
+      column-name: USER_PROMPT
+      type: Plain Text
+
+    heading: 
+      heading: User Prompt
+      alignment: start
+
+    layout: 
+      sequence: 40
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: RESPONSE_TEXT ===============================
+    id: 154735310143983124
+    identification: 
+      column-name: RESPONSE_TEXT
+      type: Plain Text
+
+    heading: 
+      heading: Response Text
+      alignment: start
+
+    layout: 
+      sequence: 50
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: DB_CREATED_AT ===============================
+    id: 154735461103983125
+    identification: 
+      column-name: DB_CREATED_AT
+      type: Plain Text
+
+    heading: 
+      heading: Db Created At
+      alignment: start
+
+    layout: 
+      sequence: 60
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: PROCESSING_STATUS ===========================
+    id: 154735523096983126
+    identification: 
+      column-name: PROCESSING_STATUS
+      type: Plain Text
+
+    heading: 
+      heading: Processing Status
+      alignment: start
+
+    layout: 
+      sequence: 70
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: SUCCESS =====================================
+    id: 154735694443983127
+    identification: 
+      column-name: SUCCESS
+      type: Plain Text
+
+    heading: 
+      heading: Success
+      alignment: start
+
+    layout: 
+      sequence: 80
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: IS_REFUSAL ==================================
+    id: 154735728257983128
+    identification: 
+      column-name: IS_REFUSAL
+      type: Plain Text
+
+    heading: 
+      heading: Is Refusal
+      alignment: start
+
+    layout: 
+      sequence: 90
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+- # ====== Region: Breadcrumb ==================================
+  id: 124005836832353984
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 123954626239486075
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--compactTitle
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region: MyProjectsTree ==============================
+  id: 456125948450691610
+  identification: 
+    name: MyProjectsTree
+    title: Projects
+    type: Tree
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT 
+          LEVEL                                             AS tree_level,
+          
+          -- Required by APEX Tree Region
+           item_id                      AS node_id,
+          parent_id                                         AS parent_node_id,
+          DECODE(item_type, 'PROJECT','📁 ','💬 ') 
+              || item_title                                AS node_label,
+          item_type||'|' || item_id  || '|'  || parent_id AS Node_Value_Column, --Workaround to get nodeIds
+          -- Optional but useful for APEX config
+          item_type                                         AS node_type,
+          item_title                                        AS title,
+          created_at                                        AS created_at,
+          last_activity                                     AS last_activity,
+          session_count                                     AS session_count,
+          token_total                                       AS token_total,
+          token_cost                                        AS token_cost,
+      
+          -- For ordering inside tree
+          created_at                                        AS order_value,
+      
+          -- Optional icon class if needed
+          CASE 
+              WHEN item_type = 'PROJECT' THEN 'icon-tree-folder'
+              ELSE 'icon-tree-file'
+          END                                               AS icon_css
+      
+      FROM (
+          ----------------------------------------------------------------------
+          -- Level 1: Projects
+          ----------------------------------------------------------------------
+          SELECT 
+              'PROJECT'                AS item_type,
+              cp.CHAT_PROJECT_ID       AS item_id,
+              NULL                     AS parent_id,
+              cp.PROJECT_NAME          AS item_title,
+              cp.IS_ACTIVE             AS is_active,
+              cp.CREATED_AT            AS created_at,
+              NULL                     AS last_activity,
+              (SELECT COUNT(*) 
+               FROM CHAT_SESSIONS cs2
+               WHERE cs2.CHAT_PROJECT_ID = cp.CHAT_PROJECT_ID
+                 AND cs2.IS_ACTIVE = 'Y') AS session_count,
+              NULL                     AS token_total,
+              NULL                     AS token_cost
+          FROM CHAT_PROJECTS cp
+          WHERE cp.owner_user_id = v('G_USER_ID') 
+            AND cp.IS_ACTIVE = 'Y'
+          
+          UNION ALL
+      
+          ----------------------------------------------------------------------
+          -- Level 2: Sessions
+          ----------------------------------------------------------------------
+          SELECT
+              'SESSION'                AS item_type,
+              cs.SESSION_ID            AS item_id,
+              cs.CHAT_PROJECT_ID       AS parent_id,
+              NVL(cs.SESSION_TITLE, 'Untitled Session') AS item_title,
+              cs.IS_ACTIVE             AS is_active,
+              cs.CREATED_DATE          AS created_at,
+              cs.LAST_ACTIVITY_DATE    AS last_activity,
+              NULL                     AS session_count,
+              cs.TOKENS_TOTAL          AS token_total,
+              cs.TOKENS_TOTAL_COST     AS token_cost
+          FROM CHAT_SESSIONS cs
+          WHERE cs.IS_ACTIVE = 'Y'
+               and cs.user_id = v('G_USER_ID')
+            AND cs.CHAT_PROJECT_ID IS NOT NULL
+      )
+      START WITH parent_id IS NULL
+      CONNECT BY PRIOR item_id = parent_id
+      ORDER SIBLINGS BY created_at DESC;
+    page-items-to-submit: 
+    - P150_ISSUE_LEVEL
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: REGION_POSITION_02
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: myProjectsTreeStaticID
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      node-label-column: NODE_LABEL
+      node-value-column: NODE_VALUE_COLUMN
+      hierarchy: Computed with SQL
+      node-id-column: NODE_ID
+      parent-key-column: PARENT_NODE_ID
+      start-tree-with: Value is NULL
+      order-siblings-by: ORDER_VALUE
+      tooltip: Database Column
+      tooltip-column: NODE_ID
+      activate-node-link-with: Single Click
+      link: 'javascript:void(0);'
+      icon-css-class-column: ICON_CSS
+      default-icon-css-class: icon-tree-folder
+      selected-node-page-item: P150_ISSUE_LEVEL
+
+    performance: 
+      lazy-loading: false
+
+page-items: 
+- # ====== Page Item: P150_CHAT_PROJECT_ID =====================
+  id: 154733522205983106
+  identification: 
+    name: P150_CHAT_PROJECT_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 50
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P150_SELECTED_PROJECT_ID =================
+  id: 154733613389983107
+  identification: 
+    name: P150_SELECTED_PROJECT_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P150_CHAT_SESSION_ID =====================
+  id: 154733752837983108
+  identification: 
+    name: P150_CHAT_SESSION_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 30
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P150_CHAT_PROJECT_TITLE ==================
+  id: 154733860297983109
+  identification: 
+    name: P150_CHAT_PROJECT_TITLE
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 20
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P150_SESSION_TITLE =======================
+  id: 154733923732983110
+  identification: 
+    name: P150_SESSION_TITLE
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 40
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: CREATE ======================================
+  id: 124005104362353981
+  identification: 
+    button-name: CREATE
+    label: Create
+
+  layout: 
+    sequence: 10
+    region: Chat History # 123998686940353957
+    slot: RIGHT_OF_IR_SEARCH_BAR
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:151:&APP_SESSION.::&DEBUG.:151::'
+      page: 151 # Chat History
+      clear-cache: 151
+
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: ProjectTree Node Selected ===========
+  id: 155667693877979050
+  identification: 
+    name: ProjectTree Node Selected
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: NATIVE_JSTREE|REGION TYPE|treeviewselectionchange
+    selection-type: Region
+    region: MyProjectsTree # 456125948450691610
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 155668037188979054
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Chat History # 123998686940353957
+
+    execution: 
+      sequence: 70
+      event: ProjectTree Node Selected # 155667693877979050
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 155668546515979056
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        var node = apex.region("myProjectsTreeStaticID").call("getSelectedNodes")[0];
+        if (!node) return;
+        
+        // Read node metadata
+        var raw = node.id;                // PROJECT|1|   or SESSION|302|2
+        var label = node.label;           // "📁 HR Portal"  or "💬 what is my salary"
+        console.log("RAW NODE_ID:", raw);
+        console.log("label:", label);
+        
+        // Split metadata
+        var parts = raw.split("|");
+        var type   = parts[0];  // PROJECT / SESSION
+        var id     = parts[1];  // Project ID or Session ID
+        var parent = parts[2];  // Parent project ID (may be "" for root)
+        
+         
+        // PROJECT NODE
+        if (type === "PROJECT") {
+            apex.item("P150_CHAT_PROJECT_ID").setValue(id);
+            apex.item("P150_SELECTED_PROJECT_ID").setValue(id);
+            
+            // extract clean project title
+            var cleanTitle = label.replace("📁 ", "");
+            apex.item("P150_CHAT_PROJECT_TITLE").setValue(cleanTitle);
+        }
+        
+        // SESSION NODE
+        if (type === "SESSION") {
+            apex.item("P150_CHAT_SESSION_ID").setValue(id);
+            apex.item("P150_CHAT_PROJECT_ID").setValue(parent);
+            apex.item("P150_SELECTED_PROJECT_ID").setValue(parent);
+        
+            // extract clean session title
+            var cleanTitle = label.replace("💬 ", "");
+            apex.item("P150_SESSION_TITLE").setValue(cleanTitle);
+        
+        
+            // GET PROJECT TITLE FROM TREE NODE (not from items)
+            var parentLabel = "";
+            if (node._parent && node._parent.label) {
+                parentLabel = node._parent.label.replace("📁 ", "");
+            }
+        
+            console.log("PARENT PROJECT TITLE:", parentLabel);
+        
+            // Set APEX item for UI/header
+            apex.item("P150_CHAT_PROJECT_TITLE").setValue(parentLabel);
+        
+        
+            // Push value to session state immediately
+          // apex.server.process(  "", // Name of a defined AJAX Callback process
+           // { x01: apex.item("P150_CHAT_SESSION_ID").getValue(),x02: apex.item("P150_SELECTED_PROJECT_ID").getValue() },
+            
+          //  {  success: function(pData) {  console.log("Session state updated");
+            //    } } );
+        
+        
+        
+        
+                   try {
+                    apex.server.process(
+                        "SET_SESSION_ITEM",
+                        {
+                            pageItems: "#P150_CHAT_SESSION_ID,#P150_SELECTED_PROJECT_ID" 
+                        },
+                        {
+                            url: window.location.href,
+                            dataType: "text",
+                            success: () => {  console.log("✅ Protected item synced.");  },
+                            error: (err) => { console.error("❌ Protected Item Sync Failed:", err);
+                                                apex.message.alert("Failed to sync protected items.");
+                            }
+                        }
+                    );
+                } catch (e) { console.error("❌ openReportIssueDialog Exception:", e); };
+         
+        }
+        
+
+    execution: 
+      sequence: 40
+      event: ProjectTree Node Selected # 155667693877979050
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Refresh =====================================
+    id: 155669003467979057
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+
+    execution: 
+      sequence: 60
+      event: ProjectTree Node Selected # 155667693877979050
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: SET_SESSION_ITEM ===========================
+  id: 155667107283972736
+  identification: 
+    name: SET_SESSION_ITEM
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |2
+        null;
+        declare  
+           v_CHAT_SESSION_ID           NUMBER := TO_NUMBER(apex_application.g_x01);
+           v_SELECTED_PROJECT_ID       NUMBER := TO_NUMBER(apex_application.g_x02);
+       --  v     NUMBER := apex_application.g_x03;
+       BEGIN
+          APEX_UTIL.SET_SESSION_STATE('P150_CHAT_SESSION_ID', v_CHAT_SESSION_ID);
+          APEX_UTIL.SET_SESSION_STATE('P150_SELECTED_PROJECT_ID', v_SELECTED_PROJECT_ID);
+         -- APEX_UTIL.SET_SESSION_STATE('P1_ITEM', :x03);
+      END;  
+      
+         
+
+  execution: 
+    sequence: 10
+    point: Ajax Callback
+    run-process: Once Per Page Visit (default)
+

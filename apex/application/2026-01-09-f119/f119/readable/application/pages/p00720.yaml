@@ -1,0 +1,2166 @@
+---
+# ====== Page: Audit Log Viewer ==============================
+id: 720
+identification: 
+  name: Audit Log Viewer
+  alias: AUDIT-LOG-VIEWER
+  title: Audit Log Viewer
+
+appearance: 
+  page-mode: Normal
+  page-template: Left Side Column
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+javascript: 
+  execute-when-page-loads: |
+    (function () {
+      const region = apex.jQuery("#logViewerStaticId");
+    
+      region.on("apexafterrefresh", function () {
+        region.find("tbody tr").each(function () {
+          const levelCell = apex.jQuery(this).find("td[headers='C302138586923051728']");
+          const txt = levelCell.text();
+    
+          if (txt.includes("(1)")) this.dataset.level = "1";
+          else if (txt.includes("(2)")) this.dataset.level = "2";
+          else if (txt.includes("(3)")) this.dataset.level = "3";
+          else if (txt.includes("(4)")) this.dataset.level = "4";
+        });
+      });
+    })();
+    
+
+css: 
+  inline: |
+    /* ===== Row Coloring ===== */
+    #logViewerStaticId tr[data-level="1"] {
+      background-color: #fff5f5;
+    }
+    
+    #logViewerStaticId tr[data-level="2"] {
+      background-color: #fff7ed;
+    }
+    
+    #logViewerStaticId tr[data-level="3"] {
+      background-color: #f0f9ff;
+    }
+    
+    #logViewerStaticId tr[data-level="4"] {
+      background-color: #f0fdf4;
+    }
+    
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Breadcrumb ==================================
+  id: 164000862252856590
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 123954626239486075
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region: btn =========================================
+  id: 327898477205611328
+  identification: 
+    name: btn
+    type: Static Content
+
+  layout: 
+    sequence: 160
+    parent-region: filters # 464483787299239014
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-ButtonRegion--noPadding
+    - t-ButtonRegion--noUI
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: filters =====================================
+  id: 464483787299239014
+  identification: 
+    name: filters
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_02
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--removeHeader js-removeLandmark
+    - t-Region--accent15
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Audit Log Viewer ============================
+  id: 466125927818908192
+  identification: 
+    name: Audit Log Viewer
+    type: Interactive Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |2
+       SELECT 
+          a.AUDIT_ID,
+          a.CREATED_AT,
+          a.APP_ID,
+          a.PAGE_ID,
+          a.USER_ID,
+          a.SESSION_ID,
+          a.MODULE_NAME,
+          a.TRACE_ID,
+          a.MESSAGE,
+          a.EXTRA_DATA,
+          -- Get Type Icon and Display Name
+          t.DISPLAY_NAME as EVENT_TYPE_DESC,
+          -- Get Specific Event Icon and Name
+        
+          -- APEX CSS Classes for Row Styling
+          CASE a.AUDIT_EVENT_TYPE_CODE
+              WHEN 'SEC'   THEN 'u-color-1' -- Security (Blue)
+              WHEN 'KPI_F' THEN 'u-color-9' -- Failure (Red)
+              WHEN 'EVNT'  THEN 'u-color-5' -- Success (Green)
+              WHEN 'DATA'  THEN 'u-color-7' -- Data (Orange)
+              ELSE 'u-color-2'
+          END as ROW_CLASS
+      FROM DEBUG_AUDIT_LOG a
+      LEFT JOIN LKP_DEBUG_AUDIT_EVENT_TYPES t 
+          ON a.AUDIT_EVENT_TYPE_CODE = t.AUDIT_EVENT_TYPE_CODE
+       
+      WHERE 1=1
+        -- Context Filters
+        AND (:P720_APP_ID     IS NULL OR a.APP_ID      = :P720_APP_ID)
+        AND (:P720_PAGE_ID    IS NULL OR a.PAGE_ID     = :P720_PAGE_ID)
+        AND (:P720_USER_ID    IS NULL OR a.USER_ID     = TO_NUMBER(TRIM(:P720_USER_ID)))
+        AND (:P720_SESSION_ID IS NULL OR a.SESSION_ID  = :P720_SESSION_ID)
+        
+        -- Audit Specific Filters
+        AND (:P720_EVENT_TYPE IS NULL OR a.AUDIT_EVENT_TYPE_CODE = :P720_EVENT_TYPE)
+       
+        
+        -- Search & Trace
+        AND (:P720_MODULE   IS NULL OR UPPER(a.MODULE_NAME) LIKE '%'||UPPER(:P720_MODULE)||'%')
+        AND (:P720_TRACE_ID IS NULL OR a.TRACE_ID = :P720_TRACE_ID)
+        AND (:P720_MESSAGE_SEARCH   IS NULL OR INSTR(UPPER(a.MESSAGE), UPPER(TRIM(:P720_MESSAGE_SEARCH))) > 0)
+      
+        -- Time Range Logic
+        AND (
+          :P720_TIME_RANGE IS NULL OR :P720_TIME_RANGE = 'ALL'
+          OR (:P720_TIME_RANGE = '5M'    AND a.CREATED_AT >= SYSTIMESTAMP - INTERVAL '5' MINUTE)
+          OR (:P720_TIME_RANGE = '1H'    AND a.CREATED_AT >= SYSTIMESTAMP - INTERVAL '1' HOUR)
+          OR (:P720_TIME_RANGE = 'TODAY' AND a.CREATED_AT >= TRUNC(SYSDATE))
+          OR (:P720_TIME_RANGE = '7D'    AND a.CREATED_AT >= TRUNC(SYSDATE) - 7)
+        )
+      
+        -- Manual Date Range
+        AND (:P720_FROM_TS IS NULL OR a.CREATED_AT >= CAST(:P720_FROM_TS AS TIMESTAMP))
+        AND (:P720_TO_TS   IS NULL OR a.CREATED_AT <  CAST(:P720_TO_TS AS TIMESTAMP) + INTERVAL '1' DAY)
+      
+      ORDER BY 
+          CASE WHEN :P720_SORT_DIR = 'ASC'  THEN a.AUDIT_ID END ASC,
+          CASE WHEN :P720_SORT_DIR = 'DESC' THEN a.AUDIT_ID END DESC
+    page-items-to-submit: 
+    - P720_APP_ID
+    - P720_SESSION_ID
+    - P720_MODULE
+    - P720_TRACE_ID
+    - P720_LEVEL
+    - P720_USER_ID
+    - P720_TIME_RANGE
+    - P720_FROM_TS
+    - P720_TO_TS
+    - P720_MESSAGE_SEARCH
+    - P720_SORT_DIR
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    row-css-classes: 
+    - '#ROW_CLASS#'
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: logViewerStaticId
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 466125985603908192
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+
+    messages: 
+      when-no-data-found: No data found.
+      when-more-data-found: 'The maximum row count for this report is #MAX_ROW_COUNT# rows.  Please apply a filter to reduce the number of records in your query.'
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+      csv-separator: ','
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Primary Report ========================
+      id: 466132877413921121
+      identification: 
+        name: Primary Report
+        alias: 1427973
+
+    columns: 
+    - # ====== Column: AUDIT_ID ====================================
+      id: 163910758867754832
+      identification: 
+        column-name: AUDIT_ID
+        type: Plain Text
+
+      heading: 
+        heading: Audit Id
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 124
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CREATED_AT ==================================
+      id: 163910809508754833
+      identification: 
+        column-name: CREATED_AT
+        type: Plain Text
+
+      heading: 
+        heading: Created At
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 134
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EVENT_TYPE_DESC =============================
+      id: 163910917397754834
+      identification: 
+        column-name: EVENT_TYPE_DESC
+        type: Plain Text
+
+      heading: 
+        heading: Event Type Desc
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 144
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ROW_CLASS ===================================
+      id: 326760786916357457
+      identification: 
+        column-name: ROW_CLASS
+        type: Hidden
+
+      heading: 
+        heading: Row Class
+
+      layout: 
+        sequence: 114
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PAGE_ID =====================================
+      id: 327899547534611339
+      identification: 
+        column-name: PAGE_ID
+        type: Plain Text (based on List of Values)
+
+      list-of-values: 
+        list-of-values: APP_PAGES_ALL # 163957443930745159
+
+      heading: 
+        heading: 'Page '
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 14
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Use Named List of Values to Filter Exact Match
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+    - # ====== Column: APP_ID ======================================
+      id: 466127856623908237
+      identification: 
+        column-name: APP_ID
+        type: Plain Text (based on List of Values)
+
+      list-of-values: 
+        list-of-values: APP LIST # 142784952100993911
+
+      heading: 
+        heading: Application
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 4
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Use Named List of Values to Filter Exact Match
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+    - # ====== Column: USER_ID =====================================
+      id: 466128243094908238
+      identification: 
+        column-name: USER_ID
+        type: Plain Text (based on List of Values)
+
+      list-of-values: 
+        list-of-values: USERS(USERID) # 142784559434972307
+
+      heading: 
+        heading: 'User '
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 24
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Use Named List of Values to Filter Exact Match
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+    - # ====== Column: SESSION_ID ==================================
+      id: 466128687617908239
+      identification: 
+        column-name: SESSION_ID
+        type: Plain Text
+
+      heading: 
+        heading: Session ID
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 44
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: MODULE_NAME =================================
+      id: 466129463681908241
+      identification: 
+        column-name: MODULE_NAME
+        type: Plain Text (based on List of Values)
+
+      list-of-values: 
+        list-of-values: USER MODULES (DB PKGS) # 142785128474004023
+
+      heading: 
+        heading: Module Name
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 64
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Use Named List of Values to Filter Exact Match
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+    - # ====== Column: MESSAGE =====================================
+      id: 466130723906908245
+      identification: 
+        column-name: MESSAGE
+        type: Plain Text
+
+      heading: 
+        heading: Message
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 84
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: EXTRA_DATA ==================================
+      id: 466131105937908246
+      identification: 
+        column-name: EXTRA_DATA
+        type: Plain Text
+
+      heading: 
+        heading: Extra Data
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 94
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: None
+
+      enable-users-to: 
+        hide: true
+        sort: false
+        filter: true
+        highlight: true
+        control-break: false
+        aggregate: false
+        compute: false
+        chart: false
+        group-by: false
+        pivot: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: TRACE_ID ====================================
+      id: 466635746360064580
+      identification: 
+        column-name: TRACE_ID
+        type: Plain Text
+
+      heading: 
+        heading: Trace Id
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 34
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Debug Log Viewer
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+page-items: 
+- # ====== Page Item: P720_EVENT_TYPE ==========================
+  id: 163911115576754836
+  identification: 
+    name: P720_EVENT_TYPE
+    type: Text Field
+
+  label: 
+    label: Event Type
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 150
+    region: filters # 464483787299239014
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P720_USER_ID =============================
+  id: 326766898901357515
+  identification: 
+    name: P720_USER_ID
+    type: Select List
+
+  label: 
+    label: User
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 60
+    region: filters # 464483787299239014
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: USERS(USERID) # 142784559434972307
+    display-extra-values: true
+    display-null-value: true
+    null-display-value: '--All Users---'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: v('G_USER_ID')
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P720_TIME_RANGE ==========================
+  id: 327902800358611369
+  identification: 
+    name: P720_TIME_RANGE
+    type: Select List
+
+  label: 
+    label: Time Range
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 120
+    region: filters # 464483787299239014
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Function Body returning SQL Query
+    language: PL/SQL
+    pl/sql-function-body-returning-sql-query: |
+      
+      select NAME, RETURNX from (
+      SELECT '5M' AS RETURNX, UNISTR('\23F2 ') || 'Last 5 minutes' AS NAME FROM DUAL
+      UNION ALL
+      SELECT '15M',   UNISTR('\23F2 ') || 'Last 15 minutes' FROM DUAL
+      UNION ALL
+      SELECT '1H',    UNISTR('\23F2 ') || 'Last hour' FROM DUAL
+      UNION ALL
+      SELECT '24H',   UNISTR('\23F2 ') || 'Last 24 hours' FROM DUAL
+      UNION ALL
+      SELECT 'TODAY', UNISTR('\23F2 ') || 'Today' FROM DUAL
+      UNION ALL
+      SELECT 'YDAY',  UNISTR('\23F2 ') || 'Yesterday' FROM DUAL
+      UNION ALL
+      SELECT '7D',    UNISTR('\23F2 ') || 'Last 7 days' FROM DUAL
+      UNION ALL
+      SELECT 'ALL',   UNISTR('\23F2 ') || 'All time' FROM DUAL
+      )
+    display-extra-values: true
+    display-null-value: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: ALL
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: |
+      Choose a quick time range.
+      Select All to enable custom From / To dates.
+
+- # ====== Page Item: P720_FROM_TS =============================
+  id: 327902933879611370
+  identification: 
+    name: P720_FROM_TS
+    type: Date Picker
+
+  label: 
+    label: From Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 100
+    region: filters # 464483787299239014
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    value-placeholder: '-- Any Date --'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P720_TO_TS ===============================
+  id: 327903009899611371
+  identification: 
+    name: P720_TO_TS
+    type: Date Picker
+
+  label: 
+    label: To Date
+    alignment: Left
+
+  settings: 
+    show-time: false
+    display-as: Popup
+    minimum-date: None
+    maximum-date: None
+    multiple-months: No
+    use-defaults: true
+
+  layout: 
+    sequence: 110
+    region: filters # 464483787299239014
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    value-placeholder: '-- Any Date --'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P720_MESSAGE_SEARCH ======================
+  id: 327903920347611380
+  identification: 
+    name: P720_MESSAGE_SEARCH
+    type: Text Field
+
+  label: 
+    label: Message Search
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 130
+    region: filters # 464483787299239014
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    value-placeholder: Searching for.......
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P720_SORT_DIR ============================
+  id: 327903981017611381
+  identification: 
+    name: P720_SORT_DIR
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 140
+    region: filters # 464483787299239014
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: DESC
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P720_PAGE_ID =============================
+  id: 327905584987611397
+  identification: 
+    name: P720_PAGE_ID
+    type: Select List
+
+  label: 
+    label: 'Page '
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 40
+    region: filters # 464483787299239014
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select page_title ||'('||page_name ||')' page_name,
+           page_id 
+      FROM apex_application_pages
+      WHERE application_id = :P720_APP_ID 
+       
+    display-extra-values: true
+    display-null-value: true
+    null-display-value: '-- All Pages --'
+
+  cascading-list-of-values: 
+    parent-item(s): 
+    - P720_APP_ID
+    items-to-submit: 
+    - P720_APP_ID
+    parent-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P720_APP_ID ==============================
+  id: 464495923567239106
+  identification: 
+    name: P720_APP_ID
+    type: Select List
+
+  label: 
+    label: Application
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 30
+    region: filters # 464483787299239014
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: APP LIST # 142784952100993911
+    display-extra-values: true
+    display-null-value: true
+    null-display-value: '--All Apps--'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Item
+    item: APP_ID
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P720_MODULE ==============================
+  id: 464496000508239107
+  identification: 
+    name: P720_MODULE
+    type: Select List
+
+  label: 
+    label: Module
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 70
+    region: filters # 464483787299239014
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: USER MODULES (DB PKGS) # 142785128474004023
+    display-extra-values: true
+    display-null-value: true
+    null-display-value: '-- All Modules --'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P720_SESSION_ID ==========================
+  id: 464496075739239108
+  identification: 
+    name: P720_SESSION_ID
+    type: Number Field
+
+  label: 
+    label: SESSION ID
+    alignment: Left
+
+  settings: 
+    number-alignment: Start
+    virtual-keyboard: Decimal
+
+  layout: 
+    sequence: 50
+    region: filters # 464483787299239014
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    value-placeholder: '--All Sessions--'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P720_TRACE_ID ============================
+  id: 464496217064239109
+  identification: 
+    name: P720_TRACE_ID
+    type: Text Field
+
+  label: 
+    label: Trace Text
+    alignment: Left
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 80
+    region: filters # 464483787299239014
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    value-placeholder: '--All Traces--'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P720_LEVEL ===============================
+  id: 464496437783239111
+  identification: 
+    name: P720_LEVEL
+    type: Select List
+
+  label: 
+    label: Level
+    alignment: Left
+
+  settings: 
+    page-action-on-selection: None
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 90
+    region: filters # 464483787299239014
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: DEBUG LEVEL (DEBUG_LEVEL) # 142783886284945216
+    display-extra-values: true
+    display-null-value: true
+    null-display-value: '--All Levels--'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: Purge_Log ===================================
+  id: 163989145845856521
+  identification: 
+    button-name: Purge_Log
+    label: Purge Log
+
+  layout: 
+    sequence: 10
+    region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--link
+    - t-Button--iconLeft
+    icon: fa-cut
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+  configuration: 
+    build-option: Commented Out # 123954063565486069
+
+- # ====== Button: clear =======================================
+  id: 163999528566856587
+  identification: 
+    button-name: clear
+    label: clear
+
+  layout: 
+    sequence: 10
+    region: btn # 327898477205611328
+    slot: PREVIOUS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    - t-Button--gapTop
+    icon: fa-eraser
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: sort ========================================
+  id: 163999998945856588
+  identification: 
+    button-name: sort
+    label: sort
+
+  layout: 
+    sequence: 10
+    region: btn # 327898477205611328
+    slot: PREVIOUS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--noUI
+    icon: fa-arrow-down
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+  advanced: 
+    static-id: BTN_TOGGLE_SORT
+
+  comments: 
+    comments: sort
+
+- # ====== Button: Search ======================================
+  id: 164000346258856589
+  identification: 
+    button-name: Search
+    label: Search
+
+  layout: 
+    sequence: 10
+    region: btn # 327898477205611328
+    slot: PREVIOUS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    - t-Button--gapTop
+    icon: fa-search
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+dynamic-actions: 
+- # ====== Dynamic Action: clear Search ========================
+  id: 164001691067856598
+  identification: 
+    name: clear Search
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: clear # 163999528566856587
+
+  actions: 
+  - # ====== Action: Clear =======================================
+    id: 164002064420856601
+    identification: 
+      action: Clear
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P720_APP_ID
+      - P720_SESSION_ID
+      - P720_MODULE
+      - P720_TRACE_ID
+      - P720_LEVEL
+      - P720_USER_ID
+      - P720_TIME_RANGE
+      - P720_FROM_TS
+      - P720_TO_TS
+      - P720_MESSAGE_SEARCH
+
+    execution: 
+      sequence: 10
+      event: clear Search # 164001691067856598
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Toggle Date Range-ALL ===============
+  id: 164002408211856601
+  identification: 
+    name: Toggle Date Range-ALL
+
+  execution: 
+    sequence: 30
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P720_TIME_RANGE
+
+  client-side-condition: 
+    type: Item != Value
+    item: P720_TIME_RANGE
+    value: ALL
+
+  actions: 
+  - # ====== Action: clear =======================================
+    id: 164002955428856603
+    identification: 
+      name: clear
+      action: Set Value
+
+    settings: 
+      set-type: Static Assignment
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P720_FROM_TS
+      - ' P720_TO_TS'
+
+    execution: 
+      sequence: 10
+      event: Toggle Date Range-ALL # 164002408211856601
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+    server-side-condition: 
+      type: Item != Value
+      item: P720_TIME_RANGE
+      value: ALL
+
+  - # ====== Action: Disable =====================================
+    id: 164003463276856604
+    identification: 
+      action: Disable
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P720_FROM_TS
+      - ' P720_TO_TS'
+
+    execution: 
+      sequence: 20
+      event: Toggle Date Range-ALL # 164002408211856601
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+    client-side-condition: 
+      type: Item != Value
+      item: P720_TIME_RANGE
+      value: ALL
+
+- # ====== Dynamic Action: Toggle Date Range-Not-ALL ===========
+  id: 164003865990856605
+  identification: 
+    name: Toggle Date Range-Not-ALL
+
+  execution: 
+    sequence: 40
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P720_TIME_RANGE
+
+  client-side-condition: 
+    type: Item = Value
+    item: P720_TIME_RANGE
+    value: ALL
+
+  actions: 
+  - # ====== Action: Enable ======================================
+    id: 164004393735856606
+    identification: 
+      action: Enable
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P720_FROM_TS
+      - ' P720_TO_TS'
+
+    execution: 
+      sequence: 20
+      event: Toggle Date Range-Not-ALL # 164003865990856605
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: delete All log data =================
+  id: 164004702874856607
+  identification: 
+    name: delete All log data
+
+  execution: 
+    sequence: 60
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: Purge_Log # 163989145845856521
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 164005283840856609
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Audit Log Viewer # 466125927818908192
+
+    execution: 
+      sequence: 30
+      event: delete All log data # 164004702874856607
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Confirm =====================================
+    id: 164005796672856610
+    identification: 
+      action: Confirm
+
+    settings: 
+      title: Purge Log
+      message: |
+        All Log data will be lost? 
+        !!!!!!
+      style: Danger
+      icon: fa-warning
+      confirm-label: Confirm Purge
+      cancel-label: Cancel
+
+    execution: 
+      sequence: 10
+      event: delete All log data # 164004702874856607
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Execute Server-side Code ====================
+    id: 164006208519856611
+    identification: 
+      action: Execute Server-side Code
+
+    settings: 
+      language: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      pl/sql-code: |
+        delete DEBUG_LOG;
+        commit;
+
+    execution: 
+      sequence: 20
+      event: delete All log data # 164004702874856607
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+- # ====== Dynamic Action: Toggle Sort Direction ===============
+  id: 164006620364856612
+  identification: 
+    name: Toggle Sort Direction
+
+  execution: 
+    sequence: 50
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: sort # 163999998945856588
+
+  actions: 
+  - # ====== Action: Set Value ===================================
+    id: 164007107490856614
+    identification: 
+      action: Set Value
+
+    settings: 
+      set-type: JavaScript Expression
+      javascript-expression: "($v('P720_SORT_DIR') === 'DESC') ? 'ASC' : 'DESC'"
+      suppress-change-event: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P720_SORT_DIR
+
+    execution: 
+      sequence: 10
+      event: Toggle Sort Direction # 164006620364856612
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Refresh =====================================
+    id: 164007616869856615
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Audit Log Viewer # 466125927818908192
+
+    execution: 
+      sequence: 30
+      event: Toggle Sort Direction # 164006620364856612
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 164008118075856617
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        var dir = $v('P720_SORT_DIR');
+        var btn = $('#BTN_TOGGLE_SORT');
+        
+        btn.find('.fa')
+           .removeClass('fa-arrow-up fa-arrow-down')
+           .addClass(dir === 'ASC' ? 'fa-arrow-up' : 'fa-arrow-down');
+        
+        btn.attr(
+          'title',
+          dir === 'ASC' ? 'Oldest first' : 'Newest first'
+        );
+
+    execution: 
+      sequence: 20
+      event: Toggle Sort Direction # 164006620364856612
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Search ==============================
+  id: 164008570226856618
+  identification: 
+    name: Search
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: Search # 164000346258856589
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 164009071240856619
+    identification: 
+      action: Refresh
+
+    settings: 
+      maintain-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Audit Log Viewer # 466125927818908192
+
+    execution: 
+      sequence: 10
+      event: Search # 164008570226856618
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+

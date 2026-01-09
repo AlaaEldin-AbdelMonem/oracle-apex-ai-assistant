@@ -1,0 +1,901 @@
+---
+# ====== Page: JSON Editor ===================================
+id: 6
+identification: 
+  name: JSON Editor
+  alias: JSON-EDITOR
+  title: JSON Editor
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+javascript: 
+  file-urls: 
+  - '#WORKSPACE_FILES#jsonview/jquery.jsonview.min.js'
+  execute-when-page-loads: ' '
+
+css: 
+  file-urls: 
+  - '#WORKSPACE_FILES#jsonview/jquery.jsonview.min.css'
+  inline: |
+    .jsonview .bool, .jsonview .num {
+        color: var(--ut-palette-success);
+    }
+    
+    .jsonview .string {
+        color: var(--ut-palette-info);
+    }
+    
+    .jsonview .null {
+        color: var(--ut-palette-danger);
+    }
+    
+    .jsonview .collapser {
+        color: var(--ut-palette-primary-alt);
+    }
+    
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: t ===========================================
+  id: 135398901168142631
+  identification: 
+    name: t
+    type: Static Content
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Tabs Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-TabsRegion-mod--simple
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Advanced_Viewer =============================
+  id: 135451835445194802
+  identification: 
+    name: Advanced_Viewer
+    title: Advanced Editor
+    type: JSON Viewer
+
+  source: 
+    location: None
+
+  layout: 
+    sequence: 20
+    parent-region: t # 135398901168142631
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      theme:: Light
+
+- # ====== Region: viewer ======================================
+  id: 135451911058194803
+  identification: 
+    name: viewer
+    type: Static Content
+
+  source: 
+    html-code: '  <pre class="my_json_item">&P6_JSON_TEXT.</pre>'
+
+  layout: 
+    sequence: 10
+    parent-region: t # 135398901168142631
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  configuration: 
+    build-option: Commented Out # 123954063565486069
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Viewer ======================================
+  id: 135452085009194804
+  identification: 
+    name: Viewer
+    type: Dynamic Content
+
+  source: 
+    language: PL/SQL
+    pl/sql-function-body-returning-a-clob: |
+      /*declare
+          l_result clob;
+      begin
+      
+          for c in ( select MANDATORY_FILTERS from RAG_SOURCE_REGISTRY  where SOURCE_REGISTRY_ID = 3 )
+      
+          loop
+              l_result := l_result || '<pre class="my_json_item">' || c.MANDATORY_FILTERS || '</pre>';
+          end loop;
+      
+          return l_result;
+      end;*/
+      
+      
+      begin
+      
+       return   '<pre class="my_json_item">' || :P6_JSON_TEXT  || '</pre>';
+      end;
+    page-items-to-submit: 
+    - P6_JSON_TEXT
+
+  layout: 
+    sequence: 40
+    parent-region: t # 135398901168142631
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: json_result
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    performance: 
+      lazy-loading: false
+
+page-items: 
+- # ====== Page Item: P6_TABLE_NAME ============================
+  id: 135399038313142632
+  identification: 
+    name: P6_TABLE_NAME
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 10
+    region: t # 135398901168142631
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P6_JSON_TEXT =============================
+  id: 135399454757142636
+  identification: 
+    name: P6_JSON_TEXT
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 50
+    region: t # 135398901168142631
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P6_ROW_ID ================================
+  id: 135399572395142637
+  identification: 
+    name: P6_ROW_ID
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 40
+    region: t # 135398901168142631
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P6_PK_COLUMN =============================
+  id: 135399645565142638
+  identification: 
+    name: P6_PK_COLUMN
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 30
+    region: t # 135398901168142631
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P6_COLUMN_NAME ===========================
+  id: 135399775517142639
+  identification: 
+    name: P6_COLUMN_NAME
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 20
+    region: t # 135398901168142631
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P6_READ_ONLY =============================
+  id: 135451738267194801
+  identification: 
+    name: P6_READ_ONLY
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 60
+    region: t # 135398901168142631
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: N
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: SAVE ========================================
+  id: 135399914025142641
+  identification: 
+    button-name: SAVE
+    label: Save
+
+  layout: 
+    sequence: 60
+    region: t # 135398901168142631
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+  advanced: 
+    static-id: btnSaveJson
+
+  configuration: 
+    build-option: Commented Out # 123954063565486069
+
+- # ====== Button: FormatJSON ==================================
+  id: 135400351090142645
+  identification: 
+    button-name: FormatJSON
+    label: 🧩Format json
+
+  layout: 
+    sequence: 70
+    region: t # 135398901168142631
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+  configuration: 
+    build-option: Commented Out # 123954063565486069
+
+- # ====== Button: Cancel ======================================
+  id: 135400469629142646
+  identification: 
+    button-name: Cancel
+    label: Cancel
+
+  layout: 
+    sequence: 80
+    region: t # 135398901168142631
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: Collapse_All ================================
+  id: 135452474409194808
+  identification: 
+    button-name: Collapse_All
+    label: Collapse All
+
+  layout: 
+    sequence: 10
+    region: Viewer # 135452085009194804
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    icon: fa-expand-collapse
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: Expand_All ==================================
+  id: 135452555163194809
+  identification: 
+    button-name: Expand_All
+    label: Expand All
+
+  layout: 
+    sequence: 20
+    region: Viewer # 135452085009194804
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    icon: fa-expand
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+dynamic-actions: 
+- # ====== Dynamic Action: New =================================
+  id: 135400043117142642
+  identification: 
+    name: New
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: SAVE # 135399914025142641
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 135400173002142643
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        try {
+          JSON.parse(window.jsonEditor.getValue());
+          apex.submit('SAVE');
+        } catch (e) {
+          apex.message.showErrors([{
+            type: 'error',
+            location: 'page',
+            message: 'Invalid JSON: ' + e.message,
+            unsafe: false
+          }]);
+        }
+
+    execution: 
+      sequence: 10
+      event: New # 135400043117142642
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: close dialog ========================
+  id: 135400528283142647
+  identification: 
+    name: close dialog
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: Cancel # 135400469629142646
+
+  actions: 
+  - # ====== Action: Cancel Dialog ===============================
+    id: 135400607150142648
+    identification: 
+      action: Cancel Dialog
+
+    execution: 
+      sequence: 10
+      event: close dialog # 135400528283142647
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Beautify JSON =======================
+  id: 135400766817142649
+  identification: 
+    name: Beautify JSON
+
+  execution: 
+    sequence: 30
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: FormatJSON # 135400351090142645
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 135400851671142650
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        try {
+          var editor = window.jsonEditor;
+          var obj = JSON.parse(editor.getValue());
+          editor.setValue(JSON.stringify(obj, null, 2), -1);
+        } catch(e) {
+          apex.message.alert('Cannot format: ' + e.message);
+        }
+
+    execution: 
+      sequence: 10
+      event: Beautify JSON # 135400766817142649
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: formatJson ==========================
+  id: 135452187296194805
+  identification: 
+    name: formatJson
+
+  execution: 
+    sequence: 40
+    event-scope: Static
+
+  when: 
+    event: Page Load
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 135452252505194806
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        var json = $('.my_json_item').text();
+        
+          $(function() {
+            $(".my_json_item").JSONView(json, { collapsed: true });
+          });
+
+    execution: 
+      sequence: 10
+      event: formatJson # 135452187296194805
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: New_1 ===============================
+  id: 135452618627194810
+  identification: 
+    name: New_1
+
+  execution: 
+    sequence: 50
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: Expand_All # 135452555163194809
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 135452784133194811
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        // Expand All JSON nodes
+        function expand_all() {
+           var json = $('.my_json_item').text();
+        
+           $(function() {
+               $(".my_json_item").JSONView(json, { collapsed: false });
+           }); 
+         }
+        
+         ( apex.region("json_result").refresh() )
+             .then(() => ( expand_all() )
+         )
+        
+
+    execution: 
+      sequence: 10
+      event: New_1 # 135452618627194810
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: New_2 ===============================
+  id: 135452834601194812
+  identification: 
+    name: New_2
+
+  execution: 
+    sequence: 60
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: Collapse_All # 135452474409194808
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 135452909615194813
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |
+        // Collapse All JSON nodes
+        function collapse_all() {
+           var json = $('.my_json_item').text();
+        
+           $(function() {
+               $(".my_json_item").JSONView(json, { collapsed: true });
+           }); 
+         }
+        
+         ( apex.region("json_result").refresh() )
+             .then(() => ( collapse_all() )
+         )
+        
+
+    execution: 
+      sequence: 10
+      event: New_2 # 135452834601194812
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: LOAD_JSON_DYNAMICALLY ======================
+  id: 135399853687142640
+  identification: 
+    name: LOAD_JSON_DYNAMICALLY
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_sql   VARCHAR2(1000);
+      BEGIN
+          IF :P6_TABLE_NAME IS NOT NULL
+             AND :P6_COLUMN_NAME IS NOT NULL
+             AND :P6_ROW_ID IS NOT NULL THEN
+      
+              IF :P6_PK_COLUMN IS NULL THEN
+                 :P6_PK_COLUMN := 'ID';
+              END IF;
+      
+              v_sql := 'SELECT ' || :P6_COLUMN_NAME ||
+                       ' FROM ' || :P6_TABLE_NAME ||
+                       ' WHERE ' || :P6_PK_COLUMN || ' = :1';
+      
+              EXECUTE IMMEDIATE v_sql INTO :P6_JSON_TEXT USING :P6_ROW_ID;
+          END IF;
+      EXCEPTION
+          WHEN OTHERS THEN
+              :P6_JSON_TEXT := '{"error":"Failed to load JSON: ' || SQLERRM || '"}';
+      END;
+      
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: SAVE_JSON_DYNAMICALLY ======================
+  id: 135400286581142644
+  identification: 
+    name: SAVE_JSON_DYNAMICALLY
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_sql VARCHAR2(1000);
+      BEGIN
+      
+      IF :P6_READ_ONLY = 'Y' THEN
+          raise_application_error(-20001, 'Page is read-only; cannot save.');
+      END IF;
+      
+          apex_json.parse(:P6_JSON_TEXT); -- Validate JSON syntax
+      
+          IF :P6_PK_COLUMN IS NULL THEN
+             :P6_PK_COLUMN := 'ID';
+          END IF;
+      
+          v_sql := 'UPDATE ' || :P6_TABLE_NAME ||
+                   ' SET ' || :P6_COLUMN_NAME || ' = :1 ' ||
+                   ' WHERE ' || :P6_PK_COLUMN || ' = :2';
+      
+          EXECUTE IMMEDIATE v_sql USING :P6_JSON_TEXT, :P6_ROW_ID;
+          COMMIT;
+      EXCEPTION
+          WHEN OTHERS THEN
+              apex_error.add_error(
+                  p_message => 'Failed to save JSON: ' || SQLERRM,
+                  p_display_location => apex_error.c_inline_in_field,
+                  p_page_item_name   => 'P6_JSON_TEXT'
+              );
+      END;
+      
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: SAVE # 135399914025142641
+

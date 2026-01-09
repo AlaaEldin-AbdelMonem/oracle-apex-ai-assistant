@@ -1,0 +1,3 @@
+REM INSERTING into TENANTS
+SET DEFINE OFF;
+Insert into TENANTS (TENANT_ID,TENANT_NAME,TENANT_DESC,IS_ACTIVE,CREATED_ON,CREATED_BY,TENANT_CODE) values (1,'My SaaS Platform','Primary tenant for testing','Y',to_date('25-OCT-25','DD-MON-RR'),null,'MY_SAAS');

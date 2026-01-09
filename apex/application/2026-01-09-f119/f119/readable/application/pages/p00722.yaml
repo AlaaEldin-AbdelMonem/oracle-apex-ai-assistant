@@ -1,0 +1,3259 @@
+---
+# ====== Page: Chat Calls Viewer =============================
+id: 722
+identification: 
+  name: Chat Calls Viewer
+  alias: CHAT-CALLS-VIEWER
+  title: Chat Calls Viewer
+
+appearance: 
+  page-mode: Normal
+  page-template: Standard
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Breadcrumb ==================================
+  id: 164973496386005850
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 123954626239486075
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region: Search Results ==============================
+  id: 164974150298005861
+  identification: 
+    name: Search Results
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: CHAT_CALLS
+    include-rowid-column: false
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noPadding
+    - t-Region--hideHeader js-addHiddenHeadingRoleDesc
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 50
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - '#DEFAULT#'
+      - t-Report--stretch
+      - t-Report--staticRowColors
+      - t-Report--rowHighlight
+      - t-Report--inline
+      - t-Report--hideNoPagination
+
+    pagination: 
+      type: Row Ranges X to Y (with next and previous links)
+      display-position: Bottom - Right
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 100000
+
+    messages: 
+      when-no-data-found: no data found
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: CALL_ID =====================================
+    id: 164981081135005964
+    identification: 
+      column-name: CALL_ID
+      type: Hidden
+
+    layout: 
+      sequence: 0
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CHAT_SESSION_ID =============================
+    id: 164981430966005966
+    identification: 
+      column-name: CHAT_SESSION_ID
+      type: Plain Text (based on List of Values)
+
+    heading: 
+      heading: Chat Session
+      alignment: start
+
+    layout: 
+      sequence: 2
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: CHAT_SESSIONS # 160925527503637571
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CALL_SEQ ====================================
+    id: 164981854650005967
+    identification: 
+      column-name: CALL_SEQ
+      type: Plain Text
+
+    heading: 
+      heading: Call Seq
+      alignment: end
+
+    layout: 
+      sequence: 3
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      format-mask: 999G999G999G999G999G999G999G999G999G990
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: PROVIDER ====================================
+    id: 164982266888005968
+    identification: 
+      column-name: PROVIDER
+      type: Plain Text
+
+    heading: 
+      heading: Provider
+      alignment: start
+
+    layout: 
+      sequence: 4
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: MODEL =======================================
+    id: 164982655501005969
+    identification: 
+      column-name: MODEL
+      type: Plain Text
+
+    heading: 
+      heading: Model
+      alignment: start
+
+    layout: 
+      sequence: 5
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: USER_PROMPT =================================
+    id: 164983058846005970
+    identification: 
+      column-name: USER_PROMPT
+      type: Plain Text
+
+    heading: 
+      heading: User Prompt
+      alignment: start
+
+    layout: 
+      sequence: 6
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: SYSTEM_INSTRUCTIONS =========================
+    id: 164983471321005971
+    identification: 
+      column-name: SYSTEM_INSTRUCTIONS
+      type: Plain Text
+
+    heading: 
+      heading: System Instructions
+      alignment: start
+
+    layout: 
+      sequence: 7
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CONVERSATION_HISTORY ========================
+    id: 164983867063005972
+    identification: 
+      column-name: CONVERSATION_HISTORY
+      type: Plain Text
+
+    heading: 
+      heading: Conversation History
+      alignment: start
+
+    layout: 
+      sequence: 8
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: RAG_CONTEXT =================================
+    id: 164984292586005973
+    identification: 
+      column-name: RAG_CONTEXT
+      type: Plain Text
+
+    heading: 
+      heading: Rag Context
+      alignment: start
+
+    layout: 
+      sequence: 9
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: RESPONSE_SCHEMA =============================
+    id: 164984670313005973
+    identification: 
+      column-name: RESPONSE_SCHEMA
+      type: Plain Text
+
+    heading: 
+      heading: Response Schema
+      alignment: start
+
+    layout: 
+      sequence: 10
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: GOVERNANCE_DETAILS ==========================
+    id: 164985032139005974
+    identification: 
+      column-name: GOVERNANCE_DETAILS
+      type: Hidden
+
+    layout: 
+      sequence: 11
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: FINAL_SYSTEM_PROMPT =========================
+    id: 164985423895005975
+    identification: 
+      column-name: FINAL_SYSTEM_PROMPT
+      type: Hidden
+
+    layout: 
+      sequence: 12
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: FINAL_USER_PROMPT ===========================
+    id: 164985853379005976
+    identification: 
+      column-name: FINAL_USER_PROMPT
+      type: Hidden
+
+    layout: 
+      sequence: 13
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: FINAL_LLM_PROMPT ============================
+    id: 164986209724005977
+    identification: 
+      column-name: FINAL_LLM_PROMPT
+      type: Hidden
+
+    layout: 
+      sequence: 14
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: TOOL_CALLS_JSON =============================
+    id: 164986634900005978
+    identification: 
+      column-name: TOOL_CALLS_JSON
+      type: Hidden
+
+    layout: 
+      sequence: 15
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: PARSED_STRUCT_OUTPUT ========================
+    id: 164987087654005979
+    identification: 
+      column-name: PARSED_STRUCT_OUTPUT
+      type: Hidden
+
+    layout: 
+      sequence: 16
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: RESPONSE_FORMAT =============================
+    id: 164987448148005980
+    identification: 
+      column-name: RESPONSE_FORMAT
+      type: Hidden
+
+    layout: 
+      sequence: 17
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CONTEXT_DOMAIN_ID ===========================
+    id: 164987884552005981
+    identification: 
+      column-name: CONTEXT_DOMAIN_ID
+      type: Hidden
+
+    layout: 
+      sequence: 18
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CONTEXT_CONFIDENCE ==========================
+    id: 164988272372005982
+    identification: 
+      column-name: CONTEXT_CONFIDENCE
+      type: Hidden
+
+    layout: 
+      sequence: 19
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CONTEXT_METHOD ==============================
+    id: 164988669438005983
+    identification: 
+      column-name: CONTEXT_METHOD
+      type: Hidden
+
+    layout: 
+      sequence: 20
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: INTENT_ID ===================================
+    id: 164989076864005984
+    identification: 
+      column-name: INTENT_ID
+      type: Hidden
+
+    layout: 
+      sequence: 21
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: INTENT_CONFIDENCE ===========================
+    id: 164989485391005985
+    identification: 
+      column-name: INTENT_CONFIDENCE
+      type: Hidden
+
+    layout: 
+      sequence: 22
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: INTENT_METHOD ===============================
+    id: 164989852644005986
+    identification: 
+      column-name: INTENT_METHOD
+      type: Hidden
+
+    layout: 
+      sequence: 23
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: IS_DOC_INJECT_REQUIRED ======================
+    id: 164990275242005987
+    identification: 
+      column-name: IS_DOC_INJECT_REQUIRED
+      type: Hidden
+
+    layout: 
+      sequence: 24
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: IS_DATA_INJECT_REQUIRED =====================
+    id: 164990680578005988
+    identification: 
+      column-name: IS_DATA_INJECT_REQUIRED
+      type: Hidden
+
+    layout: 
+      sequence: 25
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: RAG_ENABLED =================================
+    id: 164991064504005989
+    identification: 
+      column-name: RAG_ENABLED
+      type: Hidden
+
+    layout: 
+      sequence: 26
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: RAG_MAX_CHUNKS ==============================
+    id: 164991435114005990
+    identification: 
+      column-name: RAG_MAX_CHUNKS
+      type: Hidden
+
+    layout: 
+      sequence: 27
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: RAG_FILTER_MODE =============================
+    id: 164991803299005991
+    identification: 
+      column-name: RAG_FILTER_MODE
+      type: Hidden
+
+    layout: 
+      sequence: 28
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: GOVERNANCE_ENABLED ==========================
+    id: 164992257666005991
+    identification: 
+      column-name: GOVERNANCE_ENABLED
+      type: Hidden
+
+    layout: 
+      sequence: 29
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: TEMPERATURE =================================
+    id: 164992616010005992
+    identification: 
+      column-name: TEMPERATURE
+      type: Hidden
+
+    layout: 
+      sequence: 30
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: MAX_TOKENS ==================================
+    id: 164993096174005993
+    identification: 
+      column-name: MAX_TOKENS
+      type: Hidden
+
+    layout: 
+      sequence: 31
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: TOP_P =======================================
+    id: 164993453871005994
+    identification: 
+      column-name: TOP_P
+      type: Hidden
+
+    layout: 
+      sequence: 32
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: TOP_K =======================================
+    id: 164993856375005995
+    identification: 
+      column-name: TOP_K
+      type: Hidden
+
+    layout: 
+      sequence: 33
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: SEED ========================================
+    id: 164994225969005996
+    identification: 
+      column-name: SEED
+      type: Hidden
+
+    layout: 
+      sequence: 34
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: STOP_SEQ ====================================
+    id: 164994562128005997
+    identification: 
+      column-name: STOP_SEQ
+      type: Hidden
+
+    layout: 
+      sequence: 35
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: FREQUENCY_PENALTY ===========================
+    id: 164994914637005998
+    identification: 
+      column-name: FREQUENCY_PENALTY
+      type: Hidden
+
+    layout: 
+      sequence: 36
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: PRESENCE_PENALTY ============================
+    id: 164995358179005999
+    identification: 
+      column-name: PRESENCE_PENALTY
+      type: Hidden
+
+    layout: 
+      sequence: 37
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: MESSAGE_ID ==================================
+    id: 164995786892006000
+    identification: 
+      column-name: MESSAGE_ID
+      type: Hidden
+
+    layout: 
+      sequence: 38
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: PREFERRED_PROVIDER ==========================
+    id: 164996179072006001
+    identification: 
+      column-name: PREFERRED_PROVIDER
+      type: Hidden
+
+    layout: 
+      sequence: 39
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: PREFERRED_MODEL =============================
+    id: 164996541740006002
+    identification: 
+      column-name: PREFERRED_MODEL
+      type: Hidden
+
+    layout: 
+      sequence: 40
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: ALLOW_FALLBACK ==============================
+    id: 164996949924006003
+    identification: 
+      column-name: ALLOW_FALLBACK
+      type: Hidden
+
+    layout: 
+      sequence: 41
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: STREAM_ENABLED ==============================
+    id: 164997307305006004
+    identification: 
+      column-name: STREAM_ENABLED
+      type: Hidden
+
+    layout: 
+      sequence: 42
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: STREAM_CHANNEL ==============================
+    id: 164997744297006004
+    identification: 
+      column-name: STREAM_CHANNEL
+      type: Hidden
+
+    layout: 
+      sequence: 43
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: TRACE_ID ====================================
+    id: 164998136159006005
+    identification: 
+      column-name: TRACE_ID
+      type: Hidden
+
+    layout: 
+      sequence: 44
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: TRACE_PARENT_ID =============================
+    id: 164998551817006006
+    identification: 
+      column-name: TRACE_PARENT_ID
+      type: Hidden
+
+    layout: 
+      sequence: 45
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: TRACE_STEP ==================================
+    id: 164998919233006007
+    identification: 
+      column-name: TRACE_STEP
+      type: Hidden
+
+    layout: 
+      sequence: 46
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: TRACE_MSG ===================================
+    id: 164999366079006008
+    identification: 
+      column-name: TRACE_MSG
+      type: Hidden
+
+    layout: 
+      sequence: 47
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: REQUEST_PAYLOAD =============================
+    id: 164999738565006009
+    identification: 
+      column-name: REQUEST_PAYLOAD
+      type: Hidden
+
+    layout: 
+      sequence: 48
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: SUBMITTED_USER_PROMPT =======================
+    id: 165000111331006010
+    identification: 
+      column-name: SUBMITTED_USER_PROMPT
+      type: Hidden
+
+    layout: 
+      sequence: 49
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: RAW_RESPONSE ================================
+    id: 165000588364006011
+    identification: 
+      column-name: RAW_RESPONSE
+      type: Hidden
+
+    layout: 
+      sequence: 50
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: RESPONSE_TEXT ===============================
+    id: 165000910260006012
+    identification: 
+      column-name: RESPONSE_TEXT
+      type: Hidden
+
+    layout: 
+      sequence: 51
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: PROCESSING_STATUS ===========================
+    id: 165001359399006013
+    identification: 
+      column-name: PROCESSING_STATUS
+      type: Hidden
+
+    layout: 
+      sequence: 52
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: SUCCESS =====================================
+    id: 165001713558006014
+    identification: 
+      column-name: SUCCESS
+      type: Hidden
+
+    layout: 
+      sequence: 53
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: RESPONSE_MSG ================================
+    id: 165002106916006015
+    identification: 
+      column-name: RESPONSE_MSG
+      type: Hidden
+
+    layout: 
+      sequence: 54
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: RAG_CONTEXT_DOC_COUNT =======================
+    id: 165002537768006016
+    identification: 
+      column-name: RAG_CONTEXT_DOC_COUNT
+      type: Hidden
+
+    layout: 
+      sequence: 55
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: RAG_SOURCES_JSON ============================
+    id: 165002931377006017
+    identification: 
+      column-name: RAG_SOURCES_JSON
+      type: Hidden
+
+    layout: 
+      sequence: 56
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: PROVIDER_FINAL ==============================
+    id: 165003352398006018
+    identification: 
+      column-name: PROVIDER_FINAL
+      type: Hidden
+
+    layout: 
+      sequence: 57
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: MODEL_FINAL =================================
+    id: 165003766224006019
+    identification: 
+      column-name: MODEL_FINAL
+      type: Hidden
+
+    layout: 
+      sequence: 58
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: FALLBACK_USED ===============================
+    id: 165004189686006020
+    identification: 
+      column-name: FALLBACK_USED
+      type: Hidden
+
+    layout: 
+      sequence: 59
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: TOKENS_INPUT ================================
+    id: 165004559844006020
+    identification: 
+      column-name: TOKENS_INPUT
+      type: Hidden
+
+    layout: 
+      sequence: 60
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: TOKENS_OUTPUT ===============================
+    id: 165004977357006021
+    identification: 
+      column-name: TOKENS_OUTPUT
+      type: Hidden
+
+    layout: 
+      sequence: 61
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: TOKENS_TOTAL ================================
+    id: 165005326327006022
+    identification: 
+      column-name: TOKENS_TOTAL
+      type: Hidden
+
+    layout: 
+      sequence: 62
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: COST_USD ====================================
+    id: 165005725076006023
+    identification: 
+      column-name: COST_USD
+      type: Hidden
+
+    layout: 
+      sequence: 63
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: IS_BLOCKED ==================================
+    id: 165006178609006024
+    identification: 
+      column-name: IS_BLOCKED
+      type: Hidden
+
+    layout: 
+      sequence: 64
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: SAFETY_FILTER_APPLIED =======================
+    id: 165006578421006025
+    identification: 
+      column-name: SAFETY_FILTER_APPLIED
+      type: Hidden
+
+    layout: 
+      sequence: 65
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: SAFETY_BLOCK_REASON =========================
+    id: 165006953557006026
+    identification: 
+      column-name: SAFETY_BLOCK_REASON
+      type: Hidden
+
+    layout: 
+      sequence: 66
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: SAFETY_RATINGS_JSON =========================
+    id: 165007393725006027
+    identification: 
+      column-name: SAFETY_RATINGS_JSON
+      type: Hidden
+
+    layout: 
+      sequence: 67
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: IS_REFUSAL ==================================
+    id: 165007750841006028
+    identification: 
+      column-name: IS_REFUSAL
+      type: Hidden
+
+    layout: 
+      sequence: 68
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: REFUSAL_TEXT ================================
+    id: 165008177146006029
+    identification: 
+      column-name: REFUSAL_TEXT
+      type: Hidden
+
+    layout: 
+      sequence: 69
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: REFUSAL_RAW =================================
+    id: 165008590715006030
+    identification: 
+      column-name: REFUSAL_RAW
+      type: Hidden
+
+    layout: 
+      sequence: 70
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: FINISH_REASON ===============================
+    id: 165008936077006031
+    identification: 
+      column-name: FINISH_REASON
+      type: Hidden
+
+    layout: 
+      sequence: 71
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: STOP_REASON =================================
+    id: 165009386609006032
+    identification: 
+      column-name: STOP_REASON
+      type: Hidden
+
+    layout: 
+      sequence: 72
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: STOP_SEQ_FINAL ==============================
+    id: 165009706695006033
+    identification: 
+      column-name: STOP_SEQ_FINAL
+      type: Hidden
+
+    layout: 
+      sequence: 73
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: IS_TRUNCATED ================================
+    id: 165010142833006034
+    identification: 
+      column-name: IS_TRUNCATED
+      type: Hidden
+
+    layout: 
+      sequence: 74
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: RAG_MS ======================================
+    id: 165010563059006035
+    identification: 
+      column-name: RAG_MS
+      type: Hidden
+
+    layout: 
+      sequence: 75
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: GOVERNANCE_MS ===============================
+    id: 165010991944006036
+    identification: 
+      column-name: GOVERNANCE_MS
+      type: Hidden
+
+    layout: 
+      sequence: 76
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: PROMPT_BUILD_MS =============================
+    id: 165011384191006036
+    identification: 
+      column-name: PROMPT_BUILD_MS
+      type: Hidden
+
+    layout: 
+      sequence: 77
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: CLIENT_LLM_CALL_MS ==========================
+    id: 165011765965006037
+    identification: 
+      column-name: CLIENT_LLM_CALL_MS
+      type: Hidden
+
+    layout: 
+      sequence: 78
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: TOTAL_PIPELINE_MS ===========================
+    id: 165012130276006038
+    identification: 
+      column-name: TOTAL_PIPELINE_MS
+      type: Hidden
+
+    layout: 
+      sequence: 79
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: GOVERNANCE_ACTION ===========================
+    id: 165012501294006039
+    identification: 
+      column-name: GOVERNANCE_ACTION
+      type: Hidden
+
+    layout: 
+      sequence: 80
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: REQUEST_ID ==================================
+    id: 165012929297006040
+    identification: 
+      column-name: REQUEST_ID
+      type: Hidden
+
+    layout: 
+      sequence: 81
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: SYSTEM_FINGERPRINT ==========================
+    id: 165013362585006041
+    identification: 
+      column-name: SYSTEM_FINGERPRINT
+      type: Hidden
+
+    layout: 
+      sequence: 82
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: PROVIDER_CREATED_TS =========================
+    id: 165013758420006042
+    identification: 
+      column-name: PROVIDER_CREATED_TS
+      type: Hidden
+
+    layout: 
+      sequence: 83
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: PROVIDER_PROCESSING_MS ======================
+    id: 165014131738006043
+    identification: 
+      column-name: PROVIDER_PROCESSING_MS
+      type: Hidden
+
+    layout: 
+      sequence: 84
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: RESPONSE_PAYLOAD ============================
+    id: 165014522260006044
+    identification: 
+      column-name: RESPONSE_PAYLOAD
+      type: Hidden
+
+    layout: 
+      sequence: 85
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: SOURCE_CHANNEL ==============================
+    id: 165014918722006045
+    identification: 
+      column-name: SOURCE_CHANNEL
+      type: Hidden
+
+    layout: 
+      sequence: 86
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: DB_CREATED_AT ===============================
+    id: 165015394786006046
+    identification: 
+      column-name: DB_CREATED_AT
+      type: Hidden
+
+    layout: 
+      sequence: 87
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: UPDATED_AT ==================================
+    id: 165015770950006047
+    identification: 
+      column-name: UPDATED_AT
+      type: Hidden
+
+    layout: 
+      sequence: 88
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: IS_DELETED ==================================
+    id: 165016103354006048
+    identification: 
+      column-name: IS_DELETED
+      type: Hidden
+
+    layout: 
+      sequence: 89
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: DELETED_AT ==================================
+    id: 165016589681006049
+    identification: 
+      column-name: DELETED_AT
+      type: Hidden
+
+    layout: 
+      sequence: 90
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: MESSAGE_ROLE ================================
+    id: 165016939017006050
+    identification: 
+      column-name: MESSAGE_ROLE
+      type: Hidden
+
+    layout: 
+      sequence: 91
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: USER_RATING =================================
+    id: 165017380626006051
+    identification: 
+      column-name: USER_RATING
+      type: Hidden
+
+    layout: 
+      sequence: 92
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: USER_RATING_COMMENT =========================
+    id: 165017794294006052
+    identification: 
+      column-name: USER_RATING_COMMENT
+      type: Hidden
+
+    layout: 
+      sequence: 93
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: USER_RATING_TS ==============================
+    id: 165018165677006053
+    identification: 
+      column-name: USER_RATING_TS
+      type: Hidden
+
+    layout: 
+      sequence: 94
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: DEPLOYMENT_ID ===============================
+    id: 165018527429006054
+    identification: 
+      column-name: DEPLOYMENT_ID
+      type: Hidden
+
+    layout: 
+      sequence: 95
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: SEGMENT_ID ==================================
+    id: 165018996348006054
+    identification: 
+      column-name: SEGMENT_ID
+      type: Hidden
+
+    layout: 
+      sequence: 96
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: EXPERIMENT_ID ===============================
+    id: 165019337020006055
+    identification: 
+      column-name: EXPERIMENT_ID
+      type: Hidden
+
+    layout: 
+      sequence: 97
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: IS_SHADOW_CALL ==============================
+    id: 165019746628006056
+    identification: 
+      column-name: IS_SHADOW_CALL
+      type: Hidden
+
+    layout: 
+      sequence: 98
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: SHADOW_PARENT_CALL_ID =======================
+    id: 165020166086006057
+    identification: 
+      column-name: SHADOW_PARENT_CALL_ID
+      type: Hidden
+
+    layout: 
+      sequence: 99
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: SHADOW_COMPARISON_JSON ======================
+    id: 165020506198006058
+    identification: 
+      column-name: SHADOW_COMPARISON_JSON
+      type: Hidden
+
+    layout: 
+      sequence: 100
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: VARIANT_LABEL ===============================
+    id: 165020970481006059
+    identification: 
+      column-name: VARIANT_LABEL
+      type: Hidden
+
+    layout: 
+      sequence: 101
+
+    sorting: 
+      default-sequence: 1
+      direction: Ascending
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+- # ====== Region: Search ======================================
+  id: 164974225290005861
+  identification: 
+    name: Search
+    type: Smart Filters
+
+  source: 
+    filtered-region: Search Results # 164974150298005861
+
+  layout: 
+    sequence: 10
+    parent-region: Breadcrumb # 164973496386005850
+    slot: SMART_FILTERS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes (No Grid)
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      more-filters-suggestion-chip: false
+      compact-numbers-threshold: 10000
+      show-total-row-count: No
+
+  facets: 
+  - # ====== Facet: P722_SEARCH ==================================
+    id: 164974715991005871
+    identification: 
+      name: P722_SEARCH
+      type: Search
+
+    label: 
+      label: Search
+
+    settings: 
+      search-type: Row Search
+      input-field: Top of Faceted Search Region
+
+    layout: 
+      sequence: 10
+
+    source: 
+      database-column(s): CHAT_SESSION_ID,PROVIDER,MODEL
+
+    security: 
+      store-value-encrypted-in-session-state: true
+
+  - # ====== Facet: P722_TOKENS_TOTAL ============================
+    id: 164975151506005877
+    identification: 
+      name: P722_TOKENS_TOTAL
+      type: Range
+
+    label: 
+      label: Tokens Total
+      show-label-for-current-facet: true
+
+    settings: 
+      select-multiple: true
+      manual-entry: false
+
+    layout: 
+      sequence: 20
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Static Values
+      static-values: 'STATIC2:<2#G#100;|2100,2#G#100 - 2#G#120;2100|2120,2#G#120 - 2#G#140;2120|2140,2#G#140 - 2#G#150;2140|2150,>=2#G#150;2150|'
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      show-selected-first: false
+      maximum-displayed-entries: 7
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: TOKENS_TOTAL
+      data-type: NUMBER
+
+    security: 
+      store-value-encrypted-in-session-state: true
+
+  - # ====== Facet: P722_CHAT_SESSION_ID =========================
+    id: 164975526164005879
+    identification: 
+      name: P722_CHAT_SESSION_ID
+      type: Checkbox Group
+
+    label: 
+      label: Chat Session
+      show-label-for-current-facet: true
+
+    layout: 
+      sequence: 30
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: CHAT_SESSIONS # 160925527503637571
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      maximum-displayed-entries: 7
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: CHAT_SESSION_ID
+      data-type: NUMBER
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Facet: P722_CALL_SEQ ================================
+    id: 164975976703005881
+    identification: 
+      name: P722_CALL_SEQ
+      type: Range
+
+    label: 
+      label: Call Seq
+      show-label-for-current-facet: true
+
+    settings: 
+      select-multiple: true
+      manual-entry: false
+
+    layout: 
+      sequence: 40
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Static Values
+      static-values: 'STATIC2:<2;|2,2 - 6;2|6,>=6;6|'
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      show-selected-first: false
+      maximum-displayed-entries: 7
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: CALL_SEQ
+      data-type: NUMBER
+
+    security: 
+      store-value-encrypted-in-session-state: true
+
+  - # ====== Facet: P722_PROVIDER ================================
+    id: 164976376350005882
+    identification: 
+      name: P722_PROVIDER
+      type: Checkbox Group
+
+    label: 
+      label: Provider
+      show-label-for-current-facet: true
+
+    layout: 
+      sequence: 50
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      maximum-displayed-entries: 7
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: PROVIDER
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Facet: P722_MODEL ===================================
+    id: 164976783506005884
+    identification: 
+      name: P722_MODEL
+      type: Checkbox Group
+
+    label: 
+      label: Model
+      show-label-for-current-facet: true
+
+    layout: 
+      sequence: 60
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      maximum-displayed-entries: 7
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: MODEL
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Facet: P722_MAX_TOKENS ==============================
+    id: 164977106819005885
+    identification: 
+      name: P722_MAX_TOKENS
+      type: Radio Group
+
+    label: 
+      label: Max Tokens
+      show-label-for-current-facet: true
+
+    settings: 
+      hide-radio-buttons: false
+
+    layout: 
+      sequence: 70
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Disable
+      sort-by-top-counts: false
+      show-selected-first: false
+      maximum-displayed-entries: 7
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: MAX_TOKENS
+      data-type: NUMBER
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Facet: P722_TOP_P ===================================
+    id: 164977593197005886
+    identification: 
+      name: P722_TOP_P
+      type: Radio Group
+
+    label: 
+      label: Top P
+      show-label-for-current-facet: true
+
+    settings: 
+      hide-radio-buttons: false
+
+    layout: 
+      sequence: 80
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Disable
+      sort-by-top-counts: false
+      show-selected-first: false
+      maximum-displayed-entries: 7
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: TOP_P
+      data-type: NUMBER
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Facet: P722_PROVIDER_FINAL ==========================
+    id: 164977993734005887
+    identification: 
+      name: P722_PROVIDER_FINAL
+      type: Checkbox Group
+
+    label: 
+      label: Provider Final
+      show-label-for-current-facet: true
+
+    layout: 
+      sequence: 90
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      maximum-displayed-entries: 7
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: PROVIDER_FINAL
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Facet: P722_MODEL_FINAL =============================
+    id: 164978366185005888
+    identification: 
+      name: P722_MODEL_FINAL
+      type: Checkbox Group
+
+    label: 
+      label: Model Final
+      show-label-for-current-facet: true
+
+    layout: 
+      sequence: 100
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      maximum-displayed-entries: 7
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: MODEL_FINAL
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Facet: P722_TOKENS_INPUT ============================
+    id: 164978750603005890
+    identification: 
+      name: P722_TOKENS_INPUT
+      type: Range
+
+    label: 
+      label: Tokens Input
+      show-label-for-current-facet: true
+
+    settings: 
+      select-multiple: true
+      manual-entry: false
+
+    layout: 
+      sequence: 110
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Static Values
+      static-values: 'STATIC2:<2#G#075;|2075,2#G#075 - 2#G#080;2075|2080,2#G#080 - 2#G#090;2080|2090,2#G#090 - 2#G#091;2090|2091,>=2#G#091;2091|'
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      show-selected-first: false
+      maximum-displayed-entries: 7
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: TOKENS_INPUT
+      data-type: NUMBER
+
+    security: 
+      store-value-encrypted-in-session-state: true
+
+  - # ====== Facet: P722_TOKENS_OUTPUT ===========================
+    id: 164979186310005892
+    identification: 
+      name: P722_TOKENS_OUTPUT
+      type: Range
+
+    label: 
+      label: Tokens Output
+      show-label-for-current-facet: true
+
+    settings: 
+      select-multiple: true
+      manual-entry: false
+
+    layout: 
+      sequence: 120
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Static Values
+      static-values: 'STATIC2:<30;|30,30 - 40;30|40,40 - 50;40|50,50 - 55;50|55,>=55;55|'
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      show-selected-first: false
+      maximum-displayed-entries: 7
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: TOKENS_OUTPUT
+      data-type: NUMBER
+
+    security: 
+      store-value-encrypted-in-session-state: true
+
+  - # ====== Facet: P722_FINISH_REASON ===========================
+    id: 164979554126005893
+    identification: 
+      name: P722_FINISH_REASON
+      type: Checkbox Group
+
+    label: 
+      label: Finish Reason
+      show-label-for-current-facet: true
+
+    layout: 
+      sequence: 130
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      maximum-displayed-entries: 7
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: FINISH_REASON
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Facet: P722_SOURCE_CHANNEL ==========================
+    id: 164979938090005894
+    identification: 
+      name: P722_SOURCE_CHANNEL
+      type: Checkbox Group
+
+    label: 
+      label: Source Channel
+      show-label-for-current-facet: true
+
+    layout: 
+      sequence: 140
+
+    appearance: 
+      display: Inline
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      maximum-displayed-entries: 7
+      display-filter-initially: false
+
+    actions-menu: 
+      filter: true
+      chart: false
+
+    advanced: 
+      collapsible: false
+
+    source: 
+      database-column: SOURCE_CHANNEL
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  filters: 
+  - # ====== Filter: P722_SEARCH =================================
+    id: 164974715991005871
+    identification: 
+      name: P722_SEARCH
+      type: Search
+
+    label: 
+      label: Search
+
+    settings: 
+      search-type: Row Search
+      collapsed-search-field: false
+
+    layout: 
+      sequence: 10
+
+    source: 
+      database-column(s): CHAT_SESSION_ID,PROVIDER,MODEL
+
+    security: 
+      store-value-encrypted-in-session-state: true
+
+  - # ====== Filter: P722_TOKENS_TOTAL ===========================
+    id: 164975151506005877
+    identification: 
+      name: P722_TOKENS_TOTAL
+      type: Range
+
+    label: 
+      label: Tokens Total
+
+    settings: 
+      select-multiple: true
+      manual-entry: false
+
+    layout: 
+      sequence: 20
+
+    list-of-values: 
+      type: Static Values
+      static-values: 'STATIC2:<2#G#100;|2100,2#G#100 - 2#G#120;2100|2120,2#G#120 - 2#G#140;2120|2140,2#G#140 - 2#G#150;2140|2150,>=2#G#150;2150|'
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: TOKENS_TOTAL
+      data-type: NUMBER
+
+    security: 
+      store-value-encrypted-in-session-state: true
+
+  - # ====== Filter: P722_CHAT_SESSION_ID ========================
+    id: 164975526164005879
+    identification: 
+      name: P722_CHAT_SESSION_ID
+      type: Checkbox Group
+
+    label: 
+      label: Chat Session
+
+    layout: 
+      sequence: 30
+
+    list-of-values: 
+      type: Shared Component
+      list-of-values: CHAT_SESSIONS # 160925527503637571
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: CHAT_SESSION_ID
+      data-type: NUMBER
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Filter: P722_CALL_SEQ ===============================
+    id: 164975976703005881
+    identification: 
+      name: P722_CALL_SEQ
+      type: Range
+
+    label: 
+      label: Call Seq
+
+    settings: 
+      select-multiple: true
+      manual-entry: false
+
+    layout: 
+      sequence: 40
+
+    list-of-values: 
+      type: Static Values
+      static-values: 'STATIC2:<2;|2,2 - 6;2|6,>=6;6|'
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: CALL_SEQ
+      data-type: NUMBER
+
+    security: 
+      store-value-encrypted-in-session-state: true
+
+  - # ====== Filter: P722_PROVIDER ===============================
+    id: 164976376350005882
+    identification: 
+      name: P722_PROVIDER
+      type: Checkbox Group
+
+    label: 
+      label: Provider
+
+    layout: 
+      sequence: 50
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: PROVIDER
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Filter: P722_MODEL ==================================
+    id: 164976783506005884
+    identification: 
+      name: P722_MODEL
+      type: Checkbox Group
+
+    label: 
+      label: Model
+
+    layout: 
+      sequence: 60
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: MODEL
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Filter: P722_MAX_TOKENS =============================
+    id: 164977106819005885
+    identification: 
+      name: P722_MAX_TOKENS
+      type: Radio Group
+
+    label: 
+      label: Max Tokens
+
+    layout: 
+      sequence: 70
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Disable
+      sort-by-top-counts: false
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: MAX_TOKENS
+      data-type: NUMBER
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Filter: P722_TOP_P ==================================
+    id: 164977593197005886
+    identification: 
+      name: P722_TOP_P
+      type: Radio Group
+
+    label: 
+      label: Top P
+
+    layout: 
+      sequence: 80
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Disable
+      sort-by-top-counts: false
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: TOP_P
+      data-type: NUMBER
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Filter: P722_PROVIDER_FINAL =========================
+    id: 164977993734005887
+    identification: 
+      name: P722_PROVIDER_FINAL
+      type: Checkbox Group
+
+    label: 
+      label: Provider Final
+
+    layout: 
+      sequence: 90
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: PROVIDER_FINAL
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Filter: P722_MODEL_FINAL ============================
+    id: 164978366185005888
+    identification: 
+      name: P722_MODEL_FINAL
+      type: Checkbox Group
+
+    label: 
+      label: Model Final
+
+    layout: 
+      sequence: 100
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: MODEL_FINAL
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Filter: P722_TOKENS_INPUT ===========================
+    id: 164978750603005890
+    identification: 
+      name: P722_TOKENS_INPUT
+      type: Range
+
+    label: 
+      label: Tokens Input
+
+    settings: 
+      select-multiple: true
+      manual-entry: false
+
+    layout: 
+      sequence: 110
+
+    list-of-values: 
+      type: Static Values
+      static-values: 'STATIC2:<2#G#075;|2075,2#G#075 - 2#G#080;2075|2080,2#G#080 - 2#G#090;2080|2090,2#G#090 - 2#G#091;2090|2091,>=2#G#091;2091|'
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: TOKENS_INPUT
+      data-type: NUMBER
+
+    security: 
+      store-value-encrypted-in-session-state: true
+
+  - # ====== Filter: P722_TOKENS_OUTPUT ==========================
+    id: 164979186310005892
+    identification: 
+      name: P722_TOKENS_OUTPUT
+      type: Range
+
+    label: 
+      label: Tokens Output
+
+    settings: 
+      select-multiple: true
+      manual-entry: false
+
+    layout: 
+      sequence: 120
+
+    list-of-values: 
+      type: Static Values
+      static-values: 'STATIC2:<30;|30,30 - 40;30|40,40 - 50;40|50,50 - 55;50|55,>=55;55|'
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: TOKENS_OUTPUT
+      data-type: NUMBER
+
+    security: 
+      store-value-encrypted-in-session-state: true
+
+  - # ====== Filter: P722_FINISH_REASON ==========================
+    id: 164979554126005893
+    identification: 
+      name: P722_FINISH_REASON
+      type: Checkbox Group
+
+    label: 
+      label: Finish Reason
+
+    layout: 
+      sequence: 130
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: FINISH_REASON
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+
+  - # ====== Filter: P722_SOURCE_CHANNEL =========================
+    id: 164979938090005894
+    identification: 
+      name: P722_SOURCE_CHANNEL
+      type: Checkbox Group
+
+    label: 
+      label: Source Channel
+
+    layout: 
+      sequence: 140
+
+    list-of-values: 
+      type: Distinct Values
+      sort-direction: Ascending
+      include-null-option: false
+
+    list-entries: 
+      compute-counts: true
+      show-counts: true
+      zero-count-entries: Hide
+      sort-by-top-counts: true
+      show-selected-first: false
+      client-side-filtering: false
+
+    suggestions: 
+      type: Dynamic
+      show-label: true
+
+    source: 
+      database-column: SOURCE_CHANNEL
+      data-type: VARCHAR2
+
+    multiple-values: 
+      type: No
+
+    security: 
+      store-value-encrypted-in-session-state: true
+      escape-special-characters: true
+

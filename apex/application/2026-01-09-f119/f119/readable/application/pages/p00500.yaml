@@ -1,0 +1,180 @@
+---
+# ====== Page: Governance Dashboard ==========================
+id: 500
+identification: 
+  name: Governance Dashboard
+  alias: GOVERNANCE-DASHBOARD
+  title: Governance Dashboard
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Breadcrumb ==================================
+  id: 124703221581091095
+  identification: 
+    name: Breadcrumb
+    type: Breadcrumb
+
+  source: 
+    breadcrumb: Breadcrumb # 123954626239486075
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--compactTitle
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+dynamic-actions: 
+- # ====== Dynamic Action: Auto-Refresh Dynamic Action =========
+  id: 124707907035182440
+  identification: 
+    name: Auto-Refresh Dynamic Action
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+
+  when: 
+    event: Page Load
+
+  configuration: 
+    build-option: Commented Out # 123954063565486069
+
+  actions: 
+  - # ====== Action: Auto-Refresh Dynamic Action =================
+    id: 124708050350182441
+    identification: 
+      name: Auto-Refresh Dynamic Action
+      action: Execute JavaScript Code
+
+    settings: 
+      code: |2
+         
+        // Auto-refresh dashboard every 30 seconds
+        setInterval(function() {
+            // Refresh KPI region
+            apex.region("governance_overview").refresh();
+        
+            // Refresh all chart regions
+            apex.region("model_usage_chart").refresh();
+            apex.region("model_latency_chart").refresh();
+            apex.region("violations_pie_chart").refresh();
+        
+            // Refresh interactive report
+            apex.region("violation_details_report").refresh();
+        
+            console.log("Dashboard auto-refreshed at: " + new Date().toISOString());
+        }, 30000); // 30 seconds
+        
+        // Show refresh indicator
+        apex.message.showPageSuccess("Dashboard is set to auto-refresh every 30 seconds");
+         
+
+    execution: 
+      sequence: 10
+      event: Auto-Refresh Dynamic Action # 124707907035182440
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: Log Dashboard Access =======================
+  id: 124708154751182442
+  identification: 
+    name: Log Dashboard Access
+    type: Execute Code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+        v_role_id NUMBER;
+        v_context_json CLOB;
+      BEGIN
+        -- Get role_id for current user
+        BEGIN
+          SELECT ur.role_id 
+          INTO v_role_id
+          FROM user_roles ur, users u
+          WHERE u.user_id = ur.user_id
+           AND UPPER(u.user_name) = UPPER(:APP_USER)
+            AND ROWNUM = 1;
+        EXCEPTION
+          WHEN NO_DATA_FOUND THEN
+            v_role_id := NULL;
+        END;
+        
+        -- Build context JSON
+        v_context_json := JSON_OBJECT(
+          'page_id' VALUE 500,
+          'page_name' VALUE 'Governance Dashboard',
+          'app_session' VALUE :APP_SESSION,
+          'remote_addr' VALUE :APP_REMOTE_ADDR,
+          'browser' VALUE :APP_BROWSER_NAME,
+          'access_timestamp' VALUE TO_CHAR(SYSDATE, 'YYYY-MM-DD"T"HH24:MI:SS')
+        );
+        end;
+
+  execution: 
+    sequence: 10
+    point: After Header
+    run-process: Once Per Page Visit (default)
+

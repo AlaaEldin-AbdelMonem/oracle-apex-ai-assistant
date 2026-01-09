@@ -1,0 +1,182 @@
+---
+- # ====== Authorization: Administration Rights ================
+  id: 123959889250486142
+  identification: 
+    name: Administration Rights
+
+  subscription: 
+    version-number: 38946746791237
+
+  authorization-scheme: 
+    type: PL/SQL Function Returning Boolean
+
+  settings: 
+    pl/sql-function-body: return true;
+
+  server-cache: 
+    evaluation-point: Once per Page View
+
+  error: 
+    error-message: Insufficient privileges, user is not an Administrator
+
+- # ====== Authorization: Chat History Access ==================
+  id: 124017668321510603
+  identification: 
+    name: Chat History Access
+
+  subscription: 
+    version-number: 38947175558469
+
+  authorization-scheme: 
+    type: PL/SQL Function Returning Boolean
+
+  settings: 
+    pl/sql-function-body: |
+      DECLARE
+              v_count NUMBER;
+            BEGIN
+              SELECT COUNT(*)
+              INTO v_count
+              FROM user_roles ur , users u, roles r 
+              WHERE u.user_name = :APP_USER
+               and  ur.role_id = r.role_id 
+      and u.user_id = ur.user_id
+                AND r.role_code IN ('HR', 'MGR', 'AUD', 'AIADMIN');
+      
+              RETURN v_count > 0;
+            EXCEPTION
+              WHEN OTHERS THEN
+                RETURN FALSE;
+            END;
+
+  server-cache: 
+    evaluation-point: Once per Session
+
+- # ====== Authorization: AUDIT_PAGE_ACCESS ====================
+  id: 124057368318858339
+  identification: 
+    name: AUDIT_PAGE_ACCESS
+
+  subscription: 
+    version-number: 38947175599640
+
+  authorization-scheme: 
+    type: Exists SQL Query
+
+  settings: 
+    sql-query: |
+      SELECT  1
+      FROM user_roles ur ,roles lr , users u
+      WHERE
+        u.user_id= ur.user_id 
+      and u.user_name = :APP_USER
+      and ur.role_id = lr.role_id
+        AND lr.role_name  IN ('AIADMIN', 'AUD')
+
+  server-cache: 
+    evaluation-point: Once per Session
+
+  error: 
+    error-message: 'Access Restricted: Only authorized auditors and administrators can view audit traces.'
+
+- # ====== Authorization: ADMIN_ONLY_POLICY_MANAGER ============
+  id: 124122524807463932
+  identification: 
+    name: ADMIN_ONLY_POLICY_MANAGER
+
+  subscription: 
+    version-number: 38947175610112
+
+  authorization-scheme: 
+    type: PL/SQL Function Returning Boolean
+
+  settings: 
+    pl/sql-function-body: |
+      DECLARE
+               v_count NUMBER;
+           BEGIN
+               SELECT COUNT(*)
+               INTO v_count
+               FROM user_roles ur ,  roles lr  , users u
+               WHERE UPPER(u.user_name) = UPPER(:APP_USER)
+               and  ur.role_id = lr.role_id
+                and u.user_id = ur.user_id
+                 AND lr.role_code IN ('AIADMIN', 'HR');
+               
+               RETURN (v_count > 0);
+           EXCEPTION
+               WHEN OTHERS THEN
+                   RETURN FALSE;
+           END;
+
+  server-cache: 
+    evaluation-point: Once per Session
+
+  error: 
+    error-message: ' Access Denied. Policy Manager is restricted to HR Administrators only.'
+
+  comments: 
+    comments: page 300
+
+- # ====== Authorization: Governance Dashboard Access ==========
+  id: 124730165255399199
+  identification: 
+    name: Governance Dashboard Access
+
+  subscription: 
+    version-number: 38947175552911
+
+  authorization-scheme: 
+    type: PL/SQL Function Returning Boolean
+
+  settings: 
+    pl/sql-function-body: |
+      DECLARE
+        v_has_access NUMBER;
+      BEGIN
+        SELECT COUNT(*)
+        INTO v_has_access
+        FROM user_roles ur , roles lr  ,Users u
+        WHERE  u.user_id = ur.user_id
+           and  ur.role_id = lr.role_id
+           AND UPPER(u.user_name) = UPPER(:APP_USER)
+          AND lr.role_code IN ('AIADMIN', 'AUD', 'MGR', 'ADMIN');
+      
+        RETURN (v_has_access > 0);
+      EXCEPTION
+        WHEN OTHERS THEN
+          RETURN FALSE;
+      END;
+
+  server-cache: 
+    evaluation-point: Once per Session
+
+  error: 
+    error-message: |
+      ```
+      You do not have permission to access the Governance Dashboard. This page requires Administrator, Auditor, or Manager privileges.
+      ```
+
+  comments: 
+    comments: page 500
+
+- # ====== Authorization: IS_ADMIN =============================
+  id: 143295087385194865
+  identification: 
+    name: IS_ADMIN
+
+  subscription: 
+    version-number: 38947500298946
+
+  authorization-scheme: 
+    type: PL/SQL Function Returning Boolean
+
+  settings: 
+    pl/sql-function-body: RETURN app_admin_security.is_admin;
+
+  server-cache: 
+    evaluation-point: Once per Session
+
+  error: 
+    error-message: Sorry, You are not authorized to Access this page, It is for Admins Only
+

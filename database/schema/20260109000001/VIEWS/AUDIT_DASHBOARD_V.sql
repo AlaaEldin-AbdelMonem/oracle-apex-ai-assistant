@@ -1,0 +1,30 @@
+--------------------------------------------------------
+--  DDL for View AUDIT_DASHBOARD_V
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "AI8P"."AUDIT_DASHBOARD_V" ("AUDIT_ID", "CREATED_AT", "APP_ID", "PAGE_ID", "USER_ID", "SESSION_ID", "MODULE_NAME", "MESSAGE", "TRACE_ID", "EXTRA_DATA", "TYPE_CODE", "TYPE_NAME", "TYPE_COLOR", "EVENT_GROUP", "EVENT_CODE", "EVENT_NAME", "EVENT_ICON") DEFAULT COLLATION "USING_NLS_COMP"  AS 
+  SELECT 
+    a.AUDIT_ID,
+    a.CREATED_AT,
+    a.APP_ID,
+    a.PAGE_ID,
+    a.USER_ID,
+    a.SESSION_ID,
+    a.MODULE_NAME,
+    a.MESSAGE,
+    a.TRACE_ID,
+    a.EXTRA_DATA,
+    -- Top Tier (Type)
+    t.AUDIT_EVENT_TYPE_CODE as TYPE_CODE,
+    t.DISPLAY_NAME as TYPE_NAME,
+    t.UI_COLOR as TYPE_COLOR,
+    -- Middle Tier (Group)
+    e.EVENT_GROUP,
+    -- Bottom Tier (Code)
+    e.EVENT_CODE,
+    e.DISPLAY_NAME as EVENT_NAME,
+    e.ICON_HEX as EVENT_ICON
+FROM DEBUG_AUDIT_LOG a
+JOIN LKP_DEBUG_AUDIT_EVENT_TYPES t ON a.AUDIT_EVENT_TYPE_CODE = t.AUDIT_EVENT_TYPE_CODE
+JOIN LKP_DEBUG_AUDIT_EVENTS e ON a.EVENT_CODE = e.EVENT_CODE
+;
