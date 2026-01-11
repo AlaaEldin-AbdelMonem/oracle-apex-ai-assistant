@@ -3,7 +3,7 @@
 --------------------------------------------------------
 set define off;
 
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "AI8P"."INVOKE_TEST_DIAGNOSTIC" AS
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "INVOKE_TEST_DIAGNOSTIC" AS
 BEGIN
 /*******************************************************************************
  *  

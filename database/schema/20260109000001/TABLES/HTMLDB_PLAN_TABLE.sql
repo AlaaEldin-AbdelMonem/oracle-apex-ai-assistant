@@ -2,7 +2,7 @@
 --  DDL for Table HTMLDB_PLAN_TABLE
 --------------------------------------------------------
 
-  CREATE TABLE "AI8P"."HTMLDB_PLAN_TABLE" 
+  CREATE TABLE "HTMLDB_PLAN_TABLE" 
    (	"STATEMENT_ID" VARCHAR2(30 BYTE) COLLATE "USING_NLS_COMP", 
 	"PLAN_ID" NUMBER, 
 	"TIMESTAMP" DATE, 

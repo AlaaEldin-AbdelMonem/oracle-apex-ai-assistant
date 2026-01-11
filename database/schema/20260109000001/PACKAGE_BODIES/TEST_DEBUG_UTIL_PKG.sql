@@ -2,7 +2,7 @@
 --  DDL for Package Body TEST_DEBUG_UTIL_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."TEST_DEBUG_UTIL_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "TEST_DEBUG_UTIL_PKG" AS
 /*******************************************************************************
  *  
  *******************************************************************************/

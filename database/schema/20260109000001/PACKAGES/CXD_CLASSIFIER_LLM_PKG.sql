@@ -2,7 +2,7 @@
 --  DDL for Package CXD_CLASSIFIER_LLM_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."CXD_CLASSIFIER_LLM_PKG" 
+  CREATE OR REPLACE EDITIONABLE PACKAGE "CXD_CLASSIFIER_LLM_PKG" 
 AUTHID CURRENT_USER AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System

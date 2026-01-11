@@ -2,7 +2,7 @@
 --  DDL for Package Body SEGMENT_MANAGER_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."SEGMENT_MANAGER_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "SEGMENT_MANAGER_PKG" AS
 
     /***************************************************************************
      * Refresh user count for a specific segment

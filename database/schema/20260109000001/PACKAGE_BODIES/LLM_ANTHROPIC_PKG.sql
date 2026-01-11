@@ -2,7 +2,7 @@
 --  DDL for Package Body LLM_ANTHROPIC_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."LLM_ANTHROPIC_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "LLM_ANTHROPIC_PKG" AS
 
 /*=============================================================================
   Anthropic Provider Adapter (Claude 3.x)

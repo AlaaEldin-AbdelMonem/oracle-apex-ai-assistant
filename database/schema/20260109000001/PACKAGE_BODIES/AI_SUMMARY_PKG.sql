@@ -2,7 +2,7 @@
 --  DDL for Package Body AI_SUMMARY_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."AI_SUMMARY_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI_SUMMARY_PKG" AS
 
 
   FUNCTION generate_summary(p_text CLOB) RETURN CLOB IS

@@ -2,7 +2,7 @@
 --  DDL for Table LKP_DOC_STATUS
 --------------------------------------------------------
 
-  CREATE TABLE "AI8P"."LKP_DOC_STATUS" 
+  CREATE TABLE "LKP_DOC_STATUS" 
    (	"STATUS_CODE" VARCHAR2(30 BYTE) COLLATE "USING_NLS_COMP", 
 	"STATUS_NAME" VARCHAR2(100 BYTE) COLLATE "USING_NLS_COMP", 
 	"ICON_UNICODE" VARCHAR2(10 BYTE) COLLATE "USING_NLS_COMP"
@@ -13,6 +13,6 @@
   PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT);
 
-   COMMENT ON COLUMN "AI8P"."LKP_DOC_STATUS"."STATUS_CODE" IS 'Short code identifier of the status.';
-   COMMENT ON COLUMN "AI8P"."LKP_DOC_STATUS"."STATUS_NAME" IS 'Human-readable name of the status.';
-   COMMENT ON TABLE "AI8P"."LKP_DOC_STATUS"  IS 'Lifecycle status of documents.';
+   COMMENT ON COLUMN "LKP_DOC_STATUS"."STATUS_CODE" IS 'Short code identifier of the status.';
+   COMMENT ON COLUMN "LKP_DOC_STATUS"."STATUS_NAME" IS 'Human-readable name of the status.';
+   COMMENT ON TABLE "LKP_DOC_STATUS"  IS 'Lifecycle status of documents.';

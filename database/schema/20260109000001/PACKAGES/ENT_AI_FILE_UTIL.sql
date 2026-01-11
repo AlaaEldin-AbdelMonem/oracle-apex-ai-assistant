@@ -2,7 +2,7 @@
 --  DDL for Package ENT_AI_FILE_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."ENT_AI_FILE_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "ENT_AI_FILE_UTIL" AS
 
     c_version           CONSTANT VARCHAR2(10) := '1.0.0';
     c_package_name      CONSTANT VARCHAR2(30) := 'ENT_AI_FILE_UTIL'; 

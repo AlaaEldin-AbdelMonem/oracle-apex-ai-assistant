@@ -2,7 +2,7 @@
 --  DDL for Package Body LLM_GEMINI_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."LLM_GEMINI_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "LLM_GEMINI_PKG" AS
 /* ============================================================================
    LLM_GEMINI_PKG — Unified Gemini LLM Caller using llm_types
    Fully rewritten with Oracle 23ai JSON_OBJECT_T / JSON_ARRAY_T best-practices

@@ -2,7 +2,7 @@
 --  DDL for Package Body CHAT_MANAGER_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."CHAT_MANAGER_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "CHAT_MANAGER_PKG" AS
 -- ============================================================================
 -- PACKAGE BODY: CHAT_MANAGER_PKG
 -- Purpose: Implementation of chat session and message management

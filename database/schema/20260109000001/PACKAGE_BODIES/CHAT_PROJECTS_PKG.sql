@@ -2,7 +2,7 @@
 --  DDL for Package Body CHAT_PROJECTS_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."CHAT_PROJECTS_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "CHAT_PROJECTS_PKG" AS
 
     /***************************************************************************
      * FUNCTION: add_project

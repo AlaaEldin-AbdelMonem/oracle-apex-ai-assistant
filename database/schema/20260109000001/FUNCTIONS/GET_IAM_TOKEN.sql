@@ -2,7 +2,7 @@
 --  DDL for Function GET_IAM_TOKEN
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE FUNCTION "AI8P"."GET_IAM_TOKEN" RETURN VARCHAR2 IS
+  CREATE OR REPLACE EDITIONABLE FUNCTION "GET_IAM_TOKEN" RETURN VARCHAR2 IS
 /*******************************************************************************
  *  
  *******************************************************************************/

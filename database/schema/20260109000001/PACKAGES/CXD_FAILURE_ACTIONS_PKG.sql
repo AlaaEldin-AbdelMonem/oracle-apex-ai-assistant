@@ -2,7 +2,7 @@
 --  DDL for Package CXD_FAILURE_ACTIONS_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."CXD_FAILURE_ACTIONS_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "CXD_FAILURE_ACTIONS_PKG" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      cxd_failure_actions_pkg (Specification)

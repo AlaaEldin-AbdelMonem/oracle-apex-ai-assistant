@@ -3,7 +3,7 @@
 --------------------------------------------------------
 set define off;
 
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "AI8P"."RESET_SESSIONS" 
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "RESET_SESSIONS" 
 as
 /*******************************************************************************
  *  

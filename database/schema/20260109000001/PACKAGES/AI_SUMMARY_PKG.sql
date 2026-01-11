@@ -2,7 +2,7 @@
 --  DDL for Package AI_SUMMARY_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."AI_SUMMARY_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "AI_SUMMARY_PKG" AS
 /**
  * PROJECT:     Enterprise AI Assistant
  * MODULE:      AI_SUMMARY_PKG (Body)

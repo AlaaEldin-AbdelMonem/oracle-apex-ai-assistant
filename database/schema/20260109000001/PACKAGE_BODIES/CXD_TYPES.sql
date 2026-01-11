@@ -2,7 +2,7 @@
 --  DDL for Package Body CXD_TYPES
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."CXD_TYPES" IS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "CXD_TYPES" IS
 
     ----------------------------------------------------------------------------
     -- 1. REQUEST OBJECT DUMP

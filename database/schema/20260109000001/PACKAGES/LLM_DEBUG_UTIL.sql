@@ -2,7 +2,7 @@
 --  DDL for Package LLM_DEBUG_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."LLM_DEBUG_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "LLM_DEBUG_UTIL" AS
 /*==============================================================================
   PACKAGE: LLM_DEBUG_UTIL
   PURPOSE:

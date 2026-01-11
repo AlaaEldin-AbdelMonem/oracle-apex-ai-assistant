@@ -2,7 +2,7 @@
 --  DDL for Package Body CHUNK_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."CHUNK_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "CHUNK_UTIL" AS
  
     -- Performance statistics tracking for last operation
     -- Used for monitoring, debugging, and optimization analysis

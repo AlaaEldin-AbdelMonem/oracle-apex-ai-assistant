@@ -2,7 +2,7 @@
 --  DDL for Table LKP_ERROR_TYPE
 --------------------------------------------------------
 
-  CREATE TABLE "AI8P"."LKP_ERROR_TYPE" 
+  CREATE TABLE "LKP_ERROR_TYPE" 
    (	"ERROR_TYPE_CODE" VARCHAR2(100 BYTE) COLLATE "USING_NLS_COMP", 
 	"ERROR_TYPE_NAME" VARCHAR2(200 BYTE) COLLATE "USING_NLS_COMP", 
 	"ERROR_DESCRIPTION" VARCHAR2(4000 BYTE) COLLATE "USING_NLS_COMP", 
@@ -21,6 +21,6 @@
   PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT);
 
-   COMMENT ON COLUMN "AI8P"."LKP_ERROR_TYPE"."IS_RETRYABLE" IS 'Y=Automatic retry allowed, N=Manual intervention required';
-   COMMENT ON COLUMN "AI8P"."LKP_ERROR_TYPE"."ALERT_THRESHOLD" IS 'Alert after N occurrences within 1 hour';
-   COMMENT ON TABLE "AI8P"."LKP_ERROR_TYPE"  IS 'Standardized error types with retry and alerting metadata';
+   COMMENT ON COLUMN "LKP_ERROR_TYPE"."IS_RETRYABLE" IS 'Y=Automatic retry allowed, N=Manual intervention required';
+   COMMENT ON COLUMN "LKP_ERROR_TYPE"."ALERT_THRESHOLD" IS 'Alert after N occurrences within 1 hour';
+   COMMENT ON TABLE "LKP_ERROR_TYPE"  IS 'Standardized error types with retry and alerting metadata';

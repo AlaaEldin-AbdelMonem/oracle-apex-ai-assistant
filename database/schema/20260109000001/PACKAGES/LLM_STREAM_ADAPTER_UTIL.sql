@@ -2,7 +2,7 @@
 --  DDL for Package LLM_STREAM_ADAPTER_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."LLM_STREAM_ADAPTER_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "LLM_STREAM_ADAPTER_UTIL" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      LLM_STREAM_ADAPTER_UTIL (Specification)

@@ -2,7 +2,7 @@
 --  DDL for Package AI_REFRESH_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."AI_REFRESH_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "AI_REFRESH_PKG" AS
 
 /******************************************************************************
 * PACKAGE: AI_REFRESH_PKG

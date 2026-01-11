@@ -2,7 +2,7 @@
 --  DDL for Package Body CX_DATA_BUILDER_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."CX_DATA_BUILDER_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "CX_DATA_BUILDER_PKG" AS
 
     ----------------------------------------------------------------------------
     -- PUBLIC: Return formatted block for LLM

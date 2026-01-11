@@ -3,7 +3,7 @@
 --------------------------------------------------------
 set define off;
 
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "AI8P"."TEST_DOMAINS" 
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "TEST_DOMAINS" 
 as
 begin
     null;

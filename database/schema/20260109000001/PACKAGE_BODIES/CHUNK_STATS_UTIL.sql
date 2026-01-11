@@ -2,7 +2,7 @@
 --  DDL for Package Body CHUNK_STATS_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."CHUNK_STATS_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "CHUNK_STATS_UTIL" AS
  /*******************************************************************************
  *  
  *******************************************************************************/

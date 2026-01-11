@@ -2,7 +2,7 @@
 --  DDL for Table DEPLOYMENT_METRICS
 --------------------------------------------------------
 
-  CREATE TABLE "AI8P"."DEPLOYMENT_METRICS" 
+  CREATE TABLE "DEPLOYMENT_METRICS" 
    (	"METRIC_ID" NUMBER GENERATED ALWAYS AS IDENTITY MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE , 
 	"DEPLOYMENT_ID" NUMBER, 
 	"SEGMENT_ID" NUMBER, 
@@ -46,5 +46,5 @@
   PCTFREE 10 PCTUSED 40 INITRANS 10 MAXTRANS 255 
  NOCOMPRESS LOGGING;
 
-   COMMENT ON COLUMN "AI8P"."DEPLOYMENT_METRICS"."METRIC_HOUR" IS 'Hour of day (0-23) for hourly granularity, NULL for daily rollup';
-   COMMENT ON TABLE "AI8P"."DEPLOYMENT_METRICS"  IS 'Aggregated time-series metrics for deployment comparison and analysis';
+   COMMENT ON COLUMN "DEPLOYMENT_METRICS"."METRIC_HOUR" IS 'Hour of day (0-23) for hourly granularity, NULL for daily rollup';
+   COMMENT ON TABLE "DEPLOYMENT_METRICS"  IS 'Aggregated time-series metrics for deployment comparison and analysis';

@@ -2,7 +2,7 @@
 --  DDL for Function VALIDATE_JSON
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE FUNCTION "AI8P"."VALIDATE_JSON" (p_json_string IN CLOB)
+  CREATE OR REPLACE EDITIONABLE FUNCTION "VALIDATE_JSON" (p_json_string IN CLOB)
 RETURN BOOLEAN IS
 /*******************************************************************************
  *  

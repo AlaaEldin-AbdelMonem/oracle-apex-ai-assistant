@@ -2,7 +2,7 @@
 --  DDL for Table LKP_CONTEXT_DOMAIN_BEHAVIORS
 --------------------------------------------------------
 
-  CREATE TABLE "AI8P"."LKP_CONTEXT_DOMAIN_BEHAVIORS" 
+  CREATE TABLE "LKP_CONTEXT_DOMAIN_BEHAVIORS" 
    (	"DOMAIN_BEHAVIOR_CODE" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP", 
 	"BEHAVIOR_NAME" VARCHAR2(100 BYTE) COLLATE "USING_NLS_COMP", 
 	"BEHAVIOR_DESCRIPTION" VARCHAR2(1000 BYTE) COLLATE "USING_NLS_COMP", 
@@ -26,6 +26,6 @@
   PCTINCREASE 0
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)) ;
 
-   COMMENT ON COLUMN "AI8P"."LKP_CONTEXT_DOMAIN_BEHAVIORS"."INSTRUCTION_TEXT" IS 'Natural language instructions defining the behavioral characteristics';
-   COMMENT ON COLUMN "AI8P"."LKP_CONTEXT_DOMAIN_BEHAVIORS"."APPLIES_TO_PROVIDERS" IS 'LLM providers this behavior is optimized for (OpenAI, Claude, Gemini, ALL)';
-   COMMENT ON TABLE "AI8P"."LKP_CONTEXT_DOMAIN_BEHAVIORS"  IS 'Defines AI assistant behavioral styles - how it communicates, reasons, and presents information';
+   COMMENT ON COLUMN "LKP_CONTEXT_DOMAIN_BEHAVIORS"."INSTRUCTION_TEXT" IS 'Natural language instructions defining the behavioral characteristics';
+   COMMENT ON COLUMN "LKP_CONTEXT_DOMAIN_BEHAVIORS"."APPLIES_TO_PROVIDERS" IS 'LLM providers this behavior is optimized for (OpenAI, Claude, Gemini, ALL)';
+   COMMENT ON TABLE "LKP_CONTEXT_DOMAIN_BEHAVIORS"  IS 'Defines AI assistant behavioral styles - how it communicates, reasons, and presents information';

@@ -2,7 +2,7 @@
 --  DDL for Package RAG_PROCESSING_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."RAG_PROCESSING_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "RAG_PROCESSING_PKG" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      RAG_PROCESSING_PKG (Specification)

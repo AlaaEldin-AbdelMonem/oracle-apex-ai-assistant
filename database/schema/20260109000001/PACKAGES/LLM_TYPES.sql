@@ -2,7 +2,7 @@
 --  DDL for Package LLM_TYPES
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."LLM_TYPES" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "LLM_TYPES" AS
    /*******************************************************************************
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      LLM_TYPES (Specification)

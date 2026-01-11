@@ -2,7 +2,7 @@
 --  DDL for Package CHUNK_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."CHUNK_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "CHUNK_UTIL" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      CHUNK_UTIL (Specification)

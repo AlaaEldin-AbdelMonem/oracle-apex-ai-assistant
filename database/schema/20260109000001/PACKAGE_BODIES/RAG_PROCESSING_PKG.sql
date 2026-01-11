@@ -2,7 +2,7 @@
 --  DDL for Package Body RAG_PROCESSING_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."RAG_PROCESSING_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "RAG_PROCESSING_PKG" AS
 
     c_evt_chunk_embed   CONSTANT NUMBER := 512;
     c_evt_embed_refresh CONSTANT NUMBER := 522;

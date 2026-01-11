@@ -2,7 +2,7 @@
 --  DDL for Package Body CHAT_CALL_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."CHAT_CALL_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "CHAT_CALL_PKG" AS
 
    /*******************************************************************************
      *  

@@ -2,7 +2,7 @@
 --  DDL for Package CX_CHUNKS_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."CX_CHUNKS_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "CX_CHUNKS_PKG" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      CX_CHUNKS_PKG (Specification)

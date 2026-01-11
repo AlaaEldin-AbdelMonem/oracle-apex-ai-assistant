@@ -2,7 +2,7 @@
 --  DDL for Package Body AI_REFRESH_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."AI_REFRESH_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI_REFRESH_PKG" AS
 /**
  * PROJECT:     Enterprise AI Assistant
  * MODULE:      AI_REFRESH_PKG (Body)

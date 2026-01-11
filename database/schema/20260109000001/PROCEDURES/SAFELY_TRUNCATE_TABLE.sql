@@ -3,7 +3,7 @@
 --------------------------------------------------------
 set define off;
 
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "AI8P"."SAFELY_TRUNCATE_TABLE" (
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "SAFELY_TRUNCATE_TABLE" (
     p_table_name IN VARCHAR2,
     p_owner      IN VARCHAR2 DEFAULT USER
 )

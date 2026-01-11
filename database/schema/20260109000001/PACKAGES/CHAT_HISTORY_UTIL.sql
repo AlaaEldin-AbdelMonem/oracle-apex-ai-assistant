@@ -2,7 +2,7 @@
 --  DDL for Package CHAT_HISTORY_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."CHAT_HISTORY_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "CHAT_HISTORY_UTIL" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      CHAT_HISTORY_UTIL (Specification)

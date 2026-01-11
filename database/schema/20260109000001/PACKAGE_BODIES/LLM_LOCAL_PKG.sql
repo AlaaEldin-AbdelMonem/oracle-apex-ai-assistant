@@ -2,7 +2,7 @@
 --  DDL for Package Body LLM_LOCAL_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."LLM_LOCAL_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "LLM_LOCAL_PKG" AS
 
 /*=============================================================================
  Local Provider Adapter (Unified Request/Response Version)

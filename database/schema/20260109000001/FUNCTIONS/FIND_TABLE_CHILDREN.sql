@@ -2,7 +2,7 @@
 --  DDL for Function FIND_TABLE_CHILDREN
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE FUNCTION "AI8P"."FIND_TABLE_CHILDREN" (
+  CREATE OR REPLACE EDITIONABLE FUNCTION "FIND_TABLE_CHILDREN" (
     p_parent_table_name IN VARCHAR2, -- The table whose PK is being referenced (e.g., 'USERS')
     p_owner             IN VARCHAR2 DEFAULT USER -- Defaults to the current schema
 )

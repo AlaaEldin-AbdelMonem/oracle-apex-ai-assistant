@@ -2,7 +2,7 @@
 --  DDL for Package Body RAG_API_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."RAG_API_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "RAG_API_PKG" AS
 /*******************************************************************************
  *  
  *******************************************************************************/

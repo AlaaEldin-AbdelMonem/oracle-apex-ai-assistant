@@ -2,7 +2,7 @@
 --  DDL for Package Body ENT_AI_FILE_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."ENT_AI_FILE_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "ENT_AI_FILE_UTIL" AS
 /*******************************************************************************
  *  
  *******************************************************************************/

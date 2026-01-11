@@ -2,7 +2,7 @@
 --  DDL for Table LKP_PIPELINE_STAGE
 --------------------------------------------------------
 
-  CREATE TABLE "AI8P"."LKP_PIPELINE_STAGE" 
+  CREATE TABLE "LKP_PIPELINE_STAGE" 
    (	"STAGE_CODE" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP", 
 	"STAGE_NAME" VARCHAR2(100 BYTE) COLLATE "USING_NLS_COMP", 
 	"STAGE_DESCRIPTION" VARCHAR2(4000 BYTE) COLLATE "USING_NLS_COMP", 
@@ -19,6 +19,6 @@
   PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT);
 
-   COMMENT ON COLUMN "AI8P"."LKP_PIPELINE_STAGE"."STAGE_CODE" IS 'Unique stage code used in log_core.pipeline_stage';
-   COMMENT ON COLUMN "AI8P"."LKP_PIPELINE_STAGE"."TARGET_TABLE" IS 'Specialized audit table for this stage';
-   COMMENT ON TABLE "AI8P"."LKP_PIPELINE_STAGE"  IS 'Valid pipeline stages for audit logging';
+   COMMENT ON COLUMN "LKP_PIPELINE_STAGE"."STAGE_CODE" IS 'Unique stage code used in log_core.pipeline_stage';
+   COMMENT ON COLUMN "LKP_PIPELINE_STAGE"."TARGET_TABLE" IS 'Specialized audit table for this stage';
+   COMMENT ON TABLE "LKP_PIPELINE_STAGE"  IS 'Valid pipeline stages for audit logging';

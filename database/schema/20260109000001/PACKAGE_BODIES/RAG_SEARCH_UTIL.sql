@@ -2,7 +2,7 @@
 --  DDL for Package Body RAG_SEARCH_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."RAG_SEARCH_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "RAG_SEARCH_UTIL" AS
 /*******************************************************************************
  *  
  *******************************************************************************/

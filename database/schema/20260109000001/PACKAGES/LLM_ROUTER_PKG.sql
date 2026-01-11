@@ -2,7 +2,7 @@
 --  DDL for Package LLM_ROUTER_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."LLM_ROUTER_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "LLM_ROUTER_PKG" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      LLM_ROUTER_PKG (Specification)

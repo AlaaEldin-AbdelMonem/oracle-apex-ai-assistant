@@ -2,7 +2,7 @@
 --  DDL for Package Body XXXAI_LOG_LLM_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."XXXAI_LOG_LLM_PKG" IS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "XXXAI_LOG_LLM_PKG" IS
 
     PROCEDURE log_event( 
         p_pipeline      IN VARCHAR2 DEFAULT 'LLM',

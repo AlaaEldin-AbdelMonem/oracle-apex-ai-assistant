@@ -2,7 +2,7 @@
 --  DDL for Package Body STREAM_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."STREAM_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "STREAM_UTIL" AS
 
     PROCEDURE emit_token(
         p_channel IN VARCHAR2,

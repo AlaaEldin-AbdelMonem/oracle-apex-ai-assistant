@@ -2,7 +2,7 @@
 --  DDL for Package Body RAG_STRATEGY_CACHE_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."RAG_STRATEGY_CACHE_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "RAG_STRATEGY_CACHE_UTIL" AS
 /*******************************************************************************
  *  -Refresh cached recommendation for a single document
  *******************************************************************************/

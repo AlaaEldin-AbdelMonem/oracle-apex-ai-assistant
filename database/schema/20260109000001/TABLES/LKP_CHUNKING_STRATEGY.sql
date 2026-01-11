@@ -2,7 +2,7 @@
 --  DDL for Table LKP_CHUNKING_STRATEGY
 --------------------------------------------------------
 
-  CREATE TABLE "AI8P"."LKP_CHUNKING_STRATEGY" 
+  CREATE TABLE "LKP_CHUNKING_STRATEGY" 
    (	"STRATEGY_CODE" VARCHAR2(30 BYTE) COLLATE "USING_NLS_COMP", 
 	"STRATEGY_NAME" VARCHAR2(100 BYTE) COLLATE "USING_NLS_COMP", 
 	"STRATEGY_DESCRIPTION" VARCHAR2(4000 BYTE) COLLATE "USING_NLS_COMP", 
@@ -60,9 +60,9 @@
   PCTINCREASE 0
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)) ;
 
-   COMMENT ON COLUMN "AI8P"."LKP_CHUNKING_STRATEGY"."STRATEGY_CODE" IS 'Unique code for chunking strategy (e.g., FIXED_SIZE, SENTENCE_BOUNDARY)';
-   COMMENT ON COLUMN "AI8P"."LKP_CHUNKING_STRATEGY"."FUNCTION_NAME" IS 'PL/SQL function name in package that implements this strategy';
-   COMMENT ON COLUMN "AI8P"."LKP_CHUNKING_STRATEGY"."STRATEGY_PARAMETERS" IS 'Additional JSON parameters for advanced configuration';
-   COMMENT ON COLUMN "AI8P"."LKP_CHUNKING_STRATEGY"."RELATIVE_SPEED" IS 'Processing speed relative to fixed-size (baseline = 1.0)';
-   COMMENT ON COLUMN "AI8P"."LKP_CHUNKING_STRATEGY"."STORAGE_OVERHEAD" IS 'Storage multiplier vs standard chunking (1.0 = no overhead)';
-   COMMENT ON TABLE "AI8P"."LKP_CHUNKING_STRATEGY"  IS 'Registry of chunking strategies with metadata, best practices, and configuration';
+   COMMENT ON COLUMN "LKP_CHUNKING_STRATEGY"."STRATEGY_CODE" IS 'Unique code for chunking strategy (e.g., FIXED_SIZE, SENTENCE_BOUNDARY)';
+   COMMENT ON COLUMN "LKP_CHUNKING_STRATEGY"."FUNCTION_NAME" IS 'PL/SQL function name in package that implements this strategy';
+   COMMENT ON COLUMN "LKP_CHUNKING_STRATEGY"."STRATEGY_PARAMETERS" IS 'Additional JSON parameters for advanced configuration';
+   COMMENT ON COLUMN "LKP_CHUNKING_STRATEGY"."RELATIVE_SPEED" IS 'Processing speed relative to fixed-size (baseline = 1.0)';
+   COMMENT ON COLUMN "LKP_CHUNKING_STRATEGY"."STORAGE_OVERHEAD" IS 'Storage multiplier vs standard chunking (1.0 = no overhead)';
+   COMMENT ON TABLE "LKP_CHUNKING_STRATEGY"  IS 'Registry of chunking strategies with metadata, best practices, and configuration';

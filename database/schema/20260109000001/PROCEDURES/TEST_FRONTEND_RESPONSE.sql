@@ -3,7 +3,7 @@
 --------------------------------------------------------
 set define off;
 
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "AI8P"."TEST_FRONTEND_RESPONSE" AS
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "TEST_FRONTEND_RESPONSE" AS
 /*******************************************************************************
  *  
  *******************************************************************************/

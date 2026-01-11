@@ -2,7 +2,7 @@
 --  DDL for Package SEGMENT_MANAGER_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."SEGMENT_MANAGER_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "SEGMENT_MANAGER_PKG" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      SEGMENT_MANAGER_PKG (Specification)

@@ -2,7 +2,7 @@
 --  DDL for Package Body LLM_MODEL_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."LLM_MODEL_UTIL" as
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "LLM_MODEL_UTIL" as
 /*******************************************************************************
  *  
  *******************************************************************************/

@@ -2,7 +2,7 @@
 --  DDL for Package Body CHUNK_STRATEGY_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."CHUNK_STRATEGY_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "CHUNK_STRATEGY_PKG" AS
 /*******************************************************************************
  * Package Body:  CHUNK_STRATEGY_PKG
  * 

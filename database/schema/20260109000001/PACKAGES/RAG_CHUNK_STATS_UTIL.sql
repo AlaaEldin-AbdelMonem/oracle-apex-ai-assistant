@@ -2,7 +2,7 @@
 --  DDL for Package RAG_CHUNK_STATS_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."RAG_CHUNK_STATS_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "RAG_CHUNK_STATS_UTIL" AS
     -- Package to manage chunk statistics caching
     -- Maintains denormalized chunk metrics for performance
     c_version           CONSTANT VARCHAR2(10) := '1.0.0';

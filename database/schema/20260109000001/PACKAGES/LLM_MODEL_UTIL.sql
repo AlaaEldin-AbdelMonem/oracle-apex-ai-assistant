@@ -2,7 +2,7 @@
 --  DDL for Package LLM_MODEL_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."LLM_MODEL_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "LLM_MODEL_UTIL" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      LLM_MODEL_UTIL (Specification)

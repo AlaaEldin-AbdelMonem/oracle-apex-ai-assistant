@@ -2,7 +2,7 @@
 --  DDL for Package CXD_VECTOR_EMBEDDING_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."CXD_VECTOR_EMBEDDING_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "CXD_VECTOR_EMBEDDING_PKG" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      CXD_VECTOR_EMBEDDING_PKG (Specification)

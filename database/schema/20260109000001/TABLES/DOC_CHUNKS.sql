@@ -2,7 +2,7 @@
 --  DDL for Table DOC_CHUNKS
 --------------------------------------------------------
 
-  CREATE TABLE "AI8P"."DOC_CHUNKS" 
+  CREATE TABLE "DOC_CHUNKS" 
    (	"DOC_CHUNK_ID" NUMBER, 
 	"DOC_ID" NUMBER, 
 	"CHUNK_SEQUENCE" NUMBER, 
@@ -41,4 +41,4 @@
   PCTINCREASE 0
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)) ;
 
-   COMMENT ON TABLE "AI8P"."DOC_CHUNKS"  IS 'Stores text chunks split from documents for RAG processing';
+   COMMENT ON TABLE "DOC_CHUNKS"  IS 'Stores text chunks split from documents for RAG processing';

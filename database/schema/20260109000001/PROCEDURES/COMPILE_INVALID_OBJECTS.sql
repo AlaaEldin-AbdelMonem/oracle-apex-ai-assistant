@@ -3,7 +3,7 @@
 --------------------------------------------------------
 set define off;
 
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "AI8P"."COMPILE_INVALID_OBJECTS" AS
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "COMPILE_INVALID_OBJECTS" AS
 BEGIN
 /*******************************************************************************
  *  

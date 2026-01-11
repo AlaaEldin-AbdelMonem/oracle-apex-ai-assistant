@@ -2,7 +2,7 @@
 --  DDL for Package Body CHUNK_TYPES
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."CHUNK_TYPES" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "CHUNK_TYPES" AS
 
     FUNCTION calculate_quality_score(
         p_char_count IN NUMBER,

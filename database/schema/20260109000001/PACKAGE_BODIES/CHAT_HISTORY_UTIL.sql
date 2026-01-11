@@ -2,7 +2,7 @@
 --  DDL for Package Body CHAT_HISTORY_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."CHAT_HISTORY_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "CHAT_HISTORY_UTIL" AS
  /*******************************************************************************
  *  
  *******************************************************************************/

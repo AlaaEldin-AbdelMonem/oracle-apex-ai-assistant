@@ -2,7 +2,7 @@
 --  DDL for Package Body APP_ADMIN_SECURITY
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."APP_ADMIN_SECURITY" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "APP_ADMIN_SECURITY" AS
 
 FUNCTION is_admin RETURN BOOLEAN IS
     vcaller constant varchar2(70):= c_package_name ||'.get_mime_type'; 

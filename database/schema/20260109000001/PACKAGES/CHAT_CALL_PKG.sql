@@ -2,7 +2,7 @@
 --  DDL for Package CHAT_CALL_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."CHAT_CALL_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "CHAT_CALL_PKG" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      CHAT_CALL_PKG (Specification)

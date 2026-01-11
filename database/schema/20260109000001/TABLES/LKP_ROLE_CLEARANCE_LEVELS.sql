@@ -2,7 +2,7 @@
 --  DDL for Table LKP_ROLE_CLEARANCE_LEVELS
 --------------------------------------------------------
 
-  CREATE TABLE "AI8P"."LKP_ROLE_CLEARANCE_LEVELS" 
+  CREATE TABLE "LKP_ROLE_CLEARANCE_LEVELS" 
    (	"CLEARANCE_LEVEL" NUMBER, 
 	"CLEARANCE_CODE" VARCHAR2(20 BYTE) COLLATE "USING_NLS_COMP", 
 	"CLEARANCE_NAME" VARCHAR2(100 BYTE) COLLATE "USING_NLS_COMP", 
@@ -21,7 +21,7 @@
   PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT);
 
-   COMMENT ON COLUMN "AI8P"."LKP_ROLE_CLEARANCE_LEVELS"."CLEARANCE_LEVEL" IS 'Numeric clearance tier: 1=Low, 2=Medium, 3=High, 4=Maximum.';
-   COMMENT ON COLUMN "AI8P"."LKP_ROLE_CLEARANCE_LEVELS"."CLEARANCE_CODE" IS 'Neutral code representing the clearance tier (LEVEL1–LEVEL4).';
-   COMMENT ON COLUMN "AI8P"."LKP_ROLE_CLEARANCE_LEVELS"."CLEARANCE_NAME" IS 'Human-readable name for the clearance tier.';
-   COMMENT ON TABLE "AI8P"."LKP_ROLE_CLEARANCE_LEVELS"  IS 'Abstract clearance tiers (1–4). Not role-specific. Roles reference these levels.';
+   COMMENT ON COLUMN "LKP_ROLE_CLEARANCE_LEVELS"."CLEARANCE_LEVEL" IS 'Numeric clearance tier: 1=Low, 2=Medium, 3=High, 4=Maximum.';
+   COMMENT ON COLUMN "LKP_ROLE_CLEARANCE_LEVELS"."CLEARANCE_CODE" IS 'Neutral code representing the clearance tier (LEVEL1–LEVEL4).';
+   COMMENT ON COLUMN "LKP_ROLE_CLEARANCE_LEVELS"."CLEARANCE_NAME" IS 'Human-readable name for the clearance tier.';
+   COMMENT ON TABLE "LKP_ROLE_CLEARANCE_LEVELS"  IS 'Abstract clearance tiers (1–4). Not role-specific. Roles reference these levels.';

@@ -1,537 +1,539 @@
 --------------------------------------------------------
---  File created - Friday-January-09-2026   
+--  File createD - FriDay-January-09-2026   
 --------------------------------------------------------
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TYPES\T_CHUNK_ARRAY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TYPES\T_CHUNK_RECORD.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TYPES\T_DATA_ROW_OBJ.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TYPES\T_DATA_ROW_TAB.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\SEQUENCES\CHAT_CALL_SEQ.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\SEQUENCES\CHAT_FAVORITES_SEQ.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\SEQUENCES\CONTEXT_DOMAIN_REGISTRY_SEQ.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\SEQUENCES\DBTOOLS_EXECUTION_HISTORY_SEQ.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\SEQUENCES\DOC_CHUNKS_SEQ.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\SEQUENCES\LKP_CONTEXT_DOMAIN_CATEGORIES_SEQ.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\SEQUENCES\LKP_LOG_EVENT_TYPE_SEQ.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\SEQUENCES\LOG_ARCHIVE_SEQ.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\SEQUENCES\RAG_CHUNKS_SEQ.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\SEQUENCES\RAG_EMBEDDINGS_SEQ.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\SEQUENCES\RAG_INTENT_LOG_SEQ.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\SEQUENCES\RAG_QUERY_EXECUTION_LOG_SEQ.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\SEQUENCES\RAG_TRACE_LOG_SEQ.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\SEQUENCES\SEQ_RAG_CHUNKS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\AI_MODEL_PRICING.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\AI_MODEL_USAGE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\AI_RATE_LIMIT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\APP_ADMIN_USERS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\APP_ENVIRONMENT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\CFG_ALERT_THRESHOLD.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\CFG_CONTEXT_INSTRUCTIONS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\CFG_GOVERNANCE_RULES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\CFG_PARAMETERS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\CFG_PARAM_OVERRIDES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\CFG_REDACTION_RULES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\CHAT_CALL_REGENERATIONS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\CHAT_FAVORITES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\CHAT_ISSUE_ATTACHMENTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\CONTEXT_DOMAINS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\CONTEXT_DOMAIN_BEHAVIORS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\CONTEXT_DOMAIN_INSTRUCTIONS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\CONTEXT_DOMAIN_REGISTRY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\CONTEXT_REGISTRY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\CONTEXT_REGISTRY_ROLES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\DBTOOLS_EXECUTION_HISTORY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\DEBUG_AUDIT_LOG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\DEBUG_CONFIG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\DEPLOYMENT_AUDIT_LOG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\DEPLOYMENT_EXPERIMENTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\DEPLOYMENT_METRICS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\DEPLOYMENT_VERSIONS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\DOCS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\DOCS_STAGING.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\DOC_CHUNKS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\DOC_RELATIONS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\DOMAIN_INTENTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\HCM_ASSIGNMENT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\HCM_EMPLOYEE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\HCM_LEAVE_BALANCE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\HCM_SALARY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\HTMLDB_PLAN_TABLE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_ACCESS_ACTION.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_CHAT_ISSUE_LEVEL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_CHAT_ISSUE_PRIORITY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_CHAT_ISSUE_STATUS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_CHUNKING_STRATEGY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_CONTEXT_DOMAIN_BEHAVIORS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_CONTEXT_DOMAIN_CATEGORIES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_CONTEXT_DOMAIN_SCOPE_TYPE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_CONTEXT_REGISTRY_SOURCE_TYPES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_CXD_FAILURE_ACTION_OPTIONS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_DATA_CLASSIFICATION.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_DEBUG_AUDIT_EVENTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_DEBUG_AUDIT_EVENT_TYPES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_DEBUG_AUDIT_TYPES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_DEBUG_LEVEL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_DEBUG_LOG_TYPES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_DEBUG_SCOPES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_DOC_CATEGORY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_DOC_RELATION_TYPE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_DOC_STATUS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_DOMAIN_DETECTION_METHODS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_ERROR_SEVERITY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_ERROR_TYPE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_INTENT_ACTION_TYPE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_ISSUE_TYPES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_LANGUAGE_CODE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_MIME_TYPES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_OUTPUT_FORMAT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_PARAM_CATEGORY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_PARAM_SCOPE_TYPE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_PARAM_VALUE_TYPE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_PIPELINE_STAGE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_REDACTION_APPLY_PHASE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_REGISTERED_HANDLERS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_REGISTRY_SENSITIVITY_LEVELS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_ROLE_CLEARANCE_LEVELS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_SEARCH_TYPE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_TEST_CATEGORY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LKP_TEXT_CHANGE_TYPE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LLM_INTENT_PROMPTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LLM_PROVIDERS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LLM_PROVIDER_MODELS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\LOG_ARCHIVE_STORE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\RAG_DOMAIN_SOURCES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\RAG_QUALITY_METRICS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\RAG_REFRESH_QUEUE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\RAG_TRACE_SUMMARY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\ROLES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\SEGMENT_USERS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\SHADOW_COMPARISON_LOG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\TENANTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\USERS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\USER_ROLES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\USER_SEGMENTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\USER_SEGMENT_ASSIGNMENTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TABLES\XXXCFG_PARAM_AUDIT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\VIEWS\AUDIT_DASHBOARD_V.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\VIEWS\CFG_PARAM_EFFECTIVE_V.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\VIEWS\CFG_PARAM_V_MASKED.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\VIEWS\HR_VW_ADMIN_FULL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\VIEWS\HR_VW_MANAGER_TEAM.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\VIEWS\HR_VW_PAYROLL_DEPT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\VIEWS\SMART_SEARCH_RESULTS_V.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\VIEWS\V_DOC_TEXT_PAGINATED.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\VIEWS\V_ENT_AI_DOCS_METADATA.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\VIEWS\XXHR_MY_EMPLOYEE_SELF_V.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\LKP_CHAT_ISSUE_PRIORITY_PK.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\LKP_DOC_CATEGORY_CON.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\LKP_DOMAIN_ACTIVATION_TYPE_PK.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\TENANTS_PK.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\LKP_REDACTION_APPLY_PAHSE_PK.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\PK_LKP_CLEARANCE_LEVELS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\DBTOOLS_EXECUTION_HISTORY_PK.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\UK_EXPERIMENT_NAME.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\UK_MODE_BEHAVIOR_FORMAT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\UK_REGEN_PAIR.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\UQ_CFG_PARAM_CTX.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\USERS_PK.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\CFG_GLOBAL_INSTRUCTIONS_UNQ.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\SHADOW_COMP_LOG_PROD_IDX.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\SHADOW_COMP_LOG_SHADOW_IDX.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_ATTACHMENTS_ISSUE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_MBF_MODE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_DEPLOY_AUDIT_DEPLOY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IX_AUDIT_EVENT_CODE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IX_AUDIT_USER_TIME.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_CHAT_SESS_SEGMENT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_EXP_DATES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\LKP_CHAT_ISSUE_LEVEL_PK.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\LKP_CHAT_ISSUE_STATUS_PK.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\LKP_DEBUG_LEVEL_PK.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\LKP_DOMAIN_ACTIVATION_TYPE_UNQ.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\PK_LKP_DEBUG_AUDIT_EVENTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\PK_LKP_DEBUG_AUDIT_TYPES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\PK_LKP_REG_HANDLERS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\CONTEXT_REGISTRY_ROLE_PK.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\UK_BEHAVIOR_NAME.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\UK_DEPLOY_METRICS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\UK_LKP_CLEARANCE_CODE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\UK_LKP_ROLE_CODE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\UQ_LKP_DATA_CLASSIFICATION_LEVEL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\CFG_GLOBAL_INSTRUCTIONS_CON.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_ISSUE_TYPES_ACTIVE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_DEPLOY_METRICS_SEGMENT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_MBF_DEFAULT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_CHAT_SESS_DEPLOY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_DEPLOY_AUDIT_USER.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\SHADOW_COMP_LOG_TIME_IDX.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_DEPLOY_AUDIT_TYPE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_DEPLOY_METRICS_EXP.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_CHAT_SESS_EXP.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_DEPLOY_METRICS_DATE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_EXP_STATUS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_BEHAVIOR_ACTIVE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\LKP_CXD_FAILURE_ACTION_PK.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\LKP_DEBUG_SCOPES_PK.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\PK_LKP_DEBUG_LOG_TYPES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\PK_LOG_ARCHIVE_STORE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\PK_RAG_SOURCE_REGISTRY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\UK_DEPLOYMENT_VER_NAME.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\UK_FORMAT_NAME.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\UK_MODEL_API_ID.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\UK_MODEL_DISPLAY_NAME.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\UK_RAG_SRC_NAME.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\UK_USER_SEGMENT_DEPLOY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_USER_ROLE_USER.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_ENT_AI_DOCS_CHUNK_STRAT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_CHAT_CALLS_SEGMENT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_RAG_SRC_TYPE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_FORMAT_ACTIVE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\USER_SEGMENTS_ACTIVE_IDX.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_CHUNK_STRAT_ORDER.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\SEGMENT_USERS_USER_IDX.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_CHUNK_STRAT_DEFAULT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_MODEL_PROVIDER.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_DEPLOY_VER_EXPERIMENT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_RAG_CHUNKS_DOC.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_LOG_ARCHIVE_TS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_USER_ROLE_ROLE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\USER_SEGMENTS_TYPE_IDX.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_DOC_REL_PARENT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_MODEL_ACTIVE_DEFAULT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_MODE_SOURCES_MODE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_CFG_AUDIT_DATE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_MODE_SOURCES_REGISTRY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_RAG_SRC_ENABLED.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_MODEL_COST.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\SEGMENT_USERS_SEG_IDX.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_DEPLOY_VER_TYPE_STATUS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_CFG_AUDIT_PARAM.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\ENV_CFG_IDX.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\LKP_MIME_TYPES_CAT_IX.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_DEPLOY_VER_ACTIVE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_SEGMENT_ASSIGN_EXP.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\APP_ADMIN_USERS_U1.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\APP_ENVIRONMENT_UNQ.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\LKP_LLM_PROVIDER_PK.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\PK_LKP_AUDIT_EVENT_CODE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\PK_LKP_SENSITIVITY_LEVEL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\PK_MODEL_PRICING.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\CHAT_FAVORITES_PK.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\UK_DEPLOYMENT_VER_UUID.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\UK_LKP_SENSITIVITY_CODE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\UK_MODE_SOURCE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\UK_USER_ROLE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\USER_SEGMENTS_UK.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_USER_ROLE_DATES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_CFG_OVERRIDE_CTX.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_SEGMENT_ASSIGN_USER.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_DOC_REL_CHILD.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_SEGMENT_ASSIGN_SEGMENT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_GOV_PRIORITY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_RAG_SRC_REVIEW.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_SEGMENT_ASSIGN_DEPLOY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_GOV_CATEGORY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_CHAT_CALLS_EXP.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_CHAT_CALLS_DEPLOY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_CHUNK_STRAT_ACTIVE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\INDEXES\IDX_CFG_AUDIT_TENANT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TRIGGERS\ENT_AI_DOCS_METADATA_TRG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TRIGGERS\TRG_AUDIT_LLM_PROVIDERS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\TRIGGERS\TRG_LKP_CHUNK_STRAT_AUDIT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PROCEDURES\COMPILE_ALL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PROCEDURES\COMPILE_ALL2.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PROCEDURES\COMPILE_INVALID_OBJECTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PROCEDURES\CREATE_APEX_SESSION.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PROCEDURES\CXD_CLASSIFIER_DETECT_TEST.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PROCEDURES\DROP_IDENTITY_AND_ADD_SEQUENCE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PROCEDURES\INVOKE_TEST.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PROCEDURES\INVOKE_TEST2.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PROCEDURES\INVOKE_TEST_DIAGNOSTIC.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PROCEDURES\PURGE_ALL_LOGS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PROCEDURES\RESET_SESSIONS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PROCEDURES\SAFELY_TRUNCATE_TABLE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PROCEDURES\SEARCH_DB_CODE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PROCEDURES\SWAP_RECORDS_PK.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PROCEDURES\SYNC_AUDIT_COLUMNS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PROCEDURES\TEST_CHUNKING.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PROCEDURES\TEST_CHUNKING2.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PROCEDURES\TEST_CXD_CLASSIFIER.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PROCEDURES\TEST_DOMAINS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PROCEDURES\TEST_DOMAIN_DETECTION.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PROCEDURES\TEST_FRONTEND_RESPONSE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PROCEDURES\TEST_GEN_EMBEDDINGS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\AI_REFRESH_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\AI_SUMMARY_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\APP_ADMIN_SECURITY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\APP_CHUNK_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\APP_INVOKE_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\APP_SESSION_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\AUDIT_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CFG_PARAM_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CHAT_CALL_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CHAT_ENGINE_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CHAT_HISTORY_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CHAT_MANAGER_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CHAT_PROJECTS_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CHAT_SESSION_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CHUNK_EMBEDDING_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CHUNK_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CHUNK_PROCESSOR_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CHUNK_PROXY_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CHUNK_STATS_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CHUNK_STRATEGY_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CHUNK_TYPES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CHUNK_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CXD_CLASSIFIER_LLM_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CXD_CLASSIFIER_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CXD_CLASSIFIER_SEMANTIC_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CXD_FAILURE_ACTIONS_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CXD_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CXD_TYPES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CXD_VECTOR_EMBEDDING_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CX_BEHAVIOR_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CX_BUILDER_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CX_CHUNKS_BUILDER_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CX_CHUNKS_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CX_DATA_BUILDER_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CX_DATA_BUILDER_PKGXX.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CX_DATA_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\CX_REGISTRY_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\DATE_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\DEBUG_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\DEPLOYMENT_MANAGER_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\DOC_EXTRACT_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\DOC_FILE_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\DOC_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\EMBEDDING_PROCESSOR_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\ENT_AI_FILE_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\LLM_ANTHROPIC_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\LLM_DEBUG_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\LLM_GEMINI_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\LLM_LOCAL_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\LLM_MODEL_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\LLM_OPENAI_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\LLM_ROUTER_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\LLM_STREAM_ADAPTER_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\LLM_TOKEN_CALC_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\LLM_TYPES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\POLICY_ENFORCER_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\POLICY_REDACTION_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\RAG_API_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\RAG_CHUNK_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\RAG_CHUNK_STATS_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\RAG_GOVERNANCE_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\RAG_PROCESSING_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\RAG_PROCESSING_PKG_LEGACY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\RAG_SEARCH_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\RAG_STRATEGY_CACHE_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\SEGMENT_MANAGER_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\STREAM_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGES\TEST_DEBUG_UTIL_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\AI_REFRESH_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\AI_SUMMARY_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\APEX_CONTEXT_HELPER_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\APP_ADMIN_SECURITY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\APP_CHUNK_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\APP_INVOKE_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\APP_SESSION_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\AUDIT_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CFG_PARAM_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CHAT_CALL_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CHAT_ENGINE_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CHAT_HISTORY_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CHAT_MANAGER_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CHAT_PROJECTS_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CHAT_SESSION_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CHUNK_EMBEDDING_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CHUNK_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CHUNK_PROCESSOR_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CHUNK_PROXY_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CHUNK_STATS_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CHUNK_STRATEGY_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CHUNK_TYPES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CHUNK_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CXD_CLASSIFIER_LLM_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CXD_CLASSIFIER_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CXD_CLASSIFIER_SEMANTIC_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CXD_FAILURE_ACTIONS_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CXD_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CXD_TYPES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CXD_VECTOR_EMBEDDING_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CX_BEHAVIOR_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CX_BUILDER_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CX_CHUNKS_BUILDER_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CX_CHUNKS_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CX_DATA_BUILDER_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CX_DATA_BUILDER_PKGXX.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CX_DATA_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\CX_REGISTRY_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\DATE_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\DEBUG_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\DEPLOYMENT_MANAGER_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\DOC_EXTRACT_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\DOC_FILE_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\DOC_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\EMBEDDING_PROCESSOR_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\ENT_AI_FILE_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\LLM_ANTHROPIC_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\LLM_DEBUG_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\LLM_GEMINI_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\LLM_LOCAL_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\LLM_MODEL_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\LLM_OPENAI_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\LLM_ROUTER_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\LLM_STREAM_ADAPTER_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\LLM_TOKEN_CALC_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\LLM_TYPES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\POLICY_REDACTION_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\RAG_API_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\RAG_CHUNK_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\RAG_CHUNK_STATS_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\RAG_GOVERNANCE_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\RAG_PROCESSING_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\RAG_PROCESSING_PKG_LEGACY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\RAG_SEARCH_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\RAG_STRATEGY_CACHE_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\SEGMENT_MANAGER_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\STREAM_UTIL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\TEST_DEBUG_UTIL_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\PACKAGE_BODIES\XXXAI_LOG_LLM_PKG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\FUNCTIONS\EMBD_LLM_TEST.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\FUNCTIONS\FIND_CONSTRAINT_SOURCE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\FUNCTIONS\FIND_TABLE_CHILDREN.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\FUNCTIONS\FIND_TABLE_PARENTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\FUNCTIONS\GET_CONTEXT_DEBUG_INFO.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\FUNCTIONS\GET_DOC_TEXT_PAGE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\FUNCTIONS\GET_IAM_TOKEN.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\FUNCTIONS\GET_WORD_STEM.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\FUNCTIONS\HIGHLIGHT_SEARCH_TERMS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\FUNCTIONS\VALIDATE_JSON.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\SYNONYMS\AI_VECTOR_UTX.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LLM_PROVIDER_MODELS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\DOC_RELATIONS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\CHAT_ISSUE_ATTACHMENTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\DEBUG_CONFIG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\CFG_PARAM_OVERRIDES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\CFG_CONTEXT_INSTRUCTIONS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\CFG_GOVERNANCE_RULES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\USER_ROLES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\AI_RATE_LIMIT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\DEPLOYMENT_AUDIT_LOG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LLM_PROVIDERS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_OUTPUT_FORMAT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_CHAT_ISSUE_PRIORITY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\HCM_EMPLOYEE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\XXXCFG_PARAM_AUDIT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\DEPLOYMENT_EXPERIMENTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_DEBUG_AUDIT_EVENT_TYPES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_DOC_STATUS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_LANGUAGE_CODE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_PARAM_SCOPE_TYPE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_TEXT_CHANGE_TYPE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\ROLES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_ERROR_SEVERITY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LOG_ARCHIVE_STORE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\APP_ADMIN_USERS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_ERROR_TYPE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_PARAM_CATEGORY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\CONTEXT_REGISTRY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\DEPLOYMENT_METRICS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\AI_MODEL_PRICING.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\SHADOW_COMPARISON_LOG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\RAG_TRACE_SUMMARY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_ROLE_CLEARANCE_LEVELS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_DOC_CATEGORY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_DEBUG_LOG_TYPES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_DEBUG_AUDIT_EVENTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_CONTEXT_DOMAIN_CATEGORIES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\APP_ENVIRONMENT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_REGISTERED_HANDLERS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_DEBUG_AUDIT_TYPES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_CHUNKING_STRATEGY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\USER_SEGMENTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_DATA_CLASSIFICATION.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\HCM_SALARY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\CHAT_FAVORITES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\CFG_REDACTION_RULES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\AI_MODEL_USAGE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\CONTEXT_REGISTRY_ROLES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\DEBUG_AUDIT_LOG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_DOC_RELATION_TYPE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\USERS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_CXD_FAILURE_ACTION_OPTIONS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_INTENT_ACTION_TYPE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_PIPELINE_STAGE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_PARAM_VALUE_TYPE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_REGISTRY_SENSITIVITY_LEVELS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_TEST_CATEGORY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\DOCS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_DEBUG_SCOPES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\RAG_DOMAIN_SOURCES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\CFG_PARAMETERS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\CHAT_CALL_REGENERATIONS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_REDACTION_APPLY_PHASE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\DOMAIN_INTENTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_DOMAIN_DETECTION_METHODS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\DOC_CHUNKS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\CONTEXT_DOMAIN_BEHAVIORS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LLM_INTENT_PROMPTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\DBTOOLS_EXECUTION_HISTORY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_CHAT_ISSUE_STATUS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_DEBUG_LEVEL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\TENANTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\DEPLOYMENT_VERSIONS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\HCM_LEAVE_BALANCE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_MIME_TYPES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_CHAT_ISSUE_LEVEL.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_SEARCH_TYPE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_CONTEXT_DOMAIN_SCOPE_TYPE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\CFG_ALERT_THRESHOLD.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\RAG_QUALITY_METRICS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\USER_SEGMENT_ASSIGNMENTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_CONTEXT_REGISTRY_SOURCE_TYPES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_ACCESS_ACTION.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\RAG_REFRESH_QUEUE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\CONTEXT_DOMAINS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\SEGMENT_USERS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\CONTEXT_DOMAIN_REGISTRY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\HCM_ASSIGNMENT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\CONTEXT_DOMAIN_INSTRUCTIONS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\DOCS_STAGING.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_CONTEXT_DOMAIN_BEHAVIORS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\CONSTRAINTS\LKP_ISSUE_TYPES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\CFG_PARAMETERS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\CFG_PARAM_OVERRIDES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\CFG_REDACTION_RULES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\CHAT_CALL_REGENERATIONS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\CHAT_ISSUE_ATTACHMENTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\CONTEXT_DOMAINS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\CONTEXT_DOMAIN_BEHAVIORS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\CONTEXT_DOMAIN_INSTRUCTIONS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\CONTEXT_DOMAIN_REGISTRY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\CONTEXT_REGISTRY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\CONTEXT_REGISTRY_ROLES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\DEBUG_AUDIT_LOG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\DEPLOYMENT_AUDIT_LOG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\DEPLOYMENT_EXPERIMENTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\DEPLOYMENT_METRICS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\DEPLOYMENT_VERSIONS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\DOCS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\DOCS_STAGING.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\DOC_CHUNKS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\DOC_RELATIONS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\DOMAIN_INTENTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\HCM_ASSIGNMENT.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\HCM_LEAVE_BALANCE.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\HCM_SALARY.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\LKP_DEBUG_AUDIT_EVENTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\LLM_INTENT_PROMPTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\LLM_PROVIDERS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\LLM_PROVIDER_MODELS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\RAG_DOMAIN_SOURCES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\ROLES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\SEGMENT_USERS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\SHADOW_COMPARISON_LOG.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\USER_ROLES.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\USER_SEGMENT_ASSIGNMENTS.sql
-@E:\!Proj!\Proj8-Enterprise RAG System\db\REF_CONSTRAINTS\XXXCFG_PARAM_AUDIT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TYPES\T_CHUNK_ARRAY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TYPES\T_CHUNK_RECORD.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TYPES\T_DATA_ROW_OBJ.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TYPES\T_DATA_ROW_TAB.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\SEQUENCES\CHAT_CALL_SEQ.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\SEQUENCES\CHAT_FAVORITES_SEQ.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\SEQUENCES\CONTEXT_DOMAIN_REGISTRY_SEQ.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\SEQUENCES\DOC_CHUNKS_SEQ.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\SEQUENCES\LKP_CONTEXT_DOMAIN_CATEGORIES_SEQ.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\SEQUENCES\LKP_LOG_EVENT_TYPE_SEQ.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\SEQUENCES\LOG_ARCHIVE_SEQ.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\SEQUENCES\RAG_CHUNKS_SEQ.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\SEQUENCES\RAG_EMBEDDINGS_SEQ.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\SEQUENCES\RAG_INTENT_LOG_SEQ.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\SEQUENCES\RAG_QUERY_EXECUTION_LOG_SEQ.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\SEQUENCES\RAG_TRACE_LOG_SEQ.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\SEQUENCES\SEQ_RAG_CHUNKS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\DEBUG_LOG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\CHAT_PROJECTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\CHAT_SESSIONS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\CHAT_CALLS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\AI_MODEL_PRICING.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\AI_MODEL_USAGE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\AI_RATE_LIMIT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\APP_ADMIN_USERS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\APP_ENVIRONMENT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\CFG_ALERT_THRESHOLD.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\CFG_CONTEXT_INSTRUCTIONS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\CFG_GOVERNANCE_RULES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\CFG_PARAMETERS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\CFG_PARAM_OVERRIDES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\CFG_REDACTION_RULES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\CHAT_CALL_REGENERATIONS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\CHAT_FAVORITES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\CHAT_ISSUE_ATTACHMENTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\CONTEXT_DOMAINS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\CONTEXT_DOMAIN_BEHAVIORS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\CONTEXT_DOMAIN_INSTRUCTIONS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\CONTEXT_DOMAIN_REGISTRY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\CONTEXT_REGISTRY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\CONTEXT_REGISTRY_ROLES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\DEBUG_AUDIT_LOG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\DEBUG_CONFIG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\DEPLOYMENT_AUDIT_LOG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\DEPLOYMENT_EXPERIMENTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\DEPLOYMENT_METRICS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\DEPLOYMENT_VERSIONS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\DOCS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\DOCS_STAGING.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\DOC_CHUNKS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\DOC_RELATIONS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\DOMAIN_INTENTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\HCM_ASSIGNMENT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\HCM_EMPLOYEE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\HCM_LEAVE_BALANCE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\HCM_SALARY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\HTMLDB_PLAN_TABLE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_ACCESS_ACTION.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_CHAT_ISSUE_LEVEL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_CHAT_ISSUE_PRIORITY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_CHAT_ISSUE_STATUS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_CHUNKING_STRATEGY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_CONTEXT_DOMAIN_BEHAVIORS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_CONTEXT_DOMAIN_CATEGORIES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_CONTEXT_DOMAIN_SCOPE_TYPE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_CONTEXT_REGISTRY_SOURCE_TYPES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_CXD_FAILURE_ACTION_OPTIONS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_DATA_CLASSIFICATION.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_DEBUG_AUDIT_EVENTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_DEBUG_AUDIT_EVENT_TYPES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_DEBUG_AUDIT_TYPES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_DEBUG_LEVEL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_DEBUG_LOG_TYPES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_DEBUG_SCOPES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_DOC_CATEGORY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_DOC_RELATION_TYPE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_DOC_STATUS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_DOMAIN_DETECTION_METHODS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_ERROR_SEVERITY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_ERROR_TYPE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_INTENT_ACTION_TYPE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_ISSUE_TYPES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_LANGUAGE_CODE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_MIME_TYPES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_OUTPUT_FORMAT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_PARAM_CATEGORY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_PARAM_SCOPE_TYPE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_PARAM_VALUE_TYPE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_PIPELINE_STAGE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_REDACTION_APPLY_PHASE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_REGISTERED_HANDLERS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_REGISTRY_SENSITIVITY_LEVELS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_ROLE_CLEARANCE_LEVELS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_SEARCH_TYPE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_TEST_CATEGORY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LKP_TEXT_CHANGE_TYPE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LLM_INTENT_PROMPTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LLM_PROVIDERS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LLM_PROVIDER_MODELS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\LOG_ARCHIVE_STORE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\RAG_DOMAIN_SOURCES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\RAG_QUALITY_METRICS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\RAG_REFRESH_QUEUE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\RAG_TRACE_SUMMARY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\ROLES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\SEGMENT_USERS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\SHADOW_COMPARISON_LOG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\TENANTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\USERS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\USER_ROLES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\USER_SEGMENTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\USER_SEGMENT_ASSIGNMENTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TABLES\XXXCFG_PARAM_AUDIT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\VIEWS\AUDIT_DASHBOARD_V.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\VIEWS\CFG_PARAM_EFFECTIVE_V.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\VIEWS\CFG_PARAM_V_MASKED.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\VIEWS\HR_VW_ADMIN_FULL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\VIEWS\HR_VW_MANAGER_TEAM.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\VIEWS\HR_VW_PAYROLL_DEPT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\VIEWS\SMART_SEARCH_RESULTS_V.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\VIEWS\V_DOC_TEXT_PAGINATED.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\VIEWS\V_ENT_AI_DOCS_METADATA.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\VIEWS\XXHR_MY_EMPLOYEE_SELF_V.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\LKP_CHAT_ISSUE_PRIORITY_PK.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\LKP_DOC_CATEGORY_CON.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\LKP_DOMAIN_ACTIVATION_TYPE_PK.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\TENANTS_PK.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\LKP_REDACTION_APPLY_PAHSE_PK.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\PK_LKP_CLEARANCE_LEVELS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\DBTOOLS_EXECUTION_HISTORY_PK.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\UK_EXPERIMENT_NAME.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\UK_MODE_BEHAVIOR_FORMAT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\UK_REGEN_PAIR.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\UQ_CFG_PARAM_CTX.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\USERS_PK.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\CFG_GLOBAL_INSTRUCTIONS_UNQ.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\SHADOW_COMP_LOG_PROD_IDX.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\SHADOW_COMP_LOG_SHADOW_IDX.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_ATTACHMENTS_ISSUE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_MBF_MODE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_DEPLOY_AUDIT_DEPLOY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IX_AUDIT_EVENT_CODE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IX_AUDIT_USER_TIME.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_CHAT_SESS_SEGMENT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_EXP_DATES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\LKP_CHAT_ISSUE_LEVEL_PK.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\LKP_CHAT_ISSUE_STATUS_PK.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\LKP_DEBUG_LEVEL_PK.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\LKP_DOMAIN_ACTIVATION_TYPE_UNQ.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\PK_LKP_DEBUG_AUDIT_EVENTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\PK_LKP_DEBUG_AUDIT_TYPES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\PK_LKP_REG_HANDLERS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\CONTEXT_REGISTRY_ROLE_PK.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\UK_BEHAVIOR_NAME.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\UK_DEPLOY_METRICS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\UK_LKP_CLEARANCE_CODE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\UK_LKP_ROLE_CODE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\UQ_LKP_DATA_CLASSIFICATION_LEVEL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\CFG_GLOBAL_INSTRUCTIONS_CON.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_ISSUE_TYPES_ACTIVE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_DEPLOY_METRICS_SEGMENT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_MBF_DEFAULT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_CHAT_SESS_DEPLOY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_DEPLOY_AUDIT_USER.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\SHADOW_COMP_LOG_TIME_IDX.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_DEPLOY_AUDIT_TYPE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_DEPLOY_METRICS_EXP.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_CHAT_SESS_EXP.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_DEPLOY_METRICS_DATE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_EXP_STATUS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_BEHAVIOR_ACTIVE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\LKP_CXD_FAILURE_ACTION_PK.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\LKP_DEBUG_SCOPES_PK.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\PK_LKP_DEBUG_LOG_TYPES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\PK_LOG_ARCHIVE_STORE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\PK_RAG_SOURCE_REGISTRY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\UK_DEPLOYMENT_VER_NAME.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\UK_FORMAT_NAME.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\UK_MODEL_API_ID.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\UK_MODEL_DISPLAY_NAME.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\UK_RAG_SRC_NAME.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\UK_USER_SEGMENT_DEPLOY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_USER_ROLE_USER.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_ENT_AI_DOCS_CHUNK_STRAT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_CHAT_CALLS_SEGMENT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_RAG_SRC_TYPE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_FORMAT_ACTIVE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\USER_SEGMENTS_ACTIVE_IDX.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_CHUNK_STRAT_ORDER.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\SEGMENT_USERS_USER_IDX.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_CHUNK_STRAT_DEFAULT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_MODEL_PROVIDER.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_DEPLOY_VER_EXPERIMENT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_RAG_CHUNKS_DOC.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_LOG_ARCHIVE_TS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_USER_ROLE_ROLE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\USER_SEGMENTS_TYPE_IDX.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_DOC_REL_PARENT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_MODEL_ACTIVE_DEFAULT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_MODE_SOURCES_MODE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_CFG_AUDIT_DATE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_MODE_SOURCES_REGISTRY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_RAG_SRC_ENABLED.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_MODEL_COST.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\SEGMENT_USERS_SEG_IDX.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_DEPLOY_VER_TYPE_STATUS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_CFG_AUDIT_PARAM.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\ENV_CFG_IDX.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\LKP_MIME_TYPES_CAT_IX.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_DEPLOY_VER_ACTIVE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_SEGMENT_ASSIGN_EXP.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\APP_ADMIN_USERS_U1.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\APP_ENVIRONMENT_UNQ.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\LKP_LLM_PROVIDER_PK.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\PK_LKP_AUDIT_EVENT_CODE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\PK_LKP_SENSITIVITY_LEVEL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\PK_MODEL_PRICING.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\CHAT_FAVORITES_PK.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\UK_DEPLOYMENT_VER_UUID.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\UK_LKP_SENSITIVITY_CODE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\UK_MODE_SOURCE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\UK_USER_ROLE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\USER_SEGMENTS_UK.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_USER_ROLE_DATES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_CFG_OVERRIDE_CTX.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_SEGMENT_ASSIGN_USER.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_DOC_REL_CHILD.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_SEGMENT_ASSIGN_SEGMENT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_GOV_PRIORITY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_RAG_SRC_REVIEW.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_SEGMENT_ASSIGN_DEPLOY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_GOV_CATEGORY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_CHAT_CALLS_EXP.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_CHAT_CALLS_DEPLOY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_CHUNK_STRAT_ACTIVE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\INDEXES\IDX_CFG_AUDIT_TENANT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TRIGGERS\ENT_AI_DOCS_METADATA_TRG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TRIGGERS\TRG_AUDIT_LLM_PROVIDERS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\TRIGGERS\TRG_LKP_CHUNK_STRAT_AUDIT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PROCEDURES\COMPILE_ALL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PROCEDURES\COMPILE_ALL2.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PROCEDURES\COMPILE_INVALID_OBJECTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PROCEDURES\CREATE_APEX_SESSION.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PROCEDURES\CXD_CLASSIFIER_DETECT_TEST.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PROCEDURES\DROP_IDENTITY_AND_ADD_SEQUENCE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PROCEDURES\INVOKE_TEST.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PROCEDURES\INVOKE_TEST2.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PROCEDURES\INVOKE_TEST_DIAGNOSTIC.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PROCEDURES\PURGE_ALL_LOGS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PROCEDURES\RESET_SESSIONS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PROCEDURES\SAFELY_TRUNCATE_TABLE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PROCEDURES\SEARCH_DB_CODE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PROCEDURES\SWAP_RECORDS_PK.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PROCEDURES\SYNC_AUDIT_COLUMNS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PROCEDURES\TEST_CHUNKING.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PROCEDURES\TEST_CHUNKING2.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PROCEDURES\TEST_CXD_CLASSIFIER.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PROCEDURES\TEST_DOMAINS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PROCEDURES\TEST_DOMAIN_DETECTION.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PROCEDURES\TEST_FRONTEND_RESPONSE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PROCEDURES\TEST_GEN_EMBEDDINGS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\AI_REFRESH_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\AI_SUMMARY_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\APP_ADMIN_SECURITY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\APP_CHUNK_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\APP_INVOKE_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\APP_SESSION_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\AUDIT_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CFG_PARAM_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CHAT_CALL_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CHAT_ENGINE_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CHAT_HISTORY_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CHAT_MANAGER_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CHAT_PROJECTS_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CHAT_SESSION_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CHUNK_EMBEDDING_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CHUNK_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CHUNK_PROCESSOR_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CHUNK_PROXY_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CHUNK_STATS_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CHUNK_STRATEGY_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CHUNK_TYPES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CHUNK_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CXD_CLASSIFIER_LLM_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CXD_CLASSIFIER_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CXD_CLASSIFIER_SEMANTIC_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CXD_FAILURE_ACTIONS_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CXD_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CXD_TYPES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CXD_VECTOR_EMBEDDING_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CX_BEHAVIOR_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CX_BUILDER_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CX_CHUNKS_BUILDER_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CX_CHUNKS_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CX_DATA_BUILDER_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CX_DATA_BUILDER_PKGXX.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CX_DATA_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\CX_REGISTRY_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\DATE_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\DEBUG_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\DEPLOYMENT_MANAGER_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\DOC_EXTRACT_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\DOC_FILE_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\DOC_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\EMBEDDING_PROCESSOR_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\ENT_AI_FILE_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\LLM_ANTHROPIC_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\LLM_DEBUG_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\LLM_GEMINI_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\LLM_LOCAL_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\LLM_MODEL_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\LLM_OPENAI_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\LLM_ROUTER_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\LLM_STREAM_ADAPTER_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\LLM_TOKEN_CALC_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\LLM_TYPES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\POLICY_ENFORCER_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\POLICY_REDACTION_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\RAG_API_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\RAG_CHUNK_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\RAG_CHUNK_STATS_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\RAG_GOVERNANCE_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\RAG_PROCESSING_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\RAG_PROCESSING_PKG_LEGACY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\RAG_SEARCH_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\RAG_STRATEGY_CACHE_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\SEGMENT_MANAGER_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\STREAM_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGES\TEST_DEBUG_UTIL_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\AI_REFRESH_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\AI_SUMMARY_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\APEX_CONTEXT_HELPER_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\APP_ADMIN_SECURITY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\APP_CHUNK_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\APP_INVOKE_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\APP_SESSION_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\AUDIT_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CFG_PARAM_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CHAT_CALL_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CHAT_ENGINE_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CHAT_HISTORY_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CHAT_MANAGER_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CHAT_PROJECTS_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CHAT_SESSION_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CHUNK_EMBEDDING_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CHUNK_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CHUNK_PROCESSOR_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CHUNK_PROXY_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CHUNK_STATS_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CHUNK_STRATEGY_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CHUNK_TYPES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CHUNK_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CXD_CLASSIFIER_LLM_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CXD_CLASSIFIER_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CXD_CLASSIFIER_SEMANTIC_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CXD_FAILURE_ACTIONS_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CXD_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CXD_TYPES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CXD_VECTOR_EMBEDDING_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CX_BEHAVIOR_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CX_BUILDER_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CX_CHUNKS_BUILDER_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CX_CHUNKS_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CX_DATA_BUILDER_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CX_DATA_BUILDER_PKGXX.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CX_DATA_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\CX_REGISTRY_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\DATE_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\DEBUG_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\DEPLOYMENT_MANAGER_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\DOC_EXTRACT_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\DOC_FILE_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\DOC_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\EMBEDDING_PROCESSOR_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\ENT_AI_FILE_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\LLM_ANTHROPIC_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\LLM_DEBUG_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\LLM_GEMINI_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\LLM_LOCAL_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\LLM_MODEL_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\LLM_OPENAI_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\LLM_ROUTER_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\LLM_STREAM_ADAPTER_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\LLM_TOKEN_CALC_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\LLM_TYPES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\POLICY_REDACTION_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\RAG_API_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\RAG_CHUNK_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\RAG_CHUNK_STATS_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\RAG_GOVERNANCE_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\RAG_PROCESSING_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\RAG_PROCESSING_PKG_LEGACY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\RAG_SEARCH_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\RAG_STRATEGY_CACHE_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\SEGMENT_MANAGER_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\STREAM_UTIL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\TEST_DEBUG_UTIL_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\PACKAGE_BODIES\XXXAI_LOG_LLM_PKG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\FUNCTIONS\EMBD_LLM_TEST.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\FUNCTIONS\FIND_CONSTRAINT_SOURCE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\FUNCTIONS\FIND_TABLE_CHILDREN.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\FUNCTIONS\FIND_TABLE_PARENTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\FUNCTIONS\GET_CONTEXT_DEBUG_INFO.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\FUNCTIONS\GET_DOC_TEXT_PAGE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\FUNCTIONS\GET_IAM_TOKEN.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\FUNCTIONS\GET_WORD_STEM.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\FUNCTIONS\HIGHLIGHT_SEARCH_TERMS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\FUNCTIONS\VALIDATE_JSON.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\SYNONYMS\AI_VECTOR_UTX.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LLM_PROVIDER_MODELS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\DOC_RELATIONS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\CHAT_ISSUE_ATTACHMENTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\DEBUG_CONFIG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\CFG_PARAM_OVERRIDES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\CFG_CONTEXT_INSTRUCTIONS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\CFG_GOVERNANCE_RULES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\USER_ROLES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\AI_RATE_LIMIT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\DEPLOYMENT_AUDIT_LOG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LLM_PROVIDERS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_OUTPUT_FORMAT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_CHAT_ISSUE_PRIORITY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\HCM_EMPLOYEE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\XXXCFG_PARAM_AUDIT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\DEPLOYMENT_EXPERIMENTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_DEBUG_AUDIT_EVENT_TYPES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_DOC_STATUS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_LANGUAGE_CODE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_PARAM_SCOPE_TYPE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_TEXT_CHANGE_TYPE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\ROLES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_ERROR_SEVERITY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LOG_ARCHIVE_STORE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\APP_ADMIN_USERS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_ERROR_TYPE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_PARAM_CATEGORY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\CONTEXT_REGISTRY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\DEPLOYMENT_METRICS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\AI_MODEL_PRICING.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\SHADOW_COMPARISON_LOG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\RAG_TRACE_SUMMARY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_ROLE_CLEARANCE_LEVELS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_DOC_CATEGORY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_DEBUG_LOG_TYPES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_DEBUG_AUDIT_EVENTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_CONTEXT_DOMAIN_CATEGORIES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\APP_ENVIRONMENT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_REGISTERED_HANDLERS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_DEBUG_AUDIT_TYPES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_CHUNKING_STRATEGY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\USER_SEGMENTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_DATA_CLASSIFICATION.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\HCM_SALARY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\CHAT_FAVORITES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\CFG_REDACTION_RULES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\AI_MODEL_USAGE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\CONTEXT_REGISTRY_ROLES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\DEBUG_AUDIT_LOG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_DOC_RELATION_TYPE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\USERS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_CXD_FAILURE_ACTION_OPTIONS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_INTENT_ACTION_TYPE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_PIPELINE_STAGE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_PARAM_VALUE_TYPE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_REGISTRY_SENSITIVITY_LEVELS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_TEST_CATEGORY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\DOCS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_DEBUG_SCOPES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\RAG_DOMAIN_SOURCES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\CFG_PARAMETERS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\CHAT_CALL_REGENERATIONS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_REDACTION_APPLY_PHASE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\DOMAIN_INTENTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_DOMAIN_DETECTION_METHODS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\DOC_CHUNKS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\CONTEXT_DOMAIN_BEHAVIORS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LLM_INTENT_PROMPTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\DBTOOLS_EXECUTION_HISTORY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_CHAT_ISSUE_STATUS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_DEBUG_LEVEL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\TENANTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\DEPLOYMENT_VERSIONS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\HCM_LEAVE_BALANCE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_MIME_TYPES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_CHAT_ISSUE_LEVEL.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_SEARCH_TYPE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_CONTEXT_DOMAIN_SCOPE_TYPE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\CFG_ALERT_THRESHOLD.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\RAG_QUALITY_METRICS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\USER_SEGMENT_ASSIGNMENTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_CONTEXT_REGISTRY_SOURCE_TYPES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_ACCESS_ACTION.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\RAG_REFRESH_QUEUE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\CONTEXT_DOMAINS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\SEGMENT_USERS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\CONTEXT_DOMAIN_REGISTRY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\HCM_ASSIGNMENT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\CONTEXT_DOMAIN_INSTRUCTIONS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\DOCS_STAGING.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_CONTEXT_DOMAIN_BEHAVIORS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\CONSTRAINTS\LKP_ISSUE_TYPES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\CFG_PARAMETERS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\CFG_PARAM_OVERRIDES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\CFG_REDACTION_RULES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\CHAT_CALL_REGENERATIONS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\CHAT_ISSUE_ATTACHMENTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\CONTEXT_DOMAINS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\CONTEXT_DOMAIN_BEHAVIORS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\CONTEXT_DOMAIN_INSTRUCTIONS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\CONTEXT_DOMAIN_REGISTRY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\CONTEXT_REGISTRY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\CONTEXT_REGISTRY_ROLES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\DEBUG_AUDIT_LOG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\DEPLOYMENT_AUDIT_LOG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\DEPLOYMENT_EXPERIMENTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\DEPLOYMENT_METRICS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\DEPLOYMENT_VERSIONS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\DOCS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\DOCS_STAGING.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\DOC_CHUNKS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\DOC_RELATIONS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\DOMAIN_INTENTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\HCM_ASSIGNMENT.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\HCM_LEAVE_BALANCE.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\HCM_SALARY.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\LKP_DEBUG_AUDIT_EVENTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\LLM_INTENT_PROMPTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\LLM_PROVIDERS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\LLM_PROVIDER_MODELS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\RAG_DOMAIN_SOURCES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\ROLES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\SEGMENT_USERS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\SHADOW_COMPARISON_LOG.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\USER_ROLES.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\USER_SEGMENT_ASSIGNMENTS.sql
+@D:\GitHub\Github-formal\oracle-apex-ai-assistant\Database\schema\20260109000001\REF_CONSTRAINTS\XXXCFG_PARAM_AUDIT.sql

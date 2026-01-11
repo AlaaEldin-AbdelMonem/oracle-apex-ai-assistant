@@ -3,7 +3,7 @@
 --------------------------------------------------------
 set define off;
 
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "AI8P"."SEARCH_DB_CODE" (
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "SEARCH_DB_CODE" (
     p_search_string IN VARCHAR2
 )
 IS

@@ -3,7 +3,7 @@
 --------------------------------------------------------
 set define off;
 
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "AI8P"."DROP_IDENTITY_AND_ADD_SEQUENCE" (
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "DROP_IDENTITY_AND_ADD_SEQUENCE" (
     p_table_name IN VARCHAR2
 )
 AS

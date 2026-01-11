@@ -2,7 +2,7 @@
 --  DDL for Package CX_DATA_BUILDER_PKGXX
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."CX_DATA_BUILDER_PKGXX" 
+  CREATE OR REPLACE EDITIONABLE PACKAGE "CX_DATA_BUILDER_PKGXX" 
 AUTHID CURRENT_USER AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System

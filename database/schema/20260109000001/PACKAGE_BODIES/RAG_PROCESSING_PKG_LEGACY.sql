@@ -2,7 +2,7 @@
 --  DDL for Package Body RAG_PROCESSING_PKG_LEGACY
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."RAG_PROCESSING_PKG_LEGACY" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "RAG_PROCESSING_PKG_LEGACY" AS
     /***************************************************************************
      * process_document
      * -------------------------------------------------------------------------

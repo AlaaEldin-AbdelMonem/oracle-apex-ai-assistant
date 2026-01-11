@@ -2,7 +2,7 @@
 --  DDL for Table CFG_GOVERNANCE_RULES
 --------------------------------------------------------
 
-  CREATE TABLE "AI8P"."CFG_GOVERNANCE_RULES" 
+  CREATE TABLE "CFG_GOVERNANCE_RULES" 
    (	"RULE_ID" NUMBER GENERATED ALWAYS AS IDENTITY MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE , 
 	"RULE_CODE" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP", 
 	"RULE_NAME" VARCHAR2(100 BYTE) COLLATE "USING_NLS_COMP", 
@@ -27,5 +27,5 @@
   PCTINCREASE 0
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)) ;
 
-   COMMENT ON COLUMN "AI8P"."CFG_GOVERNANCE_RULES"."APPLIES_TO_MODES" IS 'Comma-separated mode codes this rule applies to (NULL = all modes)';
-   COMMENT ON TABLE "AI8P"."CFG_GOVERNANCE_RULES"  IS 'Enterprise governance, safety, compliance, and ethical rules for AI behavior';
+   COMMENT ON COLUMN "CFG_GOVERNANCE_RULES"."APPLIES_TO_MODES" IS 'Comma-separated mode codes this rule applies to (NULL = all modes)';
+   COMMENT ON TABLE "CFG_GOVERNANCE_RULES"  IS 'Enterprise governance, safety, compliance, and ethical rules for AI behavior';

@@ -3,7 +3,7 @@
 --------------------------------------------------------
 set define off;
 
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "AI8P"."COMPILE_ALL" 
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "COMPILE_ALL" 
 as
 /*******************************************************************************
  *  

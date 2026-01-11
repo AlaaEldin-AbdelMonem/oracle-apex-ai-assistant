@@ -2,7 +2,7 @@
 --  DDL for Package Body DEBUG_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."DEBUG_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "DEBUG_UTIL" AS
 
     /***************************************************************************
      * PRIVATE PACKAGE STATE VARIABLES

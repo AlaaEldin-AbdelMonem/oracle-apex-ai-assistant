@@ -2,7 +2,7 @@
 --  DDL for Table LKP_OUTPUT_FORMAT
 --------------------------------------------------------
 
-  CREATE TABLE "AI8P"."LKP_OUTPUT_FORMAT" 
+  CREATE TABLE "LKP_OUTPUT_FORMAT" 
    (	"FORMAT_CODE" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP", 
 	"FORMAT_NAME" VARCHAR2(100 BYTE) COLLATE "USING_NLS_COMP", 
 	"FORMAT_DESCRIPTION" VARCHAR2(1000 BYTE) COLLATE "USING_NLS_COMP", 
@@ -32,6 +32,6 @@
   PCTINCREASE 0
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)) ;
 
-   COMMENT ON COLUMN "AI8P"."LKP_OUTPUT_FORMAT"."INSTRUCTION_TEXT" IS 'Instructions for LLM on how to structure the output';
-   COMMENT ON COLUMN "AI8P"."LKP_OUTPUT_FORMAT"."EXAMPLE_OUTPUT" IS 'Sample output demonstrating the format (optional)';
-   COMMENT ON TABLE "AI8P"."LKP_OUTPUT_FORMAT"  IS 'Defines structured output formats for AI responses (JSON, Table, Summary, etc.)';
+   COMMENT ON COLUMN "LKP_OUTPUT_FORMAT"."INSTRUCTION_TEXT" IS 'Instructions for LLM on how to structure the output';
+   COMMENT ON COLUMN "LKP_OUTPUT_FORMAT"."EXAMPLE_OUTPUT" IS 'Sample output demonstrating the format (optional)';
+   COMMENT ON TABLE "LKP_OUTPUT_FORMAT"  IS 'Defines structured output formats for AI responses (JSON, Table, Summary, etc.)';

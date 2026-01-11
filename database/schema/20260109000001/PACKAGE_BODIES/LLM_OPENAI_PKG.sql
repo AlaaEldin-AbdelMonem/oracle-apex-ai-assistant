@@ -2,7 +2,7 @@
 --  DDL for Package Body LLM_OPENAI_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."LLM_OPENAI_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "LLM_OPENAI_PKG" AS
 
 /*=============================================================================
   OpenAI Provider Adapter (Unified Request/Response Version)

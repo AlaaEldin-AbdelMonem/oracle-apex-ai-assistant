@@ -2,7 +2,7 @@
 --  DDL for Function EMBD_LLM_TEST
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE FUNCTION "AI8P"."EMBD_LLM_TEST" (p_txt varchar2 default 'Hello!') return varchar2
+  CREATE OR REPLACE EDITIONABLE FUNCTION "EMBD_LLM_TEST" (p_txt varchar2 default 'Hello!') return varchar2
 IS
 /*******************************************************************************
  *  

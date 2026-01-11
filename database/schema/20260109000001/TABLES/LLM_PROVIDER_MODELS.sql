@@ -1,9 +1,10 @@
 --------------------------------------------------------
 --  DDL for Table LLM_PROVIDER_MODELS
 --------------------------------------------------------
-
-  CREATE TABLE "AI8P"."LLM_PROVIDER_MODELS" 
-   (	"PROVIDER_MODEL_ID" NUMBER DEFAULT "AI8P"."CFG_MODEL_ENDPOINTS_SEQ"."NEXTVAL", 
+  CREATE sequence CFG_MODEL_ENDPOINTS_SEQ;
+  
+  CREATE TABLE "LLM_PROVIDER_MODELS" 
+   (	"PROVIDER_MODEL_ID" NUMBER DEFAULT "CFG_MODEL_ENDPOINTS_SEQ"."NEXTVAL", 
 	"MODEL_NAME" VARCHAR2(200 BYTE) COLLATE "USING_NLS_COMP", 
 	"MODEL_CODE" VARCHAR2(200 BYTE) COLLATE "USING_NLS_COMP", 
 	"PROVIDER_CODE" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP", 
@@ -70,9 +71,9 @@
   PCTINCREASE 0
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)) ;
 
-   COMMENT ON COLUMN "AI8P"."LLM_PROVIDER_MODELS"."MODEL_NAME" IS 'User-friendly name shown in APEX LOV (must be unique)';
-   COMMENT ON COLUMN "AI8P"."LLM_PROVIDER_MODELS"."MODEL_CODE" IS 'EXACT model identifier used in API calls (e.g., gpt-4o-mini, claude-sonnet-4-20250514)';
-   COMMENT ON COLUMN "AI8P"."LLM_PROVIDER_MODELS"."PROVIDER_CODE" IS 'Provider identifier for routing: OPENAI, ANTHROPIC, GOOGLE, HUGGINGFACE, LOCAL';
-   COMMENT ON COLUMN "AI8P"."LLM_PROVIDER_MODELS"."CONTEXT_WINDOW_TOKENS" IS 'Maximum total tokens including input + output for this model';
-   COMMENT ON COLUMN "AI8P"."LLM_PROVIDER_MODELS"."COST_PER_1K_INPUT_TOKENS" IS 'Cost in USD per 1000 input tokens for budget tracking';
-   COMMENT ON TABLE "AI8P"."LLM_PROVIDER_MODELS"  IS 'Multi-provider LLM endpoint configuration supporting OpenAI, Claude, Gemini, HuggingFace, and local models';
+   COMMENT ON COLUMN "LLM_PROVIDER_MODELS"."MODEL_NAME" IS 'User-friendly name shown in APEX LOV (must be unique)';
+   COMMENT ON COLUMN "LLM_PROVIDER_MODELS"."MODEL_CODE" IS 'EXACT model identifier used in API calls (e.g., gpt-4o-mini, claude-sonnet-4-20250514)';
+   COMMENT ON COLUMN "LLM_PROVIDER_MODELS"."PROVIDER_CODE" IS 'Provider identifier for routing: OPENAI, ANTHROPIC, GOOGLE, HUGGINGFACE, LOCAL';
+   COMMENT ON COLUMN "LLM_PROVIDER_MODELS"."CONTEXT_WINDOW_TOKENS" IS 'Maximum total tokens including input + output for this model';
+   COMMENT ON COLUMN "LLM_PROVIDER_MODELS"."COST_PER_1K_INPUT_TOKENS" IS 'Cost in USD per 1000 input tokens for budget tracking';
+   COMMENT ON TABLE "LLM_PROVIDER_MODELS"  IS 'Multi-provider LLM endpoint configuration supporting OpenAI, Claude, Gemini, HuggingFace, and local models';

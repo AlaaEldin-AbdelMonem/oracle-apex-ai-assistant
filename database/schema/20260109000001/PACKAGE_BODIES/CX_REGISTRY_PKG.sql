@@ -2,7 +2,7 @@
 --  DDL for Package Body CX_REGISTRY_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."CX_REGISTRY_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "CX_REGISTRY_PKG" AS
 /*******************************************************************************
  *  
  *******************************************************************************/

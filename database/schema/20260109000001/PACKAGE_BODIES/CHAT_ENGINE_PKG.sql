@@ -2,7 +2,7 @@
 --  DDL for Package Body CHAT_ENGINE_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."CHAT_ENGINE_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "CHAT_ENGINE_PKG" AS
 
  
 c_trace_prefix  CONSTANT VARCHAR2(20) := 'TRACE-';

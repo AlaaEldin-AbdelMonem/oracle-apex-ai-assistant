@@ -2,7 +2,7 @@
 --  DDL for Package Body AUDIT_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."AUDIT_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AUDIT_UTIL" AS
 
     /***************************************************************************
      * PRIVATE INTERNAL LOGGING (AUTONOMOUS)

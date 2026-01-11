@@ -2,7 +2,7 @@
 --  DDL for Package RAG_SEARCH_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."RAG_SEARCH_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "RAG_SEARCH_UTIL" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      RAG_SEARCH_UTIL (Specification)

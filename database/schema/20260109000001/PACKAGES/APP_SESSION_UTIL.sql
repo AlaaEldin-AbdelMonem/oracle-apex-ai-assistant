@@ -2,7 +2,7 @@
 --  DDL for Package APP_SESSION_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."APP_SESSION_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "APP_SESSION_UTIL" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      APP_SESSION_UTIL (Specification)

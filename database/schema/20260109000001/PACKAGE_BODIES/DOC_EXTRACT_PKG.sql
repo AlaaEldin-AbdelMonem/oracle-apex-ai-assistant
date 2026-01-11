@@ -2,7 +2,7 @@
 --  DDL for Package Body DOC_EXTRACT_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."DOC_EXTRACT_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "DOC_EXTRACT_PKG" AS
 
     FUNCTION extract_text(p_blob BLOB) RETURN CLOB IS
     

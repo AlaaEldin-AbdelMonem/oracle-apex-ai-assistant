@@ -2,7 +2,7 @@
 --  DDL for Package RAG_PROCESSING_PKG_LEGACY
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."RAG_PROCESSING_PKG_LEGACY" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "RAG_PROCESSING_PKG_LEGACY" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      RAG_PROCESSING_PKG_LEGACY (Specification)

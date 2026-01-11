@@ -2,7 +2,7 @@
 --  DDL for Package Body CXD_CLASSIFIER_SEMANTIC_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."CXD_CLASSIFIER_SEMANTIC_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "CXD_CLASSIFIER_SEMANTIC_PKG" AS
  
   
 /*******************************************************************************

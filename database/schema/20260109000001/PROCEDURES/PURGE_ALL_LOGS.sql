@@ -3,7 +3,7 @@
 --------------------------------------------------------
 set define off;
 
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "AI8P"."PURGE_ALL_LOGS" (
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "PURGE_ALL_LOGS" (
     p_owner IN VARCHAR2 DEFAULT USER
 )
 IS

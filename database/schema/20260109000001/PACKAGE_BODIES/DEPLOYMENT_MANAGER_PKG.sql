@@ -2,7 +2,7 @@
 --  DDL for Package Body DEPLOYMENT_MANAGER_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."DEPLOYMENT_MANAGER_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "DEPLOYMENT_MANAGER_PKG" AS
 
 /*******************************************************************************
  *  

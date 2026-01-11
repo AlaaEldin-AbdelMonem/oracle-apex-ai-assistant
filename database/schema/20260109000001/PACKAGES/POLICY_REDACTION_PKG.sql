@@ -2,7 +2,7 @@
 --  DDL for Package POLICY_REDACTION_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."POLICY_REDACTION_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "POLICY_REDACTION_PKG" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      POLICY_REDACTION_PKG (Specification)

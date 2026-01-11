@@ -2,7 +2,7 @@
 --  DDL for Package Body CX_CHUNKS_BUILDER_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."CX_CHUNKS_BUILDER_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "CX_CHUNKS_BUILDER_PKG" AS
 /*******************************************************************************
  *  
  *******************************************************************************/

@@ -2,7 +2,7 @@
 --  DDL for Package CHUNK_PROXY_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."CHUNK_PROXY_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "CHUNK_PROXY_UTIL" AS
 /**
  * PROJECT:     Enterprise AI Assistant
  * MODULE:      CHUNK_PROXY_UTIL (Specification)

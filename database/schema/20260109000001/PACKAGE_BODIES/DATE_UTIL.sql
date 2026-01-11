@@ -2,7 +2,7 @@
 --  DDL for Package Body DATE_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."DATE_UTIL" IS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "DATE_UTIL" IS
 
   ------------------------------------------------------------------------------
   -- Duration Conversions

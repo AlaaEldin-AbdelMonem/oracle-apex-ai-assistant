@@ -2,7 +2,7 @@
 --  DDL for Package AUDIT_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."AUDIT_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "AUDIT_UTIL" AS
 /*****************************************************************************
  * PROJECT:      Oracle AI ChatPot - Enterprise RAG System
  * MODULE:       AUDIT_UTIL (Specification)

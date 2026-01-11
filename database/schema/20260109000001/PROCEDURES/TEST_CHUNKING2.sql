@@ -3,7 +3,7 @@
 --------------------------------------------------------
 set define off;
 
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "AI8P"."TEST_CHUNKING2" (doc_id number default 2) AS
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "TEST_CHUNKING2" (doc_id number default 2) AS
     v_text    CLOB;
     v_chunks  chunk_types.t_chunk_tab;
 BEGIN

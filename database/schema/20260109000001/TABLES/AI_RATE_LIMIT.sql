@@ -2,7 +2,7 @@
 --  DDL for Table AI_RATE_LIMIT
 --------------------------------------------------------
 
-  CREATE TABLE "AI8P"."AI_RATE_LIMIT" 
+  CREATE TABLE "AI_RATE_LIMIT" 
    (	"USER_ID" VARCHAR2(255 BYTE) COLLATE "USING_NLS_COMP", 
 	"REQUEST_HOUR" TIMESTAMP (0), 
 	"REQUEST_COUNT" NUMBER

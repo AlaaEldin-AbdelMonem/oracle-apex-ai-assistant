@@ -2,7 +2,7 @@
 --  DDL for Package Body RAG_GOVERNANCE_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."RAG_GOVERNANCE_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "RAG_GOVERNANCE_PKG" AS
 
     PROCEDURE enforce_access(
         p_user_id       IN NUMBER,

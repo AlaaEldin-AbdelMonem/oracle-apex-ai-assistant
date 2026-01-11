@@ -2,7 +2,7 @@
 --  DDL for Package APP_INVOKE_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."APP_INVOKE_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "APP_INVOKE_PKG" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      APP_INVOKE_PKG (Specification)

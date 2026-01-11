@@ -2,7 +2,7 @@
 --  DDL for Table LKP_DEBUG_LEVEL
 --------------------------------------------------------
 
-  CREATE TABLE "AI8P"."LKP_DEBUG_LEVEL" 
+  CREATE TABLE "LKP_DEBUG_LEVEL" 
    (	"DEBUG_LEVEL_ID" NUMBER, 
 	"DEBUG_LEVEL" NUMBER, 
 	"LEVEL_CODE" VARCHAR2(15 CHAR) COLLATE "USING_NLS_COMP", 

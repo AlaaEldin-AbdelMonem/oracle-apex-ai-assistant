@@ -2,7 +2,7 @@
 --  DDL for Package Body APP_INVOKE_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."APP_INVOKE_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "APP_INVOKE_PKG" AS
 
 FUNCTION is_valid_user_prompt(p_prompt CLOB) RETURN BOOLEAN IS
    vcaller constant varchar2(70):= c_package_name ||'.is_valid_user_prompt'; 

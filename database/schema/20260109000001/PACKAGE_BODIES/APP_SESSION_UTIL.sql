@@ -2,7 +2,7 @@
 --  DDL for Package Body APP_SESSION_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."APP_SESSION_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "APP_SESSION_UTIL" AS
  
   ---===============
   FUNCTION GET_AUTH_ERROR_MESSAGE(

@@ -2,7 +2,7 @@
 --  DDL for Package Body LLM_STREAM_ADAPTER_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."LLM_STREAM_ADAPTER_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "LLM_STREAM_ADAPTER_UTIL" AS
  /*******************************************************************************
  *  
  *******************************************************************************/

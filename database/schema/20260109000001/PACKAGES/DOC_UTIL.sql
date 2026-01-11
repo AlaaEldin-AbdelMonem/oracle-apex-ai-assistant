@@ -2,7 +2,7 @@
 --  DDL for Package DOC_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."DOC_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "DOC_UTIL" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      DOC_UTIL (Specification)

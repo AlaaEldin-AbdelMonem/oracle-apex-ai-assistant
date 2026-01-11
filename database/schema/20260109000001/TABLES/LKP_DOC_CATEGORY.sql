@@ -2,7 +2,7 @@
 --  DDL for Table LKP_DOC_CATEGORY
 --------------------------------------------------------
 
-  CREATE TABLE "AI8P"."LKP_DOC_CATEGORY" 
+  CREATE TABLE "LKP_DOC_CATEGORY" 
    (	"CATEGORY_CODE" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP", 
 	"CATEGORY_NAME" VARCHAR2(200 BYTE) COLLATE "USING_NLS_COMP", 
 	"IS_ACTIVE" CHAR(1 BYTE) COLLATE "USING_NLS_COMP" DEFAULT 'Y', 
@@ -14,6 +14,6 @@
   PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT);
 
-   COMMENT ON COLUMN "AI8P"."LKP_DOC_CATEGORY"."CATEGORY_CODE" IS 'Unique short code for the document category (e.g., HR, FIN).';
-   COMMENT ON COLUMN "AI8P"."LKP_DOC_CATEGORY"."CATEGORY_NAME" IS 'Descriptive name of the category.';
-   COMMENT ON TABLE "AI8P"."LKP_DOC_CATEGORY"  IS 'Lookup table listing standard enterprise document categories.';
+   COMMENT ON COLUMN "LKP_DOC_CATEGORY"."CATEGORY_CODE" IS 'Unique short code for the document category (e.g., HR, FIN).';
+   COMMENT ON COLUMN "LKP_DOC_CATEGORY"."CATEGORY_NAME" IS 'Descriptive name of the category.';
+   COMMENT ON TABLE "LKP_DOC_CATEGORY"  IS 'Lookup table listing standard enterprise document categories.';

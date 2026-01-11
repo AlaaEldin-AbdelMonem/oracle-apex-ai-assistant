@@ -2,7 +2,7 @@
 --  DDL for Package Body POLICY_REDACTION_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."POLICY_REDACTION_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "POLICY_REDACTION_PKG" AS
 /*******************************************************************************
  *  
  *******************************************************************************/

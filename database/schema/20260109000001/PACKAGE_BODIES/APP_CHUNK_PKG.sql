@@ -2,7 +2,7 @@
 --  DDL for Package Body APP_CHUNK_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."APP_CHUNK_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "APP_CHUNK_PKG" AS
  
     /*----------------------------------------- 
      * Function: validate_document_for_chunking

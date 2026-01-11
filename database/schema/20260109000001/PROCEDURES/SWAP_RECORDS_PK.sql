@@ -3,7 +3,7 @@
 --------------------------------------------------------
 set define off;
 
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "AI8P"."SWAP_RECORDS_PK" (
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "SWAP_RECORDS_PK" (
     p_table_name  IN VARCHAR2,
     p_pk_column   IN VARCHAR2,
     p_id_one      IN NUMBER,

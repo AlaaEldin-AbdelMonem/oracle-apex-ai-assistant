@@ -3,7 +3,7 @@
 --------------------------------------------------------
 set define off;
 
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "AI8P"."CREATE_APEX_SESSION" 
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "CREATE_APEX_SESSION" 
 as
 /*******************************************************************************
  *  

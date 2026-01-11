@@ -1,0 +1,225 @@
+  CREATE TABLE CHAT_CALLS 
+   (	CALL_ID NUMBER DEFAULT CHAT_CALL_SEQ.NEXTVAL, 
+	CHAT_SESSION_ID NUMBER NOT NULL ENABLE, 
+	CALL_SEQ NUMBER DEFAULT CHAT_CALL_SEQ.NEXTVAL NOT NULL ENABLE, 
+	PROVIDER VARCHAR2(50), 
+	MODEL VARCHAR2(100), 
+	USER_PROMPT CLOB, 
+	SYSTEM_INSTRUCTIONS CLOB, 
+	CONVERSATION_HISTORY CLOB, 
+	RAG_CONTEXT CLOB, 
+	RESPONSE_SCHEMA CLOB, 
+	GOVERNANCE_DETAILS CLOB, 
+	FINAL_SYSTEM_PROMPT CLOB, 
+	FINAL_USER_PROMPT CLOB, 
+	FINAL_LLM_PROMPT CLOB, 
+	TOOL_CALLS_JSON CLOB, 
+	PARSED_STRUCT_OUTPUT CLOB, 
+	RESPONSE_FORMAT VARCHAR2(50), 
+	CONTEXT_DOMAIN_ID NUMBER, 
+	CONTEXT_CONFIDENCE NUMBER, 
+	CONTEXT_METHOD VARCHAR2(50), 
+	INTENT_ID NUMBER, 
+	INTENT_CONFIDENCE NUMBER, 
+	INTENT_METHOD VARCHAR2(50), 
+	IS_DOC_INJECT_REQUIRED CHAR(1), 
+	IS_DATA_INJECT_REQUIRED CHAR(1), 
+	RAG_ENABLED CHAR(1), 
+	RAG_MAX_CHUNKS NUMBER, 
+	RAG_FILTER_MODE VARCHAR2(30), 
+	GOVERNANCE_ENABLED CHAR(1), 
+	TEMPERATURE NUMBER, 
+	MAX_TOKENS NUMBER, 
+	TOP_P NUMBER, 
+	TOP_K NUMBER, 
+	SEED NUMBER, 
+	STOP_SEQ VARCHAR2(4000), 
+	FREQUENCY_PENALTY NUMBER, 
+	PRESENCE_PENALTY NUMBER, 
+	MESSAGE_ID NUMBER, 
+	PREFERRED_PROVIDER VARCHAR2(50), 
+	PREFERRED_MODEL VARCHAR2(100), 
+	ALLOW_FALLBACK CHAR(1), 
+	STREAM_ENABLED CHAR(1), 
+	STREAM_CHANNEL VARCHAR2(30), 
+	TRACE_ID VARCHAR2(200), 
+	TRACE_PARENT_ID VARCHAR2(200), 
+	TRACE_STEP VARCHAR2(100), 
+	TRACE_MSG VARCHAR2(4000), 
+	REQUEST_PAYLOAD CLOB, 
+	SUBMITTED_USER_PROMPT CLOB, 
+	RAW_RESPONSE CLOB, 
+	RESPONSE_TEXT CLOB, 
+	PROCESSING_STATUS VARCHAR2(100), 
+	SUCCESS CHAR(1), 
+	RESPONSE_MSG VARCHAR2(4000), 
+	RAG_CONTEXT_DOC_COUNT NUMBER, 
+	RAG_SOURCES_JSON CLOB, 
+	PROVIDER_FINAL VARCHAR2(50), 
+	MODEL_FINAL VARCHAR2(100), 
+	FALLBACK_USED CHAR(1), 
+	TOKENS_INPUT NUMBER, 
+	TOKENS_OUTPUT NUMBER, 
+	TOKENS_TOTAL NUMBER, 
+	COST_USD NUMBER, 
+	IS_BLOCKED CHAR(1), 
+	SAFETY_FILTER_APPLIED CHAR(1), 
+	SAFETY_BLOCK_REASON VARCHAR2(4000), 
+	SAFETY_RATINGS_JSON CLOB, 
+	IS_REFUSAL CHAR(1), 
+	REFUSAL_TEXT CLOB, 
+	REFUSAL_RAW CLOB, 
+	FINISH_REASON VARCHAR2(100), 
+	STOP_REASON VARCHAR2(100), 
+	STOP_SEQ_FINAL VARCHAR2(4000), 
+	IS_TRUNCATED CHAR(1), 
+	RAG_MS NUMBER, 
+	GOVERNANCE_MS NUMBER, 
+	PROMPT_BUILD_MS NUMBER, 
+	CLIENT_LLM_CALL_MS NUMBER, 
+	TOTAL_PIPELINE_MS NUMBER, 
+	GOVERNANCE_ACTION VARCHAR2(200), 
+	REQUEST_ID VARCHAR2(100), 
+	SYSTEM_FINGERPRINT VARCHAR2(200), 
+	PROVIDER_CREATED_TS NUMBER, 
+	PROVIDER_PROCESSING_MS NUMBER, 
+	RESPONSE_PAYLOAD CLOB, 
+	SOURCE_CHANNEL VARCHAR2(30), 
+	DB_CREATED_AT TIMESTAMP (6) DEFAULT SYSTIMESTAMP, 
+	UPDATED_AT TIMESTAMP (6), 
+	IS_DELETED CHAR(1) DEFAULT 'N', 
+	DELETED_AT TIMESTAMP (6), 
+	MESSAGE_ROLE VARCHAR2(35), 
+	USER_RATING VARCHAR2(20), 
+	USER_RATING_COMMENT VARCHAR2(4000), 
+	USER_RATING_TS TIMESTAMP (6), 
+	DEPLOYMENT_ID NUMBER, 
+	SEGMENT_ID NUMBER, 
+	EXPERIMENT_ID NUMBER, 
+	IS_SHADOW_CALL CHAR(1) DEFAULT 'N', 
+	SHADOW_PARENT_CALL_ID NUMBER, 
+	SHADOW_COMPARISON_JSON JSON, 
+	VARIANT_LABEL VARCHAR2(10), 
+	 PRIMARY KEY (CALL_ID)
+  USING INDEX  ENABLE, 
+	 CONSTRAINT UK_CHAT_CALL_SESSION_SEQ UNIQUE (CHAT_SESSION_ID, CALL_SEQ)
+  USING INDEX  ENABLE, 
+	 CONSTRAINT CHK_CHAT_CALL_RATING CHECK (USER_RATING IN ('LIKE','DISLIKE','NEUTRAL','EXCELLENT')) ENABLE, 
+	 CONSTRAINT CHK_CHAT_SHADOW CHECK (is_shadow_call IN ('Y', 'N')) ENABLE
+   ) ;
+
+  ALTER TABLE CHAT_CALLS ADD CONSTRAINT FK_CHAT_CALLS_SESSION FOREIGN KEY (CHAT_SESSION_ID)
+	  REFERENCES CHAT_SESSIONS (SESSION_ID) ON DELETE CASCADE ENABLE;
+  ALTER TABLE CHAT_CALLS ADD CONSTRAINT FK_CHAT_CALLS_DEPLOY FOREIGN KEY (DEPLOYMENT_ID)
+	  REFERENCES DEPLOYMENT_VERSIONS (DEPLOYMENT_ID) ENABLE;
+  ALTER TABLE CHAT_CALLS ADD CONSTRAINT FK_CHAT_CALLS_EXP FOREIGN KEY (EXPERIMENT_ID)
+	  REFERENCES DEPLOYMENT_EXPERIMENTS (EXPERIMENT_ID) ENABLE;
+  ALTER TABLE CHAT_CALLS ADD CONSTRAINT FK_CHAT_CALLS_SHADOW FOREIGN KEY (SHADOW_PARENT_CALL_ID)
+	  REFERENCES CHAT_CALLS (CALL_ID) ENABLE;
+
+  CREATE INDEX IDX_CHAT_CALLS_DEPLOY ON CHAT_CALLS (DEPLOYMENT_ID, IS_SHADOW_CALL, DB_CREATED_AT) 
+  ;
+
+  CREATE INDEX IDX_CHAT_CALLS_EXP ON CHAT_CALLS (EXPERIMENT_ID, DB_CREATED_AT) 
+  ;
+
+  CREATE INDEX IDX_CHAT_CALLS_SEGMENT ON CHAT_CALLS (SEGMENT_ID, DB_CREATED_AT) 
+  ;
+
+   COMMENT ON COLUMN CHAT_CALLS.CALL_ID IS 'Internal unique identifier for the LLM call.';
+   COMMENT ON COLUMN CHAT_CALLS.CHAT_SESSION_ID IS 'Reference to CHAT_SESSIONS table for grouping calls into user conversations.';
+   COMMENT ON COLUMN CHAT_CALLS.CALL_SEQ IS 'Sequential call number inside the same session.';
+   COMMENT ON COLUMN CHAT_CALLS.PROVIDER IS 'Requested LLM provider (e.g., OPENAI, ANTHROPIC, GOOGLE, LOCAL).';
+   COMMENT ON COLUMN CHAT_CALLS.MODEL IS 'Requested model name (e.g., gpt-4o, claude-sonnet, gemini-pro).';
+   COMMENT ON COLUMN CHAT_CALLS.USER_PROMPT IS 'Original natural-language prompt entered by the user.';
+   COMMENT ON COLUMN CHAT_CALLS.SYSTEM_INSTRUCTIONS IS 'System-level instructions injected into the prompt (persona, guardrails).';
+   COMMENT ON COLUMN CHAT_CALLS.CONVERSATION_HISTORY IS 'Conversation history snapshot included when calling the LLM.';
+   COMMENT ON COLUMN CHAT_CALLS.RAG_CONTEXT IS 'Retrieved RAG document chunks injected into the LLM request.';
+   COMMENT ON COLUMN CHAT_CALLS.RESPONSE_SCHEMA IS 'Output schema used when structured JSON output is requested.';
+   COMMENT ON COLUMN CHAT_CALLS.GOVERNANCE_DETAILS IS 'Detailed governance actions applied (redaction, masking, restriction).';
+   COMMENT ON COLUMN CHAT_CALLS.FINAL_SYSTEM_PROMPT IS 'Final computed system prompt after all preprocessing steps.';
+   COMMENT ON COLUMN CHAT_CALLS.FINAL_USER_PROMPT IS 'Final user prompt after paraphrasing, rewriting, or augmentation.';
+   COMMENT ON COLUMN CHAT_CALLS.FINAL_LLM_PROMPT IS 'Fully assembled prompt sent to the LLM including system, user, RAG, and safety layers.';
+   COMMENT ON COLUMN CHAT_CALLS.TOOL_CALLS_JSON IS 'JSON describing tool/function calls detected or invoked by the LLM.';
+   COMMENT ON COLUMN CHAT_CALLS.PARSED_STRUCT_OUTPUT IS 'Post-processed structured output decoded from model JSON or tool responses.';
+   COMMENT ON COLUMN CHAT_CALLS.RESPONSE_FORMAT IS 'Requested format: TEXT, JSON, JSON_SCHEMA.';
+   COMMENT ON COLUMN CHAT_CALLS.CONTEXT_DOMAIN_ID IS 'Detected or selected business domain ID for RAG and policy enforcement.';
+   COMMENT ON COLUMN CHAT_CALLS.CONTEXT_CONFIDENCE IS 'Confidence score of domain classification.';
+   COMMENT ON COLUMN CHAT_CALLS.CONTEXT_METHOD IS 'Technique used for domain detection (LLM, SEMANTIC, HYBRID).';
+   COMMENT ON COLUMN CHAT_CALLS.INTENT_ID IS 'Detected user intent identifier.';
+   COMMENT ON COLUMN CHAT_CALLS.INTENT_CONFIDENCE IS 'Confidence score of intent detection.';
+   COMMENT ON COLUMN CHAT_CALLS.INTENT_METHOD IS 'Method used for intent classification (LLM, classifier model, rules).';
+   COMMENT ON COLUMN CHAT_CALLS.IS_DOC_INJECT_REQUIRED IS 'Flag indicating whether document-based RAG grounding is required.';
+   COMMENT ON COLUMN CHAT_CALLS.IS_DATA_INJECT_REQUIRED IS 'Flag indicating whether SQL/data-based grounding is required.';
+   COMMENT ON COLUMN CHAT_CALLS.RAG_ENABLED IS 'Indicates whether retrieval-augmented generation was enabled.';
+   COMMENT ON COLUMN CHAT_CALLS.RAG_MAX_CHUNKS IS 'Max number of RAG chunks allowed for injection.';
+   COMMENT ON COLUMN CHAT_CALLS.RAG_FILTER_MODE IS 'RAG filter strategy: STRICT, LOOSE, NONE.';
+   COMMENT ON COLUMN CHAT_CALLS.GOVERNANCE_ENABLED IS 'Y/N flag controlling whether data governance policies apply.';
+   COMMENT ON COLUMN CHAT_CALLS.TEMPERATURE IS 'Model sampling temperature for randomness.';
+   COMMENT ON COLUMN CHAT_CALLS.MAX_TOKENS IS 'Maximum tokens allowed in LLM response.';
+   COMMENT ON COLUMN CHAT_CALLS.TOP_P IS 'Nucleus sampling parameter.';
+   COMMENT ON COLUMN CHAT_CALLS.TOP_K IS 'Top-K sampling parameter.';
+   COMMENT ON COLUMN CHAT_CALLS.SEED IS 'Seed for deterministic generation.';
+   COMMENT ON COLUMN CHAT_CALLS.STOP_SEQ IS 'Stop sequences passed to the model.';
+   COMMENT ON COLUMN CHAT_CALLS.FREQUENCY_PENALTY IS 'Penalty for repeated phrases.';
+   COMMENT ON COLUMN CHAT_CALLS.PRESENCE_PENALTY IS 'Penalty for repeating concepts.';
+   COMMENT ON COLUMN CHAT_CALLS.MESSAGE_ID IS 'Internal assistant message ID for correlating UI and database.';
+   COMMENT ON COLUMN CHAT_CALLS.PREFERRED_PROVIDER IS 'User or system preferred LLM provider.';
+   COMMENT ON COLUMN CHAT_CALLS.PREFERRED_MODEL IS 'User or system preferred LLM model.';
+   COMMENT ON COLUMN CHAT_CALLS.ALLOW_FALLBACK IS 'Y/N: Allow falling back to alternative LLM providers/models.';
+   COMMENT ON COLUMN CHAT_CALLS.STREAM_ENABLED IS 'Y/N flag indicating whether live streaming was enabled.';
+   COMMENT ON COLUMN CHAT_CALLS.STREAM_CHANNEL IS 'Streaming mechanism: BACKEND, ORDS, APEX, DBMS_OUTPUT.';
+   COMMENT ON COLUMN CHAT_CALLS.TRACE_ID IS 'Unique trace ID for observability.';
+   COMMENT ON COLUMN CHAT_CALLS.TRACE_PARENT_ID IS 'Parent trace ID for linking multi-step processes.';
+   COMMENT ON COLUMN CHAT_CALLS.TRACE_STEP IS 'Current processing step label.';
+   COMMENT ON COLUMN CHAT_CALLS.TRACE_MSG IS 'Debug or trace message for diagnostics.';
+   COMMENT ON COLUMN CHAT_CALLS.REQUEST_PAYLOAD IS 'Raw JSON payload with provider-specific request parameters.';
+   COMMENT ON COLUMN CHAT_CALLS.SUBMITTED_USER_PROMPT IS 'User prompt as submitted to the model before transformations.';
+   COMMENT ON COLUMN CHAT_CALLS.RAW_RESPONSE IS 'Raw provider model response before cleanup or formatting.';
+   COMMENT ON COLUMN CHAT_CALLS.RESPONSE_TEXT IS 'Final processed response presented to the user.';
+   COMMENT ON COLUMN CHAT_CALLS.PROCESSING_STATUS IS 'Status of processing: SUCCESS, BLOCKED, ERROR, PARTIAL.';
+   COMMENT ON COLUMN CHAT_CALLS.SUCCESS IS 'Y/N flag indicating whether the model produced a valid answer.';
+   COMMENT ON COLUMN CHAT_CALLS.RESPONSE_MSG IS 'Error message or informational notes from the LLM process.';
+   COMMENT ON COLUMN CHAT_CALLS.RAG_CONTEXT_DOC_COUNT IS 'Number of RAG documents/chunks injected.';
+   COMMENT ON COLUMN CHAT_CALLS.RAG_SOURCES_JSON IS 'JSON list of documents used during RAG retrieval.';
+   COMMENT ON COLUMN CHAT_CALLS.PROVIDER_FINAL IS 'Actual provider used after routing/fallback.';
+   COMMENT ON COLUMN CHAT_CALLS.MODEL_FINAL IS 'Actual model used after routing/fallback.';
+   COMMENT ON COLUMN CHAT_CALLS.FALLBACK_USED IS 'Y/N indicating whether fallback routing occurred.';
+   COMMENT ON COLUMN CHAT_CALLS.TOKENS_INPUT IS 'Total input tokens for the request.';
+   COMMENT ON COLUMN CHAT_CALLS.TOKENS_OUTPUT IS 'Total output tokens generated.';
+   COMMENT ON COLUMN CHAT_CALLS.TOKENS_TOTAL IS 'Total input + output tokens.';
+   COMMENT ON COLUMN CHAT_CALLS.COST_USD IS 'Cost of the LLM call in USD.';
+   COMMENT ON COLUMN CHAT_CALLS.IS_BLOCKED IS 'Y/N: Whether safety or governance filters fully blocked the response.';
+   COMMENT ON COLUMN CHAT_CALLS.SAFETY_FILTER_APPLIED IS 'Y/N: Whether provider safety filters were applied.';
+   COMMENT ON COLUMN CHAT_CALLS.SAFETY_BLOCK_REASON IS 'Reason for blocking the output.';
+   COMMENT ON COLUMN CHAT_CALLS.SAFETY_RATINGS_JSON IS 'Provider safety metadata array.';
+   COMMENT ON COLUMN CHAT_CALLS.IS_REFUSAL IS 'Y/N: Whether the model explicitly refused the request.';
+   COMMENT ON COLUMN CHAT_CALLS.REFUSAL_TEXT IS 'Model refusal explanation (user-friendly).';
+   COMMENT ON COLUMN CHAT_CALLS.REFUSAL_RAW IS 'Raw refusal metadata from the provider.';
+   COMMENT ON COLUMN CHAT_CALLS.FINISH_REASON IS 'Reason why generation stopped (e.g., stop, length, content_filter).';
+   COMMENT ON COLUMN CHAT_CALLS.STOP_REASON IS 'Additional explanation why generation was halted.';
+   COMMENT ON COLUMN CHAT_CALLS.STOP_SEQ_FINAL IS 'Stop sequence that actually triggered the end of generation.';
+   COMMENT ON COLUMN CHAT_CALLS.IS_TRUNCATED IS 'Y/N: Did the model truncate output?';
+   COMMENT ON COLUMN CHAT_CALLS.RAG_MS IS 'Milliseconds spent performing RAG retrieval.';
+   COMMENT ON COLUMN CHAT_CALLS.GOVERNANCE_MS IS 'Milliseconds spent applying governance rules.';
+   COMMENT ON COLUMN CHAT_CALLS.PROMPT_BUILD_MS IS 'Time spent building the final prompt.';
+   COMMENT ON COLUMN CHAT_CALLS.CLIENT_LLM_CALL_MS IS 'Total LLM call time measured by client.';
+   COMMENT ON COLUMN CHAT_CALLS.TOTAL_PIPELINE_MS IS 'End-to-end pipeline latency including RAG, LLM, governance.';
+   COMMENT ON COLUMN CHAT_CALLS.GOVERNANCE_ACTION IS 'Final governance decision: ALLOW, MASK, REDACT, BLOCK.';
+   COMMENT ON COLUMN CHAT_CALLS.REQUEST_ID IS 'Provider request identifier for audit and debugging.';
+   COMMENT ON COLUMN CHAT_CALLS.SYSTEM_FINGERPRINT IS 'Provider system identifier for reproducibility.';
+   COMMENT ON COLUMN CHAT_CALLS.PROVIDER_CREATED_TS IS 'Provider timestamp when the response was created.';
+   COMMENT ON COLUMN CHAT_CALLS.PROVIDER_PROCESSING_MS IS 'Time spent inside provider infrastructure.';
+   COMMENT ON COLUMN CHAT_CALLS.RESPONSE_PAYLOAD IS 'Raw provider-specific JSON metadata from LLM API.';
+   COMMENT ON COLUMN CHAT_CALLS.SOURCE_CHANNEL IS 'Source of the call: UI, API, WORKFLOW, AGENT, SYSTEM.';
+   COMMENT ON COLUMN CHAT_CALLS.DB_CREATED_AT IS 'Timestamp when the record was stored in the database.';
+   COMMENT ON COLUMN CHAT_CALLS.UPDATED_AT IS 'Timestamp of last update.';
+   COMMENT ON COLUMN CHAT_CALLS.IS_DELETED IS 'Soft delete flag: Y/N.';
+   COMMENT ON COLUMN CHAT_CALLS.DELETED_AT IS 'Timestamp when soft deletion occurred.';
+   COMMENT ON COLUMN CHAT_CALLS.DEPLOYMENT_ID IS 'Links call to specific deployment version for tracking and analysis';
+   COMMENT ON COLUMN CHAT_CALLS.SEGMENT_ID IS 'User segment assigned for this call (for A/B testing, canary, etc.)';
+   COMMENT ON COLUMN CHAT_CALLS.IS_SHADOW_CALL IS 'Y = shadow execution (not shown to user), N = production call';
+   COMMENT ON COLUMN CHAT_CALLS.SHADOW_PARENT_CALL_ID IS 'For shadow calls: references the production CALL_ID that triggered this';
+   COMMENT ON COLUMN CHAT_CALLS.SHADOW_COMPARISON_JSON IS 'Comparison results between shadow and production outputs';
+   COMMENT ON COLUMN CHAT_CALLS.VARIANT_LABEL IS 'A/B test variant label (A, B, C, CONTROL)';
+   COMMENT ON TABLE CHAT_CALLS  IS 'Stores one complete LLM call (request + response + metadata) within a chat session.';

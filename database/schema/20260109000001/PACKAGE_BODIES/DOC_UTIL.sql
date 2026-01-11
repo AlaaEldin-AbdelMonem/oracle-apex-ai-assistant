@@ -2,7 +2,7 @@
 --  DDL for Package Body DOC_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."DOC_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "DOC_UTIL" AS
 
     FUNCTION create_doc(
         p_title VARCHAR2,

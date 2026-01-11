@@ -2,7 +2,7 @@
 --  DDL for Package Body CFG_PARAM_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."CFG_PARAM_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "CFG_PARAM_UTIL" AS
   ------------------------------------------------------------------------------
   --  Package: CFG_PARAM_UTIL
   --  Author : Alaaeldin Abdelmonem

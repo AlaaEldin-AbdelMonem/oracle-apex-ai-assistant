@@ -2,7 +2,7 @@
 --  DDL for Function FIND_TABLE_PARENTS
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE FUNCTION "AI8P"."FIND_TABLE_PARENTS" (
+  CREATE OR REPLACE EDITIONABLE FUNCTION "FIND_TABLE_PARENTS" (
     p_child_table_name IN VARCHAR2, -- The table with the foreign keys
     p_owner            IN VARCHAR2 DEFAULT USER -- Optionally specify the table owner
 )

@@ -2,7 +2,7 @@
 --  DDL for Package Body LLM_ROUTER_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."LLM_ROUTER_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "LLM_ROUTER_PKG" AS
 
 /*******************************************************************************
  *  

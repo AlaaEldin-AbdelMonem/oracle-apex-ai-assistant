@@ -2,7 +2,7 @@
 --  DDL for Function GET_DOC_TEXT_PAGE
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE FUNCTION "AI8P"."GET_DOC_TEXT_PAGE" (
+  CREATE OR REPLACE EDITIONABLE FUNCTION "GET_DOC_TEXT_PAGE" (
     p_doc_id IN NUMBER,
     p_page_num IN NUMBER DEFAULT 1,
     p_page_size IN NUMBER DEFAULT 10000

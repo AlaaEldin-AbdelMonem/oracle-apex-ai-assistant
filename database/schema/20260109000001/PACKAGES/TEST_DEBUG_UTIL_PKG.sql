@@ -2,7 +2,7 @@
 --  DDL for Package TEST_DEBUG_UTIL_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."TEST_DEBUG_UTIL_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "TEST_DEBUG_UTIL_PKG" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      TEST_DEBUG_UTIL_PKG (Specification)

@@ -2,7 +2,7 @@
 --  DDL for Package APP_ADMIN_SECURITY
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."APP_ADMIN_SECURITY" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "APP_ADMIN_SECURITY" AS
 /**
  * PROJECT:     Enterprise AI Assistant
  * MODULE:      APP_ADMIN_SECURITY (Specification)

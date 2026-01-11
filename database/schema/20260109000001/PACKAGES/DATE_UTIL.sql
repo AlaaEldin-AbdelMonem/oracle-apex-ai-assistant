@@ -2,7 +2,7 @@
 --  DDL for Package DATE_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."DATE_UTIL" IS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "DATE_UTIL" IS
 /**
  * date_util
  *

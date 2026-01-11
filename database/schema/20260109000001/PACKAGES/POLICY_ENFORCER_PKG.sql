@@ -2,7 +2,7 @@
 --  DDL for Package POLICY_ENFORCER_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."POLICY_ENFORCER_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "POLICY_ENFORCER_PKG" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      POLICY_ENFORCER_PKG (Specification)

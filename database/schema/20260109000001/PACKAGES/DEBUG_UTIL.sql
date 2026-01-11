@@ -2,7 +2,7 @@
 --  DDL for Package DEBUG_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."DEBUG_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "DEBUG_UTIL" AS
 /*********************************************************************************
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      DEBUG_UTIL (Specification)

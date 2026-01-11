@@ -2,7 +2,7 @@
 --  DDL for Package DEPLOYMENT_MANAGER_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."DEPLOYMENT_MANAGER_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "DEPLOYMENT_MANAGER_PKG" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      DEPLOYMENT_MANAGER_PKG (Specification)

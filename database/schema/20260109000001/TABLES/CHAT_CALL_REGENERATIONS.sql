@@ -2,7 +2,7 @@
 --  DDL for Table CHAT_CALL_REGENERATIONS
 --------------------------------------------------------
 
-  CREATE TABLE "AI8P"."CHAT_CALL_REGENERATIONS" 
+  CREATE TABLE "CHAT_CALL_REGENERATIONS" 
    (	"CHAT_CALL_REGENERATION_ID" NUMBER GENERATED ALWAYS AS IDENTITY MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE , 
 	"PARENT_CHAT_CALL_ID" NUMBER, 
 	"CHILD_CHAT_CALL_ID" NUMBER, 
@@ -11,8 +11,8 @@
   PCTFREE 10 PCTUSED 40 INITRANS 10 MAXTRANS 255 
  NOCOMPRESS LOGGING;
 
-   COMMENT ON COLUMN "AI8P"."CHAT_CALL_REGENERATIONS"."CHAT_CALL_REGENERATION_ID" IS 'Primary key of regeneration mapping.';
-   COMMENT ON COLUMN "AI8P"."CHAT_CALL_REGENERATIONS"."PARENT_CHAT_CALL_ID" IS 'The original call from which regeneration was requested.';
-   COMMENT ON COLUMN "AI8P"."CHAT_CALL_REGENERATIONS"."CHILD_CHAT_CALL_ID" IS 'The new regenerated call ID.';
-   COMMENT ON COLUMN "AI8P"."CHAT_CALL_REGENERATIONS"."INHERIT_SETTINGS" IS 'Y/N: Whether the regenerated call inherits settings from the parent.';
-   COMMENT ON TABLE "AI8P"."CHAT_CALL_REGENERATIONS"  IS 'Tracks regeneration relationships between calls (parent call → regenerated call).';
+   COMMENT ON COLUMN "CHAT_CALL_REGENERATIONS"."CHAT_CALL_REGENERATION_ID" IS 'Primary key of regeneration mapping.';
+   COMMENT ON COLUMN "CHAT_CALL_REGENERATIONS"."PARENT_CHAT_CALL_ID" IS 'The original call from which regeneration was requested.';
+   COMMENT ON COLUMN "CHAT_CALL_REGENERATIONS"."CHILD_CHAT_CALL_ID" IS 'The new regenerated call ID.';
+   COMMENT ON COLUMN "CHAT_CALL_REGENERATIONS"."INHERIT_SETTINGS" IS 'Y/N: Whether the regenerated call inherits settings from the parent.';
+   COMMENT ON TABLE "CHAT_CALL_REGENERATIONS"  IS 'Tracks regeneration relationships between calls (parent call → regenerated call).';

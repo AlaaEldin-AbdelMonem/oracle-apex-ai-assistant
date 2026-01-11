@@ -2,7 +2,7 @@
 --  DDL for Table DEPLOYMENT_EXPERIMENTS
 --------------------------------------------------------
 
-  CREATE TABLE "AI8P"."DEPLOYMENT_EXPERIMENTS" 
+  CREATE TABLE "DEPLOYMENT_EXPERIMENTS" 
    (	"EXPERIMENT_ID" NUMBER GENERATED ALWAYS AS IDENTITY MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE , 
 	"EXPERIMENT_NAME" VARCHAR2(100 BYTE) COLLATE "USING_NLS_COMP", 
 	"EXPERIMENT_TYPE" VARCHAR2(20 BYTE) COLLATE "USING_NLS_COMP", 
@@ -26,6 +26,6 @@
  LOB ("CONCLUSION_NOTES") STORE AS SECUREFILE (ENABLE STORAGE IN ROW 4000 CHUNK 8192
   NOCACHE LOGGING  NOCOMPRESS  KEEP_DUPLICATES ) ;
 
-   COMMENT ON COLUMN "AI8P"."DEPLOYMENT_EXPERIMENTS"."HYPOTHESIS" IS 'What improvement is expected? e.g., "Higher temperature will increase user satisfaction"';
-   COMMENT ON COLUMN "AI8P"."DEPLOYMENT_EXPERIMENTS"."SUCCESS_METRICS_JSON" IS 'JSON defining success criteria, e.g., {"min_success_rate": 95, "max_latency_ms": 2000}';
-   COMMENT ON TABLE "AI8P"."DEPLOYMENT_EXPERIMENTS"  IS 'Groups related deployment versions into controlled A/B tests and experiments';
+   COMMENT ON COLUMN "DEPLOYMENT_EXPERIMENTS"."HYPOTHESIS" IS 'What improvement is expected? e.g., "Higher temperature will increase user satisfaction"';
+   COMMENT ON COLUMN "DEPLOYMENT_EXPERIMENTS"."SUCCESS_METRICS_JSON" IS 'JSON defining success criteria, e.g., {"min_success_rate": 95, "max_latency_ms": 2000}';
+   COMMENT ON TABLE "DEPLOYMENT_EXPERIMENTS"  IS 'Groups related deployment versions into controlled A/B tests and experiments';

@@ -3,7 +3,7 @@
 --------------------------------------------------------
 set define off;
 
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "AI8P"."CXD_CLASSIFIER_DETECT_TEST" as
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "CXD_CLASSIFIER_DETECT_TEST" as
 /*******************************************************************************
  *  
  *******************************************************************************/

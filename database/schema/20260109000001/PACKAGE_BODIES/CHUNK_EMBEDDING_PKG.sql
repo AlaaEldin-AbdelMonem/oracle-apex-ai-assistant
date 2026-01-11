@@ -2,7 +2,7 @@
 --  DDL for Package Body CHUNK_EMBEDDING_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."CHUNK_EMBEDDING_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "CHUNK_EMBEDDING_PKG" AS
  
  
     g_debug_enabled BOOLEAN := FALSE;

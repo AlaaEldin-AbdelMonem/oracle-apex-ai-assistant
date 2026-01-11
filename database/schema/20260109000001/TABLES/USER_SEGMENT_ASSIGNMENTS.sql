@@ -2,7 +2,7 @@
 --  DDL for Table USER_SEGMENT_ASSIGNMENTS
 --------------------------------------------------------
 
-  CREATE TABLE "AI8P"."USER_SEGMENT_ASSIGNMENTS" 
+  CREATE TABLE "USER_SEGMENT_ASSIGNMENTS" 
    (	"ASSIGNMENT_ID" NUMBER GENERATED ALWAYS AS IDENTITY MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE , 
 	"USER_ID" NUMBER, 
 	"SEGMENT_ID" NUMBER, 
@@ -21,6 +21,6 @@
  NOCOMPRESS LOGGING
  JSON ("ASSIGNMENT_METADATA") STORE AS ( CHUNK 8192 RETENTION MIN 1800) ;
 
-   COMMENT ON COLUMN "AI8P"."USER_SEGMENT_ASSIGNMENTS"."ASSIGNMENT_HASH" IS 'Hash value used for consistent user assignment across sessions';
-   COMMENT ON COLUMN "AI8P"."USER_SEGMENT_ASSIGNMENTS"."STICKY_UNTIL" IS 'User stays in segment until this timestamp (prevents mid-experiment switching)';
-   COMMENT ON TABLE "AI8P"."USER_SEGMENT_ASSIGNMENTS"  IS 'User-to-segment mappings with temporal validity for experiments';
+   COMMENT ON COLUMN "USER_SEGMENT_ASSIGNMENTS"."ASSIGNMENT_HASH" IS 'Hash value used for consistent user assignment across sessions';
+   COMMENT ON COLUMN "USER_SEGMENT_ASSIGNMENTS"."STICKY_UNTIL" IS 'User stays in segment until this timestamp (prevents mid-experiment switching)';
+   COMMENT ON TABLE "USER_SEGMENT_ASSIGNMENTS"  IS 'User-to-segment mappings with temporal validity for experiments';

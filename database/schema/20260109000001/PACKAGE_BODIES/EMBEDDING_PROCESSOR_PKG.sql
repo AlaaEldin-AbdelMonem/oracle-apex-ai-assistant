@@ -2,7 +2,7 @@
 --  DDL for Package Body EMBEDDING_PROCESSOR_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."EMBEDDING_PROCESSOR_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "EMBEDDING_PROCESSOR_PKG" AS
 
     FUNCTION embed_document_chunks(
         p_doc_id          IN NUMBER,

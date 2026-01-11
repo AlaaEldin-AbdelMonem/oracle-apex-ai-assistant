@@ -2,7 +2,7 @@
 --  DDL for Package Body CX_BEHAVIOR_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."CX_BEHAVIOR_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "CX_BEHAVIOR_PKG" AS
  
     -----------------------------------------------------------------------------
     -- BEHAVIOR VALIDATION

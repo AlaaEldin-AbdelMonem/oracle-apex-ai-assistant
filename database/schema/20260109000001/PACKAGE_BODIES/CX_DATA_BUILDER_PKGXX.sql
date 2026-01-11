@@ -2,7 +2,7 @@
 --  DDL for Package Body CX_DATA_BUILDER_PKGXX
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."CX_DATA_BUILDER_PKGXX" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "CX_DATA_BUILDER_PKGXX" AS
 
 
 /*******************************************************************************

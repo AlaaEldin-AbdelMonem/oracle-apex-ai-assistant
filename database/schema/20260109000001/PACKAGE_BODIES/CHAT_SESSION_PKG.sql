@@ -2,7 +2,7 @@
 --  DDL for Package Body CHAT_SESSION_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."CHAT_SESSION_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "CHAT_SESSION_PKG" AS
 
          -- PRIVATE CONSTANTS & VARIABLES
      c_max_title_length  CONSTANT NUMBER := 200;

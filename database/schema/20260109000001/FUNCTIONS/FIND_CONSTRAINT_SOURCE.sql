@@ -2,7 +2,7 @@
 --  DDL for Function FIND_CONSTRAINT_SOURCE
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE FUNCTION "AI8P"."FIND_CONSTRAINT_SOURCE" (
+  CREATE OR REPLACE EDITIONABLE FUNCTION "FIND_CONSTRAINT_SOURCE" (
     p_constraint_id IN VARCHAR2 -- E.g., 'SYS_C0094633'
 )
 /*******************************************************************************

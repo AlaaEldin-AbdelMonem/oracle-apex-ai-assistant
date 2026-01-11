@@ -2,7 +2,7 @@
 --  DDL for Table TENANTS
 --------------------------------------------------------
 
-  CREATE TABLE "AI8P"."TENANTS" 
+  CREATE TABLE "TENANTS" 
    (	"TENANT_ID" NUMBER, 
 	"TENANT_NAME" VARCHAR2(200 BYTE) COLLATE "USING_NLS_COMP", 
 	"TENANT_DESC" VARCHAR2(500 BYTE) COLLATE "USING_NLS_COMP", 

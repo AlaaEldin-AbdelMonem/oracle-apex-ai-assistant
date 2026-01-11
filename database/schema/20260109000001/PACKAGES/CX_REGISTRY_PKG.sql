@@ -2,7 +2,7 @@
 --  DDL for Package CX_REGISTRY_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."CX_REGISTRY_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "CX_REGISTRY_PKG" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      CX_REGISTRY_PKG (Specification)

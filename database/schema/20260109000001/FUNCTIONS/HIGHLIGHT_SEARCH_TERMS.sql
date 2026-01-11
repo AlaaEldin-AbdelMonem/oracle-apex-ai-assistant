@@ -2,7 +2,7 @@
 --  DDL for Function HIGHLIGHT_SEARCH_TERMS
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE FUNCTION "AI8P"."HIGHLIGHT_SEARCH_TERMS" (
+  CREATE OR REPLACE EDITIONABLE FUNCTION "HIGHLIGHT_SEARCH_TERMS" (
     p_text              IN CLOB,
     p_search_terms      IN VARCHAR2,
     p_highlight_class   IN VARCHAR2 DEFAULT 'highlight-term',

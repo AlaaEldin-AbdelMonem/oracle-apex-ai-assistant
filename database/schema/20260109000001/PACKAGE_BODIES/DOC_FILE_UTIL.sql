@@ -2,7 +2,7 @@
 --  DDL for Package Body DOC_FILE_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."DOC_FILE_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "DOC_FILE_UTIL" AS
 
     -- Get MIME type from file extension
     FUNCTION get_mime_type(p_filename IN VARCHAR2) RETURN VARCHAR2 IS

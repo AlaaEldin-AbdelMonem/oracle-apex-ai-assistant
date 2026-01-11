@@ -2,7 +2,7 @@
 --  DDL for Package Body CHUNK_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."CHUNK_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "CHUNK_PKG" AS
  
   -------------------------------------- 
   -- Estimate token count (approximate)

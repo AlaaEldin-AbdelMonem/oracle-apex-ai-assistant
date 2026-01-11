@@ -2,7 +2,7 @@
 --  DDL for Package DOC_EXTRACT_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."DOC_EXTRACT_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "DOC_EXTRACT_PKG" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      DOC_EXTRACT_PKG (Specification)

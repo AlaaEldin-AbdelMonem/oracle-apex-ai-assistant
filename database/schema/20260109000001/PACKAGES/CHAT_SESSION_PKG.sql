@@ -2,7 +2,7 @@
 --  DDL for Package CHAT_SESSION_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."CHAT_SESSION_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "CHAT_SESSION_PKG" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      CHAT_SESSION_PKG (Specification)

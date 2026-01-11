@@ -2,7 +2,7 @@
 --  DDL for Package Body CHUNK_PROXY_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."CHUNK_PROXY_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "CHUNK_PROXY_UTIL" AS
  
  /*******************************************************************************
  *  

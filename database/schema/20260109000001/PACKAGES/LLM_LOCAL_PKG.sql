@@ -2,7 +2,7 @@
 --  DDL for Package LLM_LOCAL_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."LLM_LOCAL_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "LLM_LOCAL_PKG" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      LLM_LOCAL_PKG (Specification)

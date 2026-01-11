@@ -2,7 +2,7 @@
 --  DDL for Package STREAM_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."STREAM_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "STREAM_UTIL" AS
 /**
  * PROJECT:     Oracle AI ChatPot - Enterprise RAG System
  * MODULE:      STREAM_UTIL (Specification)

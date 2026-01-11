@@ -2,7 +2,7 @@
 --  DDL for Table CONTEXT_DOMAINS
 --------------------------------------------------------
 
-  CREATE TABLE "AI8P"."CONTEXT_DOMAINS" 
+  CREATE TABLE "CONTEXT_DOMAINS" 
    (	"CONTEXT_DOMAIN_ID" NUMBER GENERATED ALWAYS AS IDENTITY MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE , 
 	"CONTEXT_DOMAIN_CODE" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP", 
 	"DOMAIN_NAME" VARCHAR2(100 BYTE) COLLATE "USING_NLS_COMP", 
@@ -37,7 +37,7 @@
   PCTINCREASE 0
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)) ;
 
-   COMMENT ON COLUMN "AI8P"."CONTEXT_DOMAINS"."EMBEDDING_GENERATED_DATE" IS 'Timestamp when the embedding was last generated. Used to detect outdated embeddings.';
-   COMMENT ON COLUMN "AI8P"."CONTEXT_DOMAINS"."EMBEDDING_MODEL_VERSION" IS 'Version identifier of the embedding model used. Enables model migration tracking.';
-   COMMENT ON COLUMN "AI8P"."CONTEXT_DOMAINS"."EMBEDDING_STATUS" IS 'Current status of embedding: PENDING (not generated), COMPLETED (ready), FAILED (generation error), OUTDATED (description changed).';
-   COMMENT ON COLUMN "AI8P"."CONTEXT_DOMAINS"."EMBEDDING_ERROR_MESSAGE" IS 'Error details if embedding generation failed. Used for debugging and retry logic.';
+   COMMENT ON COLUMN "CONTEXT_DOMAINS"."EMBEDDING_GENERATED_DATE" IS 'Timestamp when the embedding was last generated. Used to detect outdated embeddings.';
+   COMMENT ON COLUMN "CONTEXT_DOMAINS"."EMBEDDING_MODEL_VERSION" IS 'Version identifier of the embedding model used. Enables model migration tracking.';
+   COMMENT ON COLUMN "CONTEXT_DOMAINS"."EMBEDDING_STATUS" IS 'Current status of embedding: PENDING (not generated), COMPLETED (ready), FAILED (generation error), OUTDATED (description changed).';
+   COMMENT ON COLUMN "CONTEXT_DOMAINS"."EMBEDDING_ERROR_MESSAGE" IS 'Error details if embedding generation failed. Used for debugging and retry logic.';

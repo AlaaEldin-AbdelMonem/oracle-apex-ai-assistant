@@ -2,7 +2,7 @@
 --  DDL for Function GET_WORD_STEM
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE FUNCTION "AI8P"."GET_WORD_STEM" (
+  CREATE OR REPLACE EDITIONABLE FUNCTION "GET_WORD_STEM" (
     p_word IN VARCHAR2
 ) RETURN VARCHAR2
 /*******************************************************************************

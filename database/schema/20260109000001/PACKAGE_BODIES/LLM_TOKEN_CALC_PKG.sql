@@ -2,7 +2,7 @@
 --  DDL for Package Body LLM_TOKEN_CALC_PKG
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "AI8P"."LLM_TOKEN_CALC_PKG" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "LLM_TOKEN_CALC_PKG" AS
 
     c_pkg CONSTANT VARCHAR2(30) := 'AI_TOKEN_CALC_PKG';
     c_default_currency CONSTANT VARCHAR2(10) := 'USD';

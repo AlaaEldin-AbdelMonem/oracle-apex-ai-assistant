@@ -2,7 +2,7 @@
 --  DDL for Package CFG_PARAM_UTIL
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "AI8P"."CFG_PARAM_UTIL" AS
+  CREATE OR REPLACE EDITIONABLE PACKAGE "CFG_PARAM_UTIL" AS
 /**
  * PROJECT:     Oracle Flexible Configuration Framework
  * MODULE:      CFG_PARAM_UTIL (Specification)

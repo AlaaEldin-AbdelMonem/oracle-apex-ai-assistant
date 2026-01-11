@@ -3,7 +3,7 @@
 --------------------------------------------------------
 set define off;
 
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "AI8P"."SYNC_AUDIT_COLUMNS" (
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "SYNC_AUDIT_COLUMNS" (
     p_table_name IN VARCHAR2
 )
 AS
